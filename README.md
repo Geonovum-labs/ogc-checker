@@ -2,7 +2,7 @@
 This repository contains a linter for OGC Features and Geometries JSON (JSON-FG) [Part 1 Core](https://docs.ogc.org/DRAFTS/21-045.html). 
 
 ## Rules
-The linter rules are based on JSON-FG requirements classes [Core](https://docs.ogc.org/DRAFTS/21-045.html#rc_core), [3D](https://docs.ogc.org/DRAFTS/21-045.html#rc_3d) and [Features types and Schemas](https://docs.ogc.org/DRAFTS/21-045.html#rc_types-schemas). 
+The linter rules are based on JSON-FG requirements classes [Core](https://docs.ogc.org/DRAFTS/21-045.html#rc_core), [3D](https://docs.ogc.org/DRAFTS/21-045.html#rc_3d) and [Features types and Schemas](https://docs.ogc.org/DRAFTS/21-045.html#rc_types-schemas). In addition, the linter does some consistency checks that are useful but not based on explicit requirements.
 
 In addition to requirements that can be validated with the JSON-FG JSON Schema, the following rules are also implemented. When based on JSON-FG requirements or recommendations this is stated in the list.  
 
