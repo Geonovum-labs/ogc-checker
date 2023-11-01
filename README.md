@@ -1,0 +1,1 @@
+# json-fg-linter
