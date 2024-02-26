@@ -19,7 +19,7 @@ const FEATURECOLLECTION_SCHEMA = {
 
 const ajv = new Ajv({
   loadSchema: async url => {
-    const response = await fetch(url.replace('https://beta.schemas.opengis.net/json-fg/', '/schemas/'));
+    const response = await fetch(url.replace('https://beta.schemas.opengis.net/json-fg/', 'schemas/'));
     return response.json();
   },
 });
