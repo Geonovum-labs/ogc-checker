@@ -10,8 +10,9 @@ In addition to requirements that can be validated with the JSON-FG JSON Schema, 
 
 ### time
 
+- Requirement 4B-C: validate type consistency for "interval" ends.
 - Requirement 5A-E: validate consistency between "date", "timestamp" and "interval".
-- Validate that interval start is be before interval end
+- Validate that interval start is before interval end ([spec issue](https://github.com/opengeospatial/ogc-feat-geo-json/issues/122)).
 
 ### conformsTo (can be HTTP URI or Safe CURIE):
 

@@ -33,6 +33,20 @@ rules.push({
           'instant must be earlier than or equal to the end instant.',
       };
     }
+
+    if (interval !== undefined && isDate(interval[0]) && isTimestamp(interval[1])) {
+      return {
+        pointer: '/time',
+        message: 'If the start is a date, the end SHALL be a date, too, or "..".',
+      };
+    }
+
+    if (interval !== undefined && isTimestamp(interval[0]) && isDate(interval[1])) {
+      return {
+        pointer: '/time',
+        message: 'If the start is a timestamp, the end SHALL be a timestamp, too, or "..".',
+      };
+    }
   },
 });
 
