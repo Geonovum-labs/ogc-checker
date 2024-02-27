@@ -116,3 +116,39 @@ describe('Requirement 7A', () => {
     expect(violations.length).toBe(1);
   });
 });
+
+describe('Requirement 8A', () => {
+  test('Fails when some first elements have a value out of bounds.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: null,
+      geometry: {
+        type: GeometryTypes.MULTIPOINT,
+        coordinates: [
+          [-181, 20],
+          [20, 30],
+        ],
+      },
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+});
+
+describe('Requirement 8B', () => {
+  test('Fails when some first elements have a value out of bounds.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: null,
+      geometry: {
+        type: GeometryTypes.MULTIPOINT,
+        coordinates: [
+          [10, -91],
+          [20, 30],
+        ],
+      },
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+});
