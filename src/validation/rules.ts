@@ -7,7 +7,7 @@ const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 const TIMESTAMP_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
 
-const isUnbound = (value: string) => value === '..';
+const isUnbounded = (value: string) => value === '..';
 
 const isDate = (value: string) => DATE_REGEX.test(value);
 
@@ -22,8 +22,8 @@ rules.push({
 
     if (
       interval !== undefined &&
-      !isUnbound(interval[0]) &&
-      !isUnbound(interval[1]) &&
+      !isUnbounded(interval[0]) &&
+      !isUnbounded(interval[1]) &&
       DateTime.fromISO(interval[0]) > DateTime.fromISO(interval[1])
     ) {
       return {
@@ -57,8 +57,8 @@ rules.push({
 
         if (
           (isDate(interval[0]) || isDate(interval[1])) &&
-          ((!isUnbound(interval[0]) && tsDate < DateTime.fromISO(interval[0])) ||
-            (!isUnbound(interval[1]) && tsDate > DateTime.fromISO(interval[1])))
+          ((!isUnbounded(interval[0]) && tsDate < DateTime.fromISO(interval[0])) ||
+            (!isUnbounded(interval[1]) && tsDate > DateTime.fromISO(interval[1])))
         ) {
           return {
             pointer: '/time',
@@ -70,8 +70,8 @@ rules.push({
 
         if (
           (isTimestamp(interval[0]) || isTimestamp(interval[1])) &&
-          ((!isUnbound(interval[0]) && ts < DateTime.fromISO(interval[0])) ||
-            (!isUnbound(interval[1]) && ts > DateTime.fromISO(interval[1])))
+          ((!isUnbounded(interval[0]) && ts < DateTime.fromISO(interval[0])) ||
+            (!isUnbounded(interval[1]) && ts > DateTime.fromISO(interval[1])))
         ) {
           return {
             pointer: '/time',
@@ -87,8 +87,8 @@ rules.push({
 
         if (
           (isDate(interval[0]) || isDate(interval[1])) &&
-          ((!isUnbound(interval[0]) && tsDate < DateTime.fromISO(interval[0])) ||
-            (!isUnbound(interval[1]) && tsDate > DateTime.fromISO(interval[1])))
+          ((!isUnbounded(interval[0]) && tsDate < DateTime.fromISO(interval[0])) ||
+            (!isUnbounded(interval[1]) && tsDate > DateTime.fromISO(interval[1])))
         ) {
           return {
             pointer: '/time',
@@ -100,8 +100,8 @@ rules.push({
 
         if (
           (isTimestamp(interval[0]) || isTimestamp(interval[1])) &&
-          ((!isUnbound(interval[0]) && tsDate < DateTime.fromISO(interval[0]).startOf('day')) ||
-            (!isUnbound(interval[1]) && tsDate > DateTime.fromISO(interval[1]).startOf('day')))
+          ((!isUnbounded(interval[0]) && tsDate < DateTime.fromISO(interval[0]).startOf('day')) ||
+            (!isUnbounded(interval[1]) && tsDate > DateTime.fromISO(interval[1]).startOf('day')))
         ) {
           return {
             pointer: '/time',
