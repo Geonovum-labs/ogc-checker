@@ -14,6 +14,7 @@ export enum GeometryTypes {
   MULTIPOLYHEDRON = 'MultiPolyhedron',
   PRISM = 'Prism',
   MULTIPRISM = 'MultiPrism',
+  GEOMETRYCOLLECTION = 'GeometryCollection',
 }
 
 export type FeatureDocument = Feature | FeatureCollection;
@@ -24,6 +25,7 @@ export interface Feature {
   featureType?: string | string[];
   featureSchema?: string;
   time: Time | null;
+  coordRefSys?: CoordRefSys;
   place: Place | null;
   geometry: Geometry | null;
   properties: {
@@ -36,6 +38,7 @@ export interface FeatureCollection {
   conformsTo?: string[];
   featureType?: string | string[];
   featureSchema?: string;
+  coordRefSys?: CoordRefSys;
   features: Feature[];
 }
 
@@ -45,7 +48,21 @@ export interface Time {
   interval?: [string, string];
 }
 
-export type Geometry = Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon;
+export type CoordRefSys = SingleRefSys | SingleRefSys[];
+
+export interface RefSysByRef {
+  type: 'Reference';
+  href: string;
+  epoch?: number;
+}
+
+export interface RefSysCustom {
+  type: string;
+}
+
+export type SingleRefSys = string | RefSysByRef | RefSysCustom;
+
+export type Geometry = Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | GeometryCollection;
 
 export type Place = Geometry | Polyhedron | MultiPolyhedron | Prism | MultiPrism;
 
@@ -57,46 +74,55 @@ export type Position = Position2D | Position3D;
 
 export interface Point {
   type: GeometryTypes.POINT;
+  coordRefSys?: CoordRefSys;
   coordinates: Position;
 }
 
 export interface MultiPoint {
   type: GeometryTypes.MULTIPOINT;
+  coordRefSys?: CoordRefSys;
   coordinates: Position[];
 }
 
 export interface LineString {
   type: GeometryTypes.LINESTRING;
+  coordRefSys?: CoordRefSys;
   coordinates: Position[];
 }
 
 export interface MultiLineString {
   type: GeometryTypes.MULTILINESTRING;
+  coordRefSys?: CoordRefSys;
   coordinates: Position[][];
 }
 
 export interface Polygon {
   type: GeometryTypes.POLYGON;
+  coordRefSys?: CoordRefSys;
   coordinates: Position[][];
 }
 
 export interface MultiPolygon {
   type: GeometryTypes.MULTIPOLYGON;
+  coordRefSys?: CoordRefSys;
   coordinates: Position[][][];
 }
 
 export interface Polyhedron {
   type: GeometryTypes.POLYHEDRON;
+  coordRefSys?: CoordRefSys;
   coordinates: Position3D[][][][];
 }
 
 export interface MultiPolyhedron {
   type: GeometryTypes.MULTIPOLYHEDRON;
+  coordRefSys?: CoordRefSys;
   coordinates: Position3D[][][][][];
 }
 
 export interface Prism {
   type: GeometryTypes.PRISM;
+  coordRefSys?: CoordRefSys;
   base: Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon;
   lower?: number;
   upper: number;
@@ -104,5 +130,12 @@ export interface Prism {
 
 export interface MultiPrism {
   type: GeometryTypes.MULTIPRISM;
+  coordRefSys?: CoordRefSys;
   prisms: Prism[];
+}
+
+export interface GeometryCollection {
+  type: GeometryTypes.GEOMETRYCOLLECTION;
+  coordRefSys?: CoordRefSys;
+  geometries: (Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon)[];
 }

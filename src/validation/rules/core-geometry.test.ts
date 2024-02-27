@@ -1,4 +1,4 @@
-import { DocumentTypes, Feature, GeometryTypes } from '../../types';
+import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../types';
 import { applyRules } from '../ruleValidation';
 import geometry from './core-geometry';
 
@@ -60,6 +60,7 @@ describe('Requirement 7A', () => {
       type: DocumentTypes.FEATURE,
       place: {
         type: GeometryTypes.MULTIPOINT,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
         coordinates: [
           [10, 20],
           [20, 30, 40],
@@ -147,6 +148,85 @@ describe('Requirement 8B', () => {
           [20, 30],
         ],
       },
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+});
+
+describe('Requirement 10A', () => {
+  test('Fails when a GeoJSON type and no coordRefSys is given.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.POINT,
+        coordinates: [10, 10],
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the geometry level.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.POINT,
+        coordRefSys: '[OGC:CRS84]',
+        coordinates: [10, 10],
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the feature level.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      coordRefSys: '[OGC:CRS84]',
+      place: {
+        type: GeometryTypes.POINT,
+        coordinates: [10, 10],
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the feature collection level.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      coordRefSys: '[OGC:CRS84]',
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POINT,
+            coordinates: [10, 10],
+          },
+          geometry: null,
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys by ref is given on the geometry level.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.POINT,
+        coordRefSys: {
+          type: 'Reference',
+          href: '[OGC:CRS84]',
+        },
+        coordinates: [10, 10],
+      },
+      geometry: null,
     } as Feature);
 
     expect(violations.length).toBe(1);
