@@ -1,5 +1,5 @@
 import { DateTime, Settings } from 'luxon';
-import { Rule } from './ruleValidation';
+import { Rule } from '../ruleValidation';
 
 Settings.defaultZone = 'utc';
 
