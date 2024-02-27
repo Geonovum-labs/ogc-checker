@@ -3,19 +3,11 @@ import { EditorView } from '@uiw/react-codemirror';
 import addFormats from 'ajv-formats';
 import Ajv, { SchemaObject } from 'ajv/dist/2020';
 import { groupBy } from '../util';
-import { getJsonPointers } from '../validation/pointers';
+import { getJsonPointers } from './pointers';
 
-const FEATURE_SCHEMA = {
-  type: 'object',
-  unevaluatedProperties: false,
-  allOf: [{ $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json' }],
-};
+const FEATURE_SCHEMA = { $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json' };
 
-const FEATURECOLLECTION_SCHEMA = {
-  type: 'object',
-  unevaluatedProperties: false,
-  allOf: [{ $ref: 'https://beta.schemas.opengis.net/json-fg/featurecollection.json' }],
-};
+const FEATURECOLLECTION_SCHEMA = { $ref: 'https://beta.schemas.opengis.net/json-fg/featurecollection.json' };
 
 const ajv = new Ajv({
   loadSchema: async url => {

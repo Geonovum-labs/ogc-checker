@@ -88,7 +88,7 @@ export const getJsonPointers = (state: EditorState): JsonPointerMap => {
       });
     }
 
-    if (TOKENS.ARRAY === node.parent?.name && !['[', ']'].includes(node.name)) {
+    if (node.parent === null || (TOKENS.ARRAY === node.parent?.name && !['[', ']'].includes(node.name))) {
       pointers.set(pointer, {
         valueFrom: node.from,
         valueTo: node.to,
