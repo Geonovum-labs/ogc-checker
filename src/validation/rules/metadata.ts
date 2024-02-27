@@ -21,7 +21,7 @@ rules.push({
     if (isRoot && conformsTo !== undefined && !conformsTo.includes(CORE_URI) && !conformsTo.includes(CORE_CURIE)) {
       return {
         pointer: '/conformsTo',
-        message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformation class.',
+        message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformance class.',
       };
     }
   },
@@ -38,7 +38,7 @@ rules.push({
     if (conformsTo !== undefined && !conformsTo.includes(CORE_URI) && !conformsTo.includes(CORE_CURIE)) {
       return {
         pointer: '/conformsTo',
-        message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformation class.',
+        message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformance class.',
       };
     }
   },
