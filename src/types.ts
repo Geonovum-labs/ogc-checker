@@ -16,7 +16,7 @@ export interface FeatureCollection {
 }
 
 export interface Time {
-  date: string;
-  timestamp: string;
-  interval: [string, string];
+  date?: string;
+  timestamp?: string;
+  interval?: [string, string];
 }

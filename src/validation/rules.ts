@@ -3,7 +3,38 @@ import { Rule } from './ruleValidation';
 
 Settings.defaultZone = 'utc';
 
+const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
+const TIMESTAMP_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
+
+const isUnbound = (value: string) => value === '..';
+
+const isDate = (value: string) => DATE_REGEX.test(value);
+
+const isTimestamp = (value: string) => TIMESTAMP_REGEX.test(value);
+
 const rules: Rule[] = [];
+
+rules.push({
+  name: '/req/core/interval',
+  validateFeature: feature => {
+    const interval = feature.time?.interval;
+
+    if (
+      interval !== undefined &&
+      !isUnbound(interval[0]) &&
+      !isUnbound(interval[1]) &&
+      DateTime.fromISO(interval[0]) > DateTime.fromISO(interval[1])
+    ) {
+      return {
+        pointer: '/time',
+        message:
+          'If the "time" object in any JSON-FG feature in the JSON document includes an "interval" member, the start ' +
+          'instant must be earlier than or equal to the end instant.',
+      };
+    }
+  },
+});
 
 rules.push({
   name: '/req/core/instant-and-interval',
@@ -25,9 +56,9 @@ rules.push({
         const tsDate = ts.startOf('day');
 
         if (
-          (interval[0].length === 10 || interval[1].length === 10) &&
-          ((interval[0] !== '..' && tsDate < DateTime.fromISO(interval[0])) ||
-            (interval[1] !== '..' && tsDate > DateTime.fromISO(interval[1])))
+          (isDate(interval[0]) || isDate(interval[1])) &&
+          ((!isUnbound(interval[0]) && tsDate < DateTime.fromISO(interval[0])) ||
+            (!isUnbound(interval[1]) && tsDate > DateTime.fromISO(interval[1])))
         ) {
           return {
             pointer: '/time',
@@ -38,9 +69,9 @@ rules.push({
         }
 
         if (
-          (interval[0].length > 10 || interval[1].length > 10) &&
-          ((interval[0] !== '..' && ts < DateTime.fromISO(interval[0])) ||
-            (interval[1] !== '..' && ts > DateTime.fromISO(interval[1])))
+          (isTimestamp(interval[0]) || isTimestamp(interval[1])) &&
+          ((!isUnbound(interval[0]) && ts < DateTime.fromISO(interval[0])) ||
+            (!isUnbound(interval[1]) && ts > DateTime.fromISO(interval[1])))
         ) {
           return {
             pointer: '/time',
@@ -55,9 +86,9 @@ rules.push({
         const tsDate = DateTime.fromISO(date);
 
         if (
-          (interval[0].length === 10 || interval[1].length === 10) &&
-          ((interval[0] !== '..' && tsDate < DateTime.fromISO(interval[0])) ||
-            (interval[1] !== '..' && tsDate > DateTime.fromISO(interval[1])))
+          (isDate(interval[0]) || isDate(interval[1])) &&
+          ((!isUnbound(interval[0]) && tsDate < DateTime.fromISO(interval[0])) ||
+            (!isUnbound(interval[1]) && tsDate > DateTime.fromISO(interval[1])))
         ) {
           return {
             pointer: '/time',
@@ -68,9 +99,9 @@ rules.push({
         }
 
         if (
-          (interval[0].length > 10 || interval[1].length > 10) &&
-          ((interval[0] !== '..' && tsDate < DateTime.fromISO(interval[0]).startOf('day')) ||
-            (interval[1] !== '..' && tsDate > DateTime.fromISO(interval[1]).startOf('day')))
+          (isTimestamp(interval[0]) || isTimestamp(interval[1])) &&
+          ((!isUnbound(interval[0]) && tsDate < DateTime.fromISO(interval[0]).startOf('day')) ||
+            (!isUnbound(interval[1]) && tsDate > DateTime.fromISO(interval[1]).startOf('day')))
         ) {
           return {
             pointer: '/time',
