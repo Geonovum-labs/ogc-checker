@@ -232,3 +232,92 @@ describe('Requirement 10A', () => {
     expect(violations.length).toBe(1);
   });
 });
+
+describe('Requirement 11A', () => {
+  test('Fails when a GeometryCollection member contains a "coordRefSys" member.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.GEOMETRYCOLLECTION,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        geometries: [
+          {
+            type: GeometryTypes.POINT,
+            coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+            coordinates: [10, 20],
+          },
+        ],
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a Prism base contains a "coordRefSys" member.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.PRISM,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        base: {
+          type: GeometryTypes.POINT,
+          coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+          coordinates: [10, 20],
+        },
+        upper: 10,
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a PrismCollection member contains a "coordRefSys" member.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.MULTIPRISM,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        prisms: [
+          {
+            type: GeometryTypes.PRISM,
+            coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+            base: {
+              type: GeometryTypes.POINT,
+              coordinates: [10, 20],
+            },
+            upper: 10,
+          },
+        ],
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Fails when a PrismCollection member base contains a "coordRefSys" member.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.MULTIPRISM,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        prisms: [
+          {
+            type: GeometryTypes.PRISM,
+            base: {
+              type: GeometryTypes.POINT,
+              coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+              coordinates: [10, 20],
+            },
+            upper: 10,
+          },
+        ],
+      },
+      geometry: null,
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+});

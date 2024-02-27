@@ -167,4 +167,28 @@ rules.push({
   },
 });
 
+rules.push({
+  name: '/req/core/geometry-collection',
+  validateFeature: feature => {
+    if (feature.place !== null) {
+      const place = feature.place;
+
+      if (
+        (place.type === GeometryTypes.GEOMETRYCOLLECTION && place.geometries.some(g => g.coordRefSys !== undefined)) ||
+        (place.type === GeometryTypes.PRISM && place.base.coordRefSys !== undefined) ||
+        (place.type === GeometryTypes.MULTIPRISM &&
+          place.prisms.some(g => g.coordRefSys !== undefined || g.base.coordRefSys !== undefined))
+      ) {
+        return {
+          pointer: '/place',
+          message:
+            'If the "place" member in any JSON-FG feature in the JSON document is not null and the geometry type ' +
+            '(member "type") is "GeometryCollection" or any other geometry type that has embedded geometry objects, ' +
+            'no embedded geometry object SHALL include a "coordRefSys" member.',
+        };
+      }
+    }
+  },
+});
+
 export default rules;
