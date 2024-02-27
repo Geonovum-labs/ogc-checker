@@ -129,8 +129,8 @@ rules.push({
 
 rules.push({
   name: '/req/core/place',
-  validateFeature: feature => {
-    if (feature.place !== null) {
+  validateFeature: (feature, isRoot) => {
+    if (isRoot && feature.place !== null) {
       const place = feature.place;
       const coordRefSys = place.coordRefSys ?? feature.coordRefSys;
 
@@ -147,7 +147,9 @@ rules.push({
     }
   },
   validateFeatureCollection: featureCollection => {
-    featureCollection.features.forEach((feature, i) => {
+    for (let i = 0; i < featureCollection.features.length; i++) {
+      const feature = featureCollection.features[i];
+
       if (feature.place !== null) {
         const place = feature.place;
         const coordRefSys = place.coordRefSys ?? feature.coordRefSys ?? featureCollection.coordRefSys;
@@ -163,7 +165,7 @@ rules.push({
           };
         }
       }
-    });
+    }
   },
 });
 

@@ -196,6 +196,25 @@ describe('Requirement 10A', () => {
     expect(violations.length).toBe(1);
   });
 
+  test('Succeeds when a GeoJSON type and a non-CRS84 coordRefSys is given on the feature collection level.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POINT,
+            coordinates: [10, 10],
+          },
+          geometry: null,
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(0);
+  });
+
   test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the feature collection level.', () => {
     const violations = applyRules(geometry, {
       type: DocumentTypes.FEATURECOLLECTION,
