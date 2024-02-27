@@ -8,6 +8,8 @@ export type FeatureDocument = Feature | FeatureCollection;
 export interface Feature {
   type: DocumentTypes.FEATURE;
   conformsTo?: string[];
+  featureType?: string | string[];
+  featureSchema?: string;
   time: Time | null;
   place: Geometry | null;
   geometry: Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | null;
@@ -19,6 +21,8 @@ export interface Feature {
 export interface FeatureCollection {
   type: DocumentTypes.FEATURE_COLLECTION;
   conformsTo?: string[];
+  featureType?: string | string[];
+  featureSchema?: string;
   features: Feature[];
 }
 

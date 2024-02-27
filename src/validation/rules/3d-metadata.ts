@@ -21,7 +21,8 @@ rules.push({
       return {
         pointer: '/conformsTo',
         message:
-          'When having 3D geometries, the "conformsTo" member of the JSON document SHALL include at least the 3D conformance class.',
+          'When having 3D geometries, the "conformsTo" member of the JSON document SHALL include at least the 3D ' +
+          'conformance class.',
       };
     }
   },
@@ -30,7 +31,8 @@ rules.push({
       return {
         pointer: '/conformsTo',
         message:
-          'When having 3D geometries, the "conformsTo" member of the JSON document SHALL include at least the 3D conformance class.',
+          'When having 3D geometries, the "conformsTo" member of the JSON document SHALL include at least the 3D ' +
+          'conformance class.',
       };
     }
   },
