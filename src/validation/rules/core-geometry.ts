@@ -191,4 +191,22 @@ rules.push({
   },
 });
 
+rules.push({
+  name: '/req/core/fallback',
+  validateFeature: feature => {
+    if (
+      feature.place !== null &&
+      feature.geometry !== null &&
+      JSON.stringify(feature.place) === JSON.stringify(feature.geometry)
+    ) {
+      return {
+        pointer: '/place',
+        message:
+          'If both the "place" and the "geometry" member in a JSON-FG feature in the JSON document are not null, the ' +
+          'values of both members SHALL not be identical.',
+      };
+    }
+  },
+});
+
 export default rules;

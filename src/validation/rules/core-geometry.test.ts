@@ -321,3 +321,23 @@ describe('Requirement 11A', () => {
     expect(violations.length).toBe(1);
   });
 });
+
+describe('Requirement 12A', () => {
+  test('Fails when the values for the "place" and "geometry" members are equal.', () => {
+    const violations = applyRules(geometry, {
+      type: DocumentTypes.FEATURE,
+      place: {
+        type: GeometryTypes.POINT,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        coordinates: [10, 20],
+      },
+      geometry: {
+        type: GeometryTypes.POINT,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        coordinates: [10, 20],
+      },
+    } as Feature);
+
+    expect(violations.length).toBe(1);
+  });
+});
