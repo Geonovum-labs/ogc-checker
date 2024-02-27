@@ -72,4 +72,19 @@ describe('Requirement 2A', () => {
 
     expect(violations.length).toBe(1);
   });
+
+  test('Fails when a member feature of a feature collection contains a "conformsTo" member', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURE_COLLECTION,
+      conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/core'],
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/core'],
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(1);
+  });
 });

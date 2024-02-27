@@ -34,11 +34,14 @@ const applyRule = (rule: Rule, doc: FeatureDocument): RuleViolation[] => {
       violations.push(violation);
     }
 
-    doc.features?.forEach(feature => {
+    doc.features?.forEach((feature, i) => {
       const violation = rule.validateFeature?.call(this, feature, false);
 
       if (violation) {
-        violations.push(violation);
+        violations.push({
+          ...violation,
+          pointer: '/features/' + i + violation.pointer,
+        });
       }
     });
   }

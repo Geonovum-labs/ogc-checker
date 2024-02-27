@@ -24,6 +24,13 @@ rules.push({
         message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformance class.',
       };
     }
+
+    if (!isRoot && conformsTo !== undefined) {
+      return {
+        pointer: '/conformsTo',
+        message: 'Only the root object of the JSON document SHALL include a "conformsTo" member.',
+      };
+    }
   },
   validateFeatureCollection: featureCollection => {
     const conformsTo = featureCollection.conformsTo;
