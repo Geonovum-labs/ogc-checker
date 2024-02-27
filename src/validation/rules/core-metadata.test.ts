@@ -1,6 +1,6 @@
 import { DocumentTypes, Feature, FeatureCollection } from '../../types';
 import { applyRules } from '../ruleValidation';
-import metadata from './metadata';
+import metadata from './core-metadata';
 
 describe('Requirement 2A', () => {
   test('Fails when the "conformsTo" member of a feature is absent', () => {

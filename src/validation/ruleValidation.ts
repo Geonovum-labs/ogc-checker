@@ -2,8 +2,7 @@ import { Diagnostic, linter } from '@codemirror/lint';
 import { EditorView } from '@uiw/react-codemirror';
 import { DocumentTypes, Feature, FeatureCollection, FeatureDocument } from '../types';
 import { getJsonPointers } from './pointers';
-import metadata from './rules/metadata';
-import temporal from './rules/temporal';
+import rules from './rules';
 
 export interface RuleViolation {
   pointer: string;
@@ -57,7 +56,6 @@ const ruleValidation = linter((view: EditorView) => {
   const doc = JSON.parse(code) as FeatureDocument;
   const pointers = getJsonPointers(view.state);
   const diagnostics: Diagnostic[] = [];
-  const rules = [...metadata, ...temporal];
 
   rules.forEach(rule => {
     const violations = applyRule(rule, doc);

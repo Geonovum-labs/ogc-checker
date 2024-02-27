@@ -1,6 +1,6 @@
 import { DocumentTypes, Feature } from '../../types';
 import { applyRules } from '../ruleValidation';
-import temporal from './temporal';
+import temporal from './core-temporal';
 
 describe('Requirement 3B', () => {
   test('Succeeds when start and end instants are equal', () => {
