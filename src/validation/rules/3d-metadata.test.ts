@@ -1,4 +1,4 @@
-import { DocumentTypes, Feature, FeatureCollection } from '../../types';
+import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../types';
 import { applyRules } from '../ruleValidation';
 import metadata from './3d-metadata';
 import { CC_CORE_URI } from './core-metadata';
@@ -9,7 +9,7 @@ describe('Requirement 14A', () => {
       type: DocumentTypes.FEATURE,
       conformsTo: [CC_CORE_URI],
       place: {
-        type: 'Polygon',
+        type: GeometryTypes.POLYGON,
       },
     } as Feature);
 
@@ -21,7 +21,7 @@ describe('Requirement 14A', () => {
       type: DocumentTypes.FEATURE,
       conformsTo: [CC_CORE_URI],
       place: {
-        type: 'Polyhedron',
+        type: GeometryTypes.POLYHEDRON,
       },
     } as Feature);
 
@@ -30,13 +30,13 @@ describe('Requirement 14A', () => {
 
   test('Succeeds when a feature collection does not contain a 3D geometry and does not include the 3D conformance class', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI],
       features: [
         {
           type: DocumentTypes.FEATURE,
           place: {
-            type: 'Polygon',
+            type: GeometryTypes.POLYGON,
           },
         },
       ],
@@ -47,13 +47,13 @@ describe('Requirement 14A', () => {
 
   test('Fails when a feature collection contains a 3D geometry and does not include the 3D conformance class', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI],
       features: [
         {
           type: DocumentTypes.FEATURE,
           place: {
-            type: 'Polyhedron',
+            type: GeometryTypes.POLYHEDRON,
           },
         },
       ],

@@ -1,6 +1,19 @@
 export enum DocumentTypes {
   FEATURE = 'Feature',
-  FEATURE_COLLECTION = 'FeatureCollection',
+  FEATURECOLLECTION = 'FeatureCollection',
+}
+
+export enum GeometryTypes {
+  POINT = 'Point',
+  MULTIPOINT = 'MultiPoint',
+  LINESTRING = 'LineString',
+  MULTILINESTRING = 'MultiLineString',
+  POLYGON = 'Polygon',
+  MULTIPOLYGON = 'MultiPolygon',
+  POLYHEDRON = 'Polyhedron',
+  MULTIPOLYHEDRON = 'MultiPolyhedron',
+  PRISM = 'Prism',
+  MULTIPRISM = 'MultiPrism',
 }
 
 export type FeatureDocument = Feature | FeatureCollection;
@@ -11,15 +24,15 @@ export interface Feature {
   featureType?: string | string[];
   featureSchema?: string;
   time: Time | null;
-  place: Geometry | null;
-  geometry: Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | null;
+  place: Place | null;
+  geometry: Geometry | null;
   properties: {
     [key: string]: unknown;
   } | null;
 }
 
 export interface FeatureCollection {
-  type: DocumentTypes.FEATURE_COLLECTION;
+  type: DocumentTypes.FEATURECOLLECTION;
   conformsTo?: string[];
   featureType?: string | string[];
   featureSchema?: string;
@@ -32,46 +45,64 @@ export interface Time {
   interval?: [string, string];
 }
 
-export interface Geometry {
-  type: string;
+export type Geometry = Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon;
+
+export type Place = Geometry | Polyhedron | MultiPolyhedron | Prism | MultiPrism;
+
+export type Position2D = [number, number];
+
+export type Position3D = [number, number, number];
+
+export type Position = Position2D | Position3D;
+
+export interface Point {
+  type: GeometryTypes.POINT;
+  coordinates: Position;
 }
 
-export interface Point extends Geometry {
-  type: 'Point';
+export interface MultiPoint {
+  type: GeometryTypes.MULTIPOINT;
+  coordinates: Position[];
 }
 
-export interface MultiPoint extends Geometry {
-  type: 'MultiPoint';
+export interface LineString {
+  type: GeometryTypes.LINESTRING;
+  coordinates: Position[];
 }
 
-export interface LineString extends Geometry {
-  type: 'LineString';
+export interface MultiLineString {
+  type: GeometryTypes.MULTILINESTRING;
+  coordinates: Position[][];
 }
 
-export interface MultiLineString extends Geometry {
-  type: 'MultiLineString';
+export interface Polygon {
+  type: GeometryTypes.POLYGON;
+  coordinates: Position[][];
 }
 
-export interface Polygon extends Geometry {
-  type: 'Polygon';
+export interface MultiPolygon {
+  type: GeometryTypes.MULTIPOLYGON;
+  coordinates: Position[][][];
 }
 
-export interface MultiPolygon extends Geometry {
-  type: 'MultiPolygon';
+export interface Polyhedron {
+  type: GeometryTypes.POLYHEDRON;
+  coordinates: Position3D[][][][];
 }
 
-export interface Polyhedron extends Geometry {
-  type: 'Polyhedron';
+export interface MultiPolyhedron {
+  type: GeometryTypes.MULTIPOLYHEDRON;
+  coordinates: Position3D[][][][][];
 }
 
-export interface MultiPolyhedron extends Geometry {
-  type: 'MultiPolyhedron';
+export interface Prism {
+  type: GeometryTypes.PRISM;
+  base: Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon;
+  lower?: number;
+  upper: number;
 }
 
-export interface Prism extends Geometry {
-  type: 'Prism';
-}
-
-export interface MultiPrism extends Geometry {
-  type: 'MultiPrism';
+export interface MultiPrism {
+  type: GeometryTypes.MULTIPRISM;
+  prisms: Prism[];
 }

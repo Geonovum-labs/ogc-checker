@@ -16,7 +16,7 @@ describe('Requirement 17A', () => {
 
   test('Fails when a feature collection contains a "featureType" member and does not include the Feature Types and Schemas conformance class', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI],
       featureType: 'app:building',
     } as FeatureCollection);
@@ -26,7 +26,7 @@ describe('Requirement 17A', () => {
 
   test('Fails when a feature collection member contains a "featureType" member and does not include the Feature Types and Schemas conformance class', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI],
       features: [
         {
@@ -54,7 +54,7 @@ describe('Requirement 18A', () => {
 describe('Requirement 18B', () => {
   test('Succeeds when a feature collection contains a "featureType" member', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       features: [
@@ -69,7 +69,7 @@ describe('Requirement 18B', () => {
 
   test('Succeeds when a feature collection contains a "featureType" member in every individual feature', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
       features: [
         {
@@ -88,7 +88,7 @@ describe('Requirement 18B', () => {
 
   test('Fails when both a feature collection and individual features contain a "featureType" member', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       features: [
@@ -104,7 +104,7 @@ describe('Requirement 18B', () => {
 
   test('Fails when not every individual feature contains a "featureType" member', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
       features: [
         {

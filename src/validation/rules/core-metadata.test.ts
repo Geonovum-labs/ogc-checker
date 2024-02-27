@@ -14,7 +14,7 @@ describe('Requirement 2A', () => {
 
   test('Fails when the "conformsTo" member of a feature collection is absent', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
     } as FeatureCollection);
 
     expect(violations.length).toBe(1);
@@ -40,7 +40,7 @@ describe('Requirement 2A', () => {
 
   test('Succeeds when the "conformsTo" member of a feature collection contains the core URI', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI],
     } as FeatureCollection);
 
@@ -49,7 +49,7 @@ describe('Requirement 2A', () => {
 
   test('Succeeds when the "conformsTo" member of a feature collection contains the core CURIE', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_CURIE],
     } as FeatureCollection);
 
@@ -67,7 +67,7 @@ describe('Requirement 2A', () => {
 
   test('Fails when the "conformsTo" member of a feature collection does not contain the core URI/CURIE', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_3D_URI],
     } as FeatureCollection);
 
@@ -76,7 +76,7 @@ describe('Requirement 2A', () => {
 
   test('Fails when a member feature of a feature collection contains a "conformsTo" member', () => {
     const violations = applyRules(metadata, {
-      type: DocumentTypes.FEATURE_COLLECTION,
+      type: DocumentTypes.FEATURECOLLECTION,
       conformsTo: [CC_CORE_URI],
       features: [
         {

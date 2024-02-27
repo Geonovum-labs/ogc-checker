@@ -26,7 +26,7 @@ const applyRule = (rule: Rule, doc: FeatureDocument): RuleViolation[] => {
     }
   }
 
-  if (doc.type === DocumentTypes.FEATURE_COLLECTION) {
+  if (doc.type === DocumentTypes.FEATURECOLLECTION) {
     const violation = rule.validateFeatureCollection?.call(this, doc);
 
     if (violation) {

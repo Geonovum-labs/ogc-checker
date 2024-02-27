@@ -1,11 +1,16 @@
-import { Feature, FeatureDocument } from '../../types';
+import { Feature, FeatureDocument, GeometryTypes } from '../../types';
 import { Rule } from '../ruleValidation';
 
 export const CC_3D_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
 
 export const CC_3D_CURIE = '[ogc-json-fg-1-0.2:3d]';
 
-const TYPES_3D = ['Polyhedron', 'MultiPolyhedron', 'Prism', 'MultiPrism'];
+const TYPES_3D = [
+  GeometryTypes.POLYHEDRON,
+  GeometryTypes.MULTIPOLYHEDRON,
+  GeometryTypes.PRISM,
+  GeometryTypes.MULTIPRISM,
+];
 
 const conformsTo3D = (doc: FeatureDocument) =>
   doc.conformsTo !== undefined && (doc.conformsTo.includes(CC_3D_URI) || doc.conformsTo.includes(CC_3D_CURIE));
