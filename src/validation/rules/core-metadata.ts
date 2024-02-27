@@ -1,13 +1,17 @@
+import { FeatureDocument } from '../../types';
 import { Rule } from '../ruleValidation';
 
-const CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
+export const CC_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 
-const CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
+export const CC_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
+
+const conformsToCore = (doc: FeatureDocument) =>
+  doc.conformsTo !== undefined && (doc.conformsTo.includes(CC_CORE_URI) || doc.conformsTo.includes(CC_CORE_CURIE));
 
 const rules: Rule[] = [];
 
 rules.push({
-  name: '/req/core/interval',
+  name: '/req/core/metadata',
   validateFeature: (feature, isRoot) => {
     const conformsTo = feature.conformsTo;
 
@@ -18,7 +22,7 @@ rules.push({
       };
     }
 
-    if (isRoot && conformsTo !== undefined && !conformsTo.includes(CORE_URI) && !conformsTo.includes(CORE_CURIE)) {
+    if (isRoot && conformsTo !== undefined && !conformsToCore(feature)) {
       return {
         pointer: '/conformsTo',
         message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformance class.',
@@ -42,7 +46,7 @@ rules.push({
       };
     }
 
-    if (conformsTo !== undefined && !conformsTo.includes(CORE_URI) && !conformsTo.includes(CORE_CURIE)) {
+    if (conformsTo !== undefined && !conformsToCore(featureCollection)) {
       return {
         pointer: '/conformsTo',
         message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformance class.',

@@ -1,6 +1,7 @@
 import { DocumentTypes, Feature, FeatureCollection } from '../../types';
 import { applyRules } from '../ruleValidation';
-import metadata from './core-metadata';
+import { CC_3D_URI } from './3d-metadata';
+import metadata, { CC_CORE_CURIE, CC_CORE_URI } from './core-metadata';
 
 describe('Requirement 2A', () => {
   test('Fails when the "conformsTo" member of a feature is absent', () => {
@@ -22,7 +23,7 @@ describe('Requirement 2A', () => {
   test('Succeeds when the "conformsTo" member of a feature contains the core URI', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE,
-      conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/core'],
+      conformsTo: [CC_CORE_URI],
     } as Feature);
 
     expect(violations.length).toBe(0);
@@ -31,7 +32,7 @@ describe('Requirement 2A', () => {
   test('Succeeds when the "conformsTo" member of a feature contains the core CURIE', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE,
-      conformsTo: ['[ogc-json-fg-1-0.2:core]'],
+      conformsTo: [CC_CORE_CURIE],
     } as Feature);
 
     expect(violations.length).toBe(0);
@@ -40,7 +41,7 @@ describe('Requirement 2A', () => {
   test('Succeeds when the "conformsTo" member of a feature collection contains the core URI', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE_COLLECTION,
-      conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/core'],
+      conformsTo: [CC_CORE_URI],
     } as FeatureCollection);
 
     expect(violations.length).toBe(0);
@@ -49,7 +50,7 @@ describe('Requirement 2A', () => {
   test('Succeeds when the "conformsTo" member of a feature collection contains the core CURIE', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE_COLLECTION,
-      conformsTo: ['[ogc-json-fg-1-0.2:core]'],
+      conformsTo: [CC_CORE_CURIE],
     } as FeatureCollection);
 
     expect(violations.length).toBe(0);
@@ -58,7 +59,7 @@ describe('Requirement 2A', () => {
   test('Fails when the "conformsTo" member of a feature does not contain the core URI/CURIE', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE,
-      conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/3d'],
+      conformsTo: [CC_3D_URI],
     } as Feature);
 
     expect(violations.length).toBe(1);
@@ -67,7 +68,7 @@ describe('Requirement 2A', () => {
   test('Fails when the "conformsTo" member of a feature collection does not contain the core URI/CURIE', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE_COLLECTION,
-      conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/3d'],
+      conformsTo: [CC_3D_URI],
     } as FeatureCollection);
 
     expect(violations.length).toBe(1);
@@ -76,11 +77,11 @@ describe('Requirement 2A', () => {
   test('Fails when a member feature of a feature collection contains a "conformsTo" member', () => {
     const violations = applyRules(metadata, {
       type: DocumentTypes.FEATURE_COLLECTION,
-      conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/core'],
+      conformsTo: [CC_CORE_URI],
       features: [
         {
           type: DocumentTypes.FEATURE,
-          conformsTo: ['http://www.opengis.net/spec/json-fg-1/0.2/conf/core'],
+          conformsTo: [CC_CORE_URI],
         },
       ],
     } as FeatureCollection);
