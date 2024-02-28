@@ -7,8 +7,8 @@ const App: FC = () => {
   const code = JSON.stringify(building, undefined, 2);
 
   return (
-    <div className="h-screen">
-      <header className="flex p-2 bg-slate-700 text-white">
+    <div className="flex flex-col h-screen">
+      <header className="flex px-4 py-2 bg-slate-700 text-white">
         <div>
           <h1 className="font-semibold">JSON-FG Linter</h1>
         </div>
@@ -23,11 +23,11 @@ const App: FC = () => {
           </a>
         </div>
       </header>
-      <div className="flex h-full">
-        <div className="w-[50%] h-full overflow-auto">
+      <div className="flex flex-1 min-h-0">
+        <div className="w-[50%] min-w-[400px] overflow-auto">
           <CodeEditor code={code} />
         </div>
-        <div className="flex-1 h-full bg-sky-100">
+        <div className="flex-1 overflow-auto bg-sky-100">
           <LintReport />
         </div>
       </div>
