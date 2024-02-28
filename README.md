@@ -11,6 +11,7 @@ requirement names as listed in the OGC standard document. The table mentions sep
 
 | Rule                                      | Supported | Description |
 | :-----------------------------------------| :--------:| ----------- |
+| correct JSON syntax                       | **yes**   | Basis syntax checking |
 | /req/core/schema-valid                    | **yes**   | JSON Schema validation |
 | /rec/core/properties                      | no        | GeoJSON compatibility mode |
 | /req/core/metadata                        | **yes**   | Presence of conformance statement |
