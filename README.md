@@ -26,7 +26,7 @@ requirement names as listed in the OGC standard document. The table mentions sep
 | /req/core/place                           |  **yes**  | No valid GeoJSON geometries in `place`                                                 |
 | /req/core/geometry-collection             |  **yes**  | All coordinates in a collection have the same CRS                                      |
 | /req/core/fallback - A                    |  **yes**  | Geometries in `geometry` and `place` are not the same                                  |
-| /req/core/fallback - B                    |    no     | GeoJSOn compatibility is indicated in when the document is a GET response              |
+| /req/core/fallback - B                    |    no     | GeoJSON compatibility is indicated in when the document is a GET response              |
 | /req/core/axis-order                      |    no     | Conformance to OGC axis order policy                                                   |
 | /rec/core/place-crs                       |    no     | Coordinates in `place` within range of the used CRS                                    |
 | /req/3d/metadata                          |  **yes**  | Presence of conformance statement for 3D geometries                                    |
