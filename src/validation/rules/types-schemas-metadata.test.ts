@@ -1,4 +1,4 @@
-import { DocumentTypes, Feature, FeatureCollection } from '../../types';
+import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../types';
 import { applyRules } from '../ruleValidation';
 import { CC_CORE_URI } from './core-metadata';
 import metadata, { CC_TYPES_SCHEMAS_URI } from './types-schemas-metadata';
@@ -113,6 +113,196 @@ describe('Requirement 18B', () => {
         },
         {
           type: DocumentTypes.FEATURE,
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(1);
+  });
+});
+
+describe('Requirement 19A', () => {
+  test('Succeeds when a feature collection with "geometryDimension" 0 contains valid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 0,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POINT,
+          },
+        },
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.MULTIPOINT,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(0);
+  });
+
+  test('Fails when a feature collection with "geometryDimension" 0 contains invalid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 0,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POLYGON,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Succeeds when a feature collection with "geometryDimension" 1 contains valid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 1,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.LINESTRING,
+          },
+        },
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.MULTILINESTRING,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(0);
+  });
+
+  test('Fails when a feature collection with "geometryDimension" 1 contains invalid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 1,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POINT,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Succeeds when a feature collection with "geometryDimension" 2 contains valid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 2,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POLYGON,
+          },
+        },
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.MULTIPOLYGON,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(0);
+  });
+
+  test('Fails when a feature collection with "geometryDimension" 2 contains invalid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 2,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POINT,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(1);
+  });
+
+  test('Succeeds when a feature collection with "geometryDimension" 3 contains valid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 3,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POLYHEDRON,
+          },
+        },
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.MULTIPOLYHEDRON,
+          },
+        },
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.PRISM,
+          },
+        },
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.MULTIPRISM,
+          },
+        },
+      ],
+    } as FeatureCollection);
+
+    expect(violations.length).toBe(0);
+  });
+
+  test('Fails when a feature collection with "geometryDimension" 3 contains invalid geometry types', () => {
+    const violations = applyRules(metadata, {
+      type: DocumentTypes.FEATURECOLLECTION,
+      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      featureType: 'app:building',
+      geometryDimension: 3,
+      features: [
+        {
+          type: DocumentTypes.FEATURE,
+          place: {
+            type: GeometryTypes.POINT,
+          },
         },
       ],
     } as FeatureCollection);

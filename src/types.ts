@@ -37,6 +37,7 @@ export interface FeatureCollection {
   type: DocumentTypes.FEATURECOLLECTION;
   conformsTo?: string[];
   featureType?: string | string[];
+  geometryDimension?: number;
   featureSchema?: string;
   coordRefSys?: CoordRefSys;
   features: Feature[];
