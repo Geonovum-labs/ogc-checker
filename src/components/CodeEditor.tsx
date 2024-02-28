@@ -1,11 +1,11 @@
-import { json } from '@codemirror/lang-json';
-import { Diagnostic, forEachDiagnostic, lintGutter, setDiagnosticsEffect } from '@codemirror/lint';
+import { json, jsonParseLinter } from '@codemirror/lang-json';
+import { Diagnostic, forEachDiagnostic, lintGutter, linter, setDiagnosticsEffect } from '@codemirror/lint';
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { FC, useRef, useState } from 'react';
 import ruleValidation from '../validation/ruleValidation';
 import schemaValidation from '../validation/schemaValidation';
 
-const EXTENSIONS: Extension[] = [json(), lintGutter(), schemaValidation, ruleValidation];
+const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter(), schemaValidation, ruleValidation];
 
 interface Props {
   initialCode: string;

@@ -19,8 +19,15 @@ const ajv = new Ajv({
 addFormats(ajv);
 
 const schemaValidation = linter((view: EditorView) => {
-  const code = view.state.doc.toString();
-  const doc = JSON.parse(code);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let doc: any;
+
+  try {
+    doc = JSON.parse(view.state.doc.toString());
+  } catch {
+    return [];
+  }
+
   let docSchema: SchemaObject;
 
   if (doc.type === 'Feature') {

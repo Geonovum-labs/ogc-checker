@@ -52,8 +52,14 @@ export const applyRules = (rules: Rule[], doc: FeatureDocument): RuleViolation[]
   rules.flatMap(rule => applyRule(rule, doc));
 
 const ruleValidation = linter((view: EditorView) => {
-  const code = view.state.doc.toString();
-  const doc = JSON.parse(code) as FeatureDocument;
+  let doc: FeatureDocument;
+
+  try {
+    doc = JSON.parse(view.state.doc.toString());
+  } catch {
+    return [];
+  }
+
   const pointers = getJsonPointers(view.state);
   const diagnostics: Diagnostic[] = [];
 
