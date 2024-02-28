@@ -1,5 +1,5 @@
 import { json } from '@codemirror/lang-json';
-import { Diagnostic, forEachDiagnostic, lintGutter } from '@codemirror/lint';
+import { Diagnostic, forEachDiagnostic, lintGutter, setDiagnosticsEffect } from '@codemirror/lint';
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { FC, useRef, useState } from 'react';
 import ruleValidation from '../validation/ruleValidation';
@@ -24,9 +24,15 @@ const CodeEditor: FC<Props> = ({ initialCode }) => {
           value={value}
           extensions={EXTENSIONS}
           onUpdate={viewUpdate => {
-            const diagnostics: Diagnostic[] = [];
-            forEachDiagnostic(viewUpdate.state, d => diagnostics.push(d));
-            setDiagnostics(diagnostics);
+            viewUpdate.transactions.forEach(transaction => {
+              transaction.effects.forEach(effect => {
+                if (effect.is(setDiagnosticsEffect)) {
+                  const diagnostics: Diagnostic[] = [];
+                  forEachDiagnostic(viewUpdate.state, d => diagnostics.push(d));
+                  setDiagnostics(diagnostics);
+                }
+              });
+            });
 
             if (viewUpdate.docChanged) {
               setValue(viewUpdate.state.doc.toString());
