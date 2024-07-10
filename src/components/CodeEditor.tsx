@@ -1,12 +1,10 @@
 import { json, jsonParseLinter } from '@codemirror/lang-json';
-import { Diagnostic, forEachDiagnostic, lintGutter, linter, setDiagnosticsEffect } from '@codemirror/lint';
+import { Diagnostic, forEachDiagnostic, linter, lintGutter, setDiagnosticsEffect } from '@codemirror/lint';
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Spec } from '../types';
-import ruleValidation from '../validation/ruleValidation';
-import schemaValidation from '../validation/schemaValidation';
 
-const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter(), schemaValidation, ruleValidation];
+const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
 
 interface Props {
   spec: Spec;
@@ -14,11 +12,14 @@ interface Props {
 
 const CodeEditor: FC<Props> = ({ spec }) => {
   const [value, setValue] = useState('');
+  const [extensions, setExtensions] = useState<Extension[]>([]);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
 
   useEffect(() => {
     setValue(spec.example ?? '');
+    setExtensions([EXTENSIONS, ...spec.linters]);
+    setDiagnostics([]);
   }, [spec]);
 
   return (
@@ -27,7 +28,7 @@ const CodeEditor: FC<Props> = ({ spec }) => {
         <ReactCodeMirror
           ref={codeMirrorRef}
           value={value}
-          extensions={EXTENSIONS}
+          extensions={extensions}
           onUpdate={viewUpdate => {
             viewUpdate.transactions.forEach(transaction => {
               transaction.effects.forEach(effect => {

@@ -1,4 +1,4 @@
-import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../types';
+import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../../../types';
 import { applyRules } from '../ruleValidation';
 import geometry from './core-geometry';
 

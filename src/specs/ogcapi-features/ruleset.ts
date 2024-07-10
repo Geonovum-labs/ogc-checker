@@ -1,19 +1,8 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
-import { pattern } from '@stoplight/spectral-functions';
+import { oas } from '@stoplight/spectral-rulesets';
 
 const ruleset: RulesetDefinition = {
-  rules: {
-    'no-empty-description': {
-      given: '$..description',
-      message: 'Description must not be empty',
-      then: {
-        function: pattern,
-        functionOptions: {
-          notMatch: '^\\s*$',
-        },
-      },
-    },
-  },
+  extends: oas as RulesetDefinition,
 };
 
 export default ruleset;

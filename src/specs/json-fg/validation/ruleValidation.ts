@@ -1,6 +1,6 @@
 import { Diagnostic, linter } from '@codemirror/lint';
 import { EditorView } from '@uiw/react-codemirror';
-import { DocumentTypes, Feature, FeatureCollection, FeatureDocument } from '../types';
+import { DocumentTypes, Feature, FeatureCollection, FeatureDocument } from '../../../types';
 import { getJsonPointers } from './pointers';
 import rules from './rules';
 

@@ -1,4 +1,4 @@
-import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../types';
+import { DocumentTypes, Feature, FeatureCollection, GeometryTypes } from '../../../../types';
 import { applyRules } from '../ruleValidation';
 import metadata from './3d-metadata';
 import { CC_CORE_URI } from './core-metadata';

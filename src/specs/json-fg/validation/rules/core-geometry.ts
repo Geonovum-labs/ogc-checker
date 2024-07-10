@@ -1,4 +1,4 @@
-import { CoordRefSys, GeometryTypes, Place, Position, RefSysByRef } from '../../types';
+import { CoordRefSys, GeometryTypes, Place, Position, RefSysByRef } from '../../../../types';
 import { Rule } from '../ruleValidation';
 
 const GEOJSON_TYPES = [

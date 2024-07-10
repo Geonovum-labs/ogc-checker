@@ -13,7 +13,9 @@ const SpecSelector: FC<Props> = ({ className }) => {
   return (
     <select value={location.pathname} onChange={event => navigate(event.target.value)} className={className}>
       {specs.map(spec => (
-        <option value={`/${spec.slug}`}>{spec.name}</option>
+        <option key={spec.slug} value={`/${spec.slug}`}>
+          {spec.name}
+        </option>
       ))}
     </select>
   );

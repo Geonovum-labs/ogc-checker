@@ -1,7 +1,10 @@
+import { Extension } from '@uiw/react-codemirror';
+
 export interface Spec {
   name: string;
   slug: string;
   example?: string;
+  linters: Extension[];
 }
 
 export enum DocumentTypes {

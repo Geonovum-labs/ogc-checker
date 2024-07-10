@@ -1,4 +1,4 @@
-import { FeatureDocument } from '../../types';
+import { FeatureDocument } from '../../../../types';
 import { Rule } from '../ruleValidation';
 
 export const CC_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';

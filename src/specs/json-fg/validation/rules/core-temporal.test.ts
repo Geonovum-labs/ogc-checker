@@ -1,4 +1,4 @@
-import { DocumentTypes, Feature } from '../../types';
+import { DocumentTypes, Feature } from '../../../../types';
 import { applyRules } from '../ruleValidation';
 import temporal from './core-temporal';
 
