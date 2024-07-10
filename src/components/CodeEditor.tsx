@@ -12,13 +12,11 @@ interface Props {
 
 const CodeEditor: FC<Props> = ({ spec }) => {
   const [value, setValue] = useState('');
-  const [extensions, setExtensions] = useState<Extension[]>([]);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
 
   useEffect(() => {
     setValue(spec.example ?? '');
-    setExtensions([EXTENSIONS, ...spec.linters]);
     setDiagnostics([]);
   }, [spec]);
 
@@ -28,7 +26,7 @@ const CodeEditor: FC<Props> = ({ spec }) => {
         <ReactCodeMirror
           ref={codeMirrorRef}
           value={value}
-          extensions={extensions}
+          extensions={[EXTENSIONS, ...spec.linters]}
           onUpdate={viewUpdate => {
             viewUpdate.transactions.forEach(transaction => {
               transaction.effects.forEach(effect => {
