@@ -1,3 +1,8 @@
+export interface Spec {
+  name: string;
+  slug: string;
+}
+
 export enum DocumentTypes {
   FEATURE = 'Feature',
   FEATURECOLLECTION = 'FeatureCollection',

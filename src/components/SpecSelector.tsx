@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import specs from '../specs';
 
 interface Props {
   className?: string;
@@ -11,8 +12,9 @@ const SpecSelector: FC<Props> = ({ className }) => {
 
   return (
     <select value={location.pathname} onChange={event => navigate(event.target.value)} className={className}>
-      <option value="/json-fg">JSON-FG</option>
-      <option value="/ogcapi-features">OGC API Features</option>
+      {specs.map(spec => (
+        <option value={`/${spec.slug}`}>{spec.name}</option>
+      ))}
     </select>
   );
 };

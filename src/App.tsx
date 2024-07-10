@@ -4,20 +4,21 @@ import CodeEditor from './components/CodeEditor';
 import GitHubIcon from './components/GitHubIcon';
 import SpecSelector from './components/SpecSelector';
 import building from './examples/building.json';
+import { Spec } from './types';
 
 const initialCode = JSON.stringify(building, undefined, 2);
 
 interface Props {
-  spec: string;
+  spec: Spec;
 }
 
-const App: FC<Props> = () => (
+const App: FC<Props> = ({ spec }) => (
   <div className="flex flex-col h-screen">
     <header className="flex items-center px-4 py-2 bg-slate-700 text-white">
       <div>
-        <Link to="/">
-          <h1 className="text-lg font-medium">OGC Checker</h1>
-        </Link>
+        <h1 className="text-lg font-medium">
+          <Link to="/">OGC Checker</Link>: {spec.name}
+        </h1>
       </div>
       <div className="flex items-center ml-auto">
         <SpecSelector className="mr-4" />
