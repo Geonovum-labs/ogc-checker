@@ -59,7 +59,7 @@ const CodeEditor: FC<Props> = ({ spec }) => {
                 <li key={i}>
                   <div
                     className={clsx('mb-4 p-4 bg-white rounded shadow-lg', {
-                      'bg-red-100': diagnostic.severity === 'error',
+                      'bg-red-200': diagnostic.severity === 'error',
                       'bg-yellow-100': diagnostic.severity === 'warning',
                     })}
                   >

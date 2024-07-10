@@ -4,7 +4,7 @@ import example from './example.json';
 import ruleset from './ruleset';
 
 const spec: Spec = {
-  name: 'OGC API Features',
+  name: 'OGC API - Features',
   slug: 'ogcapi-features',
   example: JSON.stringify(example, undefined, 2),
   linters: [spectralLinter(ruleset)],
