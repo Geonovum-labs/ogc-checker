@@ -61,7 +61,6 @@ const CodeEditor: FC<Props> = ({ spec }) => {
                     &nbsp;
                     <span className="text-blue-600 underline">
                       <a
-                        href="#"
                         onClick={() =>
                           codeMirrorRef.current?.view?.dispatch({
                             selection: EditorSelection.single(diagnostic.from, diagnostic.to),
