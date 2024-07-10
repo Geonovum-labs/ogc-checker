@@ -30,7 +30,7 @@ export const spectralLinter = (ruleset: RulesetDefinition) => {
         from: doc.line(violation.range.start.line + 1).from + violation.range.start.character,
         to: doc.line(violation.range.end.line + 1).from + violation.range.end.character,
         severity: mapSeverity(violation.severity),
-        message: violation.message,
+        message: `[${violation.code}] ${violation.message}`,
       }))
     );
   });
