@@ -7,6 +7,8 @@ export interface Spec {
   linters: Extension[];
 }
 
+export type Severity = 'hint' | 'info' | 'warning' | 'error';
+
 export enum DocumentTypes {
   FEATURE = 'Feature',
   FEATURECOLLECTION = 'FeatureCollection',

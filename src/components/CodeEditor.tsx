@@ -57,7 +57,7 @@ const CodeEditor: FC<Props> = ({ spec }) => {
               {diagnostics.map((diagnostic, i) => (
                 <li key={i}>
                   <div className="mb-4 p-4 bg-white rounded shadow-lg">
-                    {diagnostic.message}
+                    [{diagnostic.severity}] {diagnostic.message}
                     &nbsp;
                     <span className="text-blue-600 underline">
                       <a
