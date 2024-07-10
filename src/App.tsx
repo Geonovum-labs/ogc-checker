@@ -9,7 +9,7 @@ const App: FC = () => (
   <div className="flex flex-col h-screen">
     <header className="flex px-4 py-2 bg-slate-700 text-white">
       <div>
-        <h1 className="font-semibold">JSON-FG Linter</h1>
+        <h1 className="font-semibold">OGC Checker</h1>
       </div>
       <div className="ml-auto">
         <a href="https://github.com/Geonovum-labs/json-fg-linter" target="_blank">
