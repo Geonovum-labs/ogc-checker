@@ -1,6 +1,7 @@
 export interface Spec {
   name: string;
   slug: string;
+  example?: string;
 }
 
 export enum DocumentTypes {

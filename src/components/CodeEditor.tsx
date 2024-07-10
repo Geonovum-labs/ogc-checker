@@ -1,20 +1,25 @@
 import { json, jsonParseLinter } from '@codemirror/lang-json';
 import { Diagnostic, forEachDiagnostic, lintGutter, linter, setDiagnosticsEffect } from '@codemirror/lint';
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import { Spec } from '../types';
 import ruleValidation from '../validation/ruleValidation';
 import schemaValidation from '../validation/schemaValidation';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter(), schemaValidation, ruleValidation];
 
 interface Props {
-  initialCode: string;
+  spec: Spec;
 }
 
-const CodeEditor: FC<Props> = ({ initialCode }) => {
-  const [value, setValue] = useState(initialCode);
+const CodeEditor: FC<Props> = ({ spec }) => {
+  const [value, setValue] = useState('');
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
+
+  useEffect(() => {
+    setValue(spec.example ?? '');
+  }, [spec]);
 
   return (
     <div className="flex h-full">

@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom';
 import CodeEditor from './components/CodeEditor';
 import GitHubIcon from './components/GitHubIcon';
 import SpecSelector from './components/SpecSelector';
-import building from './examples/building.json';
 import { Spec } from './types';
-
-const initialCode = JSON.stringify(building, undefined, 2);
 
 interface Props {
   spec: Spec;
@@ -28,7 +25,7 @@ const App: FC<Props> = ({ spec }) => (
       </div>
     </header>
     <div className="flex-1 overflow-hidden">
-      <CodeEditor initialCode={initialCode} />
+      <CodeEditor spec={spec} />
     </div>
   </div>
 );
