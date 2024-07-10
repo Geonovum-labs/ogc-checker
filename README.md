@@ -1,12 +1,12 @@
-# JSON-FG Linter
+# OGC Checker
 
-This repository contains a linter for [OGC Features and Geometries JSON (JSON-FG): Part 1 Core](https://docs.ogc.org/DRAFTS/21-045.html).
+This repository contains a checker (validation & linting) for [OGC API Standards](https://ogcapi.ogc.org/) and [OGC Features and Geometries JSON (JSON-FG): Part 1 Core](https://docs.ogc.org/DRAFTS/21-045.html).
 
-URL: https://geonovum-labs.github.io/json-fg-linter/
+URL: https://geonovum-labs.github.io/ogc-checker/
 
-## Rules
+## JSON-FG
 
-The linter rules are based on JSON-FG requirements classes [Core](https://docs.ogc.org/DRAFTS/21-045.html#rc_core), [3D](https://docs.ogc.org/DRAFTS/21-045.html#rc_3d) and [Features types and Schemas](https://docs.ogc.org/DRAFTS/21-045.html#rc_types-schemas). In addition, the linter does some consistency checks that are useful but not based on explicit requirements.
+The validation rules are based on JSON-FG requirements classes [Core](https://docs.ogc.org/DRAFTS/21-045.html#rc_core), [3D](https://docs.ogc.org/DRAFTS/21-045.html#rc_3d) and [Features types and Schemas](https://docs.ogc.org/DRAFTS/21-045.html#rc_types-schemas). In addition, the checker does some consistency checks that are useful but not based on explicit requirements.
 
 The following table gives an overview of supported JSON-FG requirements. The codes in the Rules column are the
 requirement names as listed in the OGC standard document. The table mentions separate sub requirements (e.g. "A", "B") only when some are and some are not supported.

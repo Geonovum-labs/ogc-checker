@@ -1,5 +1,5 @@
 {
-  "name": "json-fg-linter",
+  "name": "ogc-checker",
   "private": true,
   "version": "0.0.0",
   "type": "module",
