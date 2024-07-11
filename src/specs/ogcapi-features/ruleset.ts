@@ -198,6 +198,24 @@ const ruleset: RulesetDefinition = {
         },
       },
     },
+    '/req/core/fc-time-definition': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
+      message: 'The operation SHALL support a parameter `datetime`. {{error}}',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'datetime',
+            in: 'query',
+            explode: false,
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
     '/req/core/f-op': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))]',
       message:
