@@ -1,3 +1,4 @@
+import { IFunctionResult } from '@stoplight/spectral-core';
 import mergeAllOf from 'json-schema-merge-allof';
 import { OpenAPIV3_0 } from './openapi-types';
 
@@ -7,11 +8,10 @@ export const groupBy = <T>(arr: T[], key: (i: T) => string) =>
     return groups;
   }, {} as Record<string, T[]>);
 
-export const errorMessage = (message: string) => [
-  {
-    message: message,
-  },
-];
+export const errorMessage = (message: string, path?: string[]): IFunctionResult[] => [{ message, path }];
+
+export const errorStr = (error: string, path: string[]) =>
+  path.length > 0 ? `${error} (schema path: "${path.map(error => error.replace('/', '\\/')).join('/')}")` : error;
 
 /**
  * This function recursively matches a schema with a given reference schema.
@@ -23,7 +23,11 @@ export const errorMessage = (message: string) => [
  * @param refSchema The reference schema
  * @returns An array of error messages
  */
-export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPIV3_0.SchemaObject): string[] => {
+export const matchSchema = (
+  schema: OpenAPIV3_0.SchemaObject,
+  refSchema: OpenAPIV3_0.SchemaObject,
+  path: string[] = []
+): string[] => {
   const errors: string[] = [];
 
   if (schema.allOf || refSchema.allOf) {
@@ -35,35 +39,35 @@ export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPI
   }
 
   if (refSchema.type && schema.type !== refSchema.type) {
-    errors.push(`Schema type must be "${refSchema.type}".`);
+    errors.push(errorStr(`Schema type must be "${refSchema.type}".`, path));
   }
 
   if (refSchema.format && schema.format !== refSchema.format) {
-    errors.push(`Schema format must be "${refSchema.format}".`);
+    errors.push(errorStr(`Schema format must be "${refSchema.format}".`, path));
   }
 
   if (refSchema.type === 'object' && schema.type === 'object') {
     refSchema.required?.forEach(req => {
       if (!schema.required?.includes(req)) {
-        errors.push(`Property "${req}" must be required.`);
+        errors.push(errorStr(`Property "${req}" must be required.`, path));
       }
     });
 
-    Object.entries(refSchema.properties ?? {}).forEach(([refPropName, refPropSchema]) => {
-      const propSchema = (schema.properties ?? {})[refPropName];
+    Object.entries(refSchema.properties ?? {}).forEach(([propName, refPropSchema]) => {
+      const propSchema = (schema.properties ?? {})[propName];
 
-      if (!propSchema && refSchema.required?.includes(refPropName)) {
-        errors.push(`Required property "${refPropName}" is missing.`);
+      if (!propSchema && refSchema.required?.includes(propName)) {
+        errors.push(errorStr(`Required property "${propName}" is missing.`, path));
       }
 
       if (propSchema) {
-        matchSchema(propSchema, refPropSchema).forEach(error => errors.push(error));
+        matchSchema(propSchema, refPropSchema, [...path, propName]).forEach(error => errors.push(error));
       }
     });
   }
 
   if (refSchema.type === 'array' && schema.type === 'array') {
-    matchSchema(schema.items, refSchema.items).forEach(error => errors.push(error));
+    matchSchema(schema.items, refSchema.items, path).forEach(error => errors.push(error));
   }
 
   return errors;
