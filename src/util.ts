@@ -8,7 +8,7 @@ export const groupBy = <T>(arr: T[], key: (i: T) => string) =>
     return groups;
   }, {} as Record<string, T[]>);
 
-export const errorMessage = (message: string, path?: string[]): IFunctionResult[] => [{ message, path }];
+export const errorMessage = (message: string, path?: (string | number)[]): IFunctionResult[] => [{ message, path }];
 
 export const errorStr = (error: string, path: string[]) =>
   path.length > 0 ? `${error} (schema path: "${path.map(error => error.replace('/', '\\/')).join('/')}")` : error;

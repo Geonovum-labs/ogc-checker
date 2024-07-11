@@ -30,7 +30,8 @@ const resolver = new Resolver({
 
 const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefined, Options> = async (
   response,
-  options
+  options,
+  context
 ) => {
   if (!options.schemaUri) {
     return [];
@@ -45,13 +46,17 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefine
   const content = response.content ? response.content[mediaType] : undefined;
 
   if (!content) {
-    return errorMessage(`Response media type "${mediaType}" is missing.`);
+    return errorMessage(`Response media type "${mediaType}" is missing.`, [...context.path, 'content']);
   }
 
   const schema = content.schema as OpenAPIV3_0.SchemaObject | undefined;
 
   if (!schema) {
-    return errorMessage(`Response schema for media type "${mediaType}" is missing.`);
+    return errorMessage(`Response schema for media type "${mediaType}" is missing.`, [
+      ...context.path,
+      'content',
+      mediaType,
+    ]);
   }
 
   const refSchema: OpenAPIV3_0.SchemaObject = await fetch(options.schemaUri)
@@ -62,7 +67,11 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefine
   const errors = matchSchema(schema, refSchema);
 
   if (errors.length > 0) {
-    return errorMessage(`Response schema is not compatible. ` + errors.join(' '));
+    return errorMessage(`Response schema is not compatible. ` + errors.join(' '), [
+      ...context.path,
+      'content',
+      mediaType,
+    ]);
   }
 
   return [];
