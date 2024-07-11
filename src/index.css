@@ -3,10 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  input[type='text'] {
+    @apply p-1 text-slate-700 text-sm rounded-md focus:ring-0;
+  }
+
   select {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3E%3Cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
     background-position: right 0.75rem center;
     background-size: 0.75em 0.75em;
     @apply appearance-none bg-no-repeat p-2 pr-8 text-slate-700 text-sm leading-none rounded-md focus:ring-0;
+  }
+
+  button {
+    @apply px-2 py-1 rounded-md bg-blue-500;
   }
 }

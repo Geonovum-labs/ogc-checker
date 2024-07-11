@@ -9,9 +9,10 @@ const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()
 
 interface Props {
   spec: Spec;
+  uri?: string;
 }
 
-const CodeEditor: FC<Props> = ({ spec }) => {
+const CodeEditor: FC<Props> = ({ spec, uri }) => {
   const [value, setValue] = useState('');
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
@@ -20,6 +21,14 @@ const CodeEditor: FC<Props> = ({ spec }) => {
     setValue(spec.example ?? '');
     setDiagnostics([]);
   }, [spec]);
+
+  useEffect(() => {
+    if (uri) {
+      fetch(uri)
+        .then(response => response.text())
+        .then(responseText => setValue(responseText));
+    }
+  }, [uri]);
 
   return (
     <div className="flex h-full">
