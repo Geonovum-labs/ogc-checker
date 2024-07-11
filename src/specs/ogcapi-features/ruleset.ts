@@ -2,9 +2,7 @@ import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import { oas } from '@stoplight/spectral-rulesets';
-import type { OpenAPIV3 } from 'openapi-types';
-import { APPLICATION_JSON_TYPE } from '../../constants';
-import { errorMessage } from '../../util';
+import responseMatchSchema from '../../functions/responseMatchSchema';
 
 const ruleset: RulesetDefinition = {
   documentationUrl: 'https://ogcapi.ogc.org/features/',
@@ -31,35 +29,9 @@ const ruleset: RulesetDefinition = {
       then: [
         {
           field: '200',
-          function: (response?: OpenAPIV3.ResponseObject) => {
-            if (!response) {
-              return errorMessage('A response with status code 200 is missing.');
-            }
-
-            if (response.content && response.content[APPLICATION_JSON_TYPE]) {
-              const schema = response.content[APPLICATION_JSON_TYPE].schema as OpenAPIV3.SchemaObject | undefined;
-
-              if (!schema) {
-                return errorMessage('Response schema for JSON media type is missing.');
-              }
-
-              if (schema.type !== 'object') {
-                return errorMessage('Response schema for JSON media type is not an object schema.');
-              }
-
-              if (!schema.required?.includes('links')) {
-                return errorMessage('Response schema for JSON media type does not set `links` property as required.');
-              }
-
-              const linksValue = schema.properties?.links as OpenAPIV3.SchemaObject | undefined;
-
-              if (!linksValue || linksValue.type !== 'array') {
-                return errorMessage(
-                  'Response schema for JSON media type does not have a `links` property, ' +
-                    'or the `links` property schema is not an array schema.'
-                );
-              }
-            }
+          function: responseMatchSchema,
+          functionOptions: {
+            schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
           },
         },
       ],
