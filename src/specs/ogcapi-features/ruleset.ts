@@ -25,13 +25,36 @@ const ruleset: RulesetDefinition = {
     '/req/core/root-success': {
       given: "$.paths['/'].get.responses",
       message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code 200. {{error}}',
+        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       then: [
         {
           field: '200',
           function: responseMatchSchema,
           functionOptions: {
             schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
+          },
+        },
+      ],
+    },
+    '/req/core/conformance-op': {
+      given: '$.paths',
+      message: 'The server SHALL support the HTTP GET operation at the path `/conformance`.',
+      severity: 'error',
+      then: {
+        field: '/conformance.get',
+        function: truthy,
+      },
+    },
+    '/req/core/conformance-success': {
+      given: "$.paths['/conformance'].get.responses",
+      message:
+        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      then: [
+        {
+          field: '200',
+          function: responseMatchSchema,
+          functionOptions: {
+            schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml',
           },
         },
       ],

@@ -15,7 +15,7 @@ export const errorMessage = (message: string) => [
 /**
  * This function recursively matches a schema with a given reference schema.
  *
- * - Equality of schema types
+ * - Equality of schema types & formats
  * - Presence of required properties for object schemas
  *
  * @param schema    The schema
@@ -27,6 +27,10 @@ export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPI
 
   if (refSchema.type && schema.type !== refSchema.type) {
     errors.push(`Schema type must be "${refSchema.type}".`);
+  }
+
+  if (refSchema.format && schema.format !== refSchema.format) {
+    errors.push(`Schema format must be "${refSchema.format}".`);
   }
 
   if (refSchema.type === 'object' && schema.type === 'object') {
