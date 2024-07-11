@@ -9,6 +9,7 @@ import { errorMessage, matchSchema } from '../util';
 
 interface Options {
   schemaUri?: string;
+  mediaType?: string;
 }
 
 const resolver = new Resolver({
@@ -35,20 +36,22 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefine
     return [];
   }
 
+  const mediaType = options.mediaType ?? APPLICATION_JSON_TYPE;
+
   if (!response) {
     return errorMessage('A response with status code 200 is missing.');
   }
 
-  const content = response.content ? response.content[APPLICATION_JSON_TYPE] : undefined;
+  const content = response.content ? response.content[mediaType] : undefined;
 
   if (!content) {
-    return errorMessage('Response media type `application/json` is missing.');
+    return errorMessage(`Response media type "${mediaType}" is missing.`);
   }
 
   const schema = content.schema as OpenAPIV3_0.SchemaObject | undefined;
 
   if (!schema) {
-    return errorMessage('Response schema for JSON media type is missing.');
+    return errorMessage(`Response schema for media type "${mediaType}" is missing.`);
   }
 
   const refSchema: OpenAPIV3_0.SchemaObject = await fetch(options.schemaUri)

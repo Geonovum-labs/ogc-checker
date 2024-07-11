@@ -2,6 +2,7 @@ import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import { oasDocumentSchema, oasPathParam } from '@stoplight/spectral-rulesets/dist/oas/functions';
+import { APPLICATION_GEO_JSON_TYPE } from '../../constants';
 import responseMatchSchema from '../../functions/responseMatchSchema';
 
 const ruleset: RulesetDefinition = {
@@ -36,6 +37,7 @@ const ruleset: RulesetDefinition = {
       given: "$.paths['/'].get.responses",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      severity: 'error',
       then: {
         field: '200',
         function: responseMatchSchema,
@@ -57,6 +59,7 @@ const ruleset: RulesetDefinition = {
       given: "$.paths['/conformance'].get.responses",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      severity: 'error',
       then: {
         field: '200',
         function: responseMatchSchema,
@@ -78,6 +81,7 @@ const ruleset: RulesetDefinition = {
       given: "$.paths['/collections'].get.responses",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      severity: 'error',
       then: {
         field: '200',
         function: responseMatchSchema,
@@ -105,6 +109,55 @@ const ruleset: RulesetDefinition = {
         function: responseMatchSchema,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml',
+        },
+      },
+    },
+    '/req/core/fc-op': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))]',
+      message:
+        'For every feature collection identified in the feature collections response (path `/collections`), the server SHALL support the HTTP GET operation at the path `/collections/{collectionId}/items`.',
+      severity: 'error',
+      then: {
+        field: 'get',
+        function: truthy,
+      },
+    },
+    '/req/core/fc-response': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses',
+      message:
+        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: responseMatchSchema,
+        functionOptions: {
+          schemaUri:
+            'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureCollectionGeoJSON.yaml',
+          mediaType: APPLICATION_GEO_JSON_TYPE,
+        },
+      },
+    },
+    '/req/core/f-op': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))]',
+      message:
+        'For every feature in a feature collection (path `/collections/{collectionId}`), the server SHALL support the HTTP GET operation at the path `/collections/{collectionId}/items/{featureId}`.',
+      severity: 'error',
+      then: {
+        field: 'get',
+        function: truthy,
+      },
+    },
+    '/req/core/f-response': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))].get.responses',
+      message:
+        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: responseMatchSchema,
+        functionOptions: {
+          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureGeoJSON.yaml',
+          mediaType: APPLICATION_GEO_JSON_TYPE,
         },
       },
     },
