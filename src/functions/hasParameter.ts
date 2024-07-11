@@ -1,10 +1,11 @@
-import { RulesetFunction } from '@stoplight/spectral-core';
+import { IFunctionResult, RulesetFunction } from '@stoplight/spectral-core';
 import { equals, omit } from 'ramda';
 import { OpenAPIV3_0 } from '../openapi-types';
 import { errorMessage } from '../util';
 
 interface Options {
   spec: OpenAPIV3_0.ParameterObject;
+  validateSchema?: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]) => IFunctionResult[];
 }
 
 const applyDefaults = (parameter: OpenAPIV3_0.ParameterObject): OpenAPIV3_0.ParameterObject => {
@@ -35,13 +36,18 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
   }
 
   const parameter = applyDefaults(operation.parameters[paramIndex]);
+  const paramPath = [...context.path, 'parameters', paramIndex];
+
+  if (options.validateSchema) {
+    if (!equals(omit(['schema'], spec), omit(['schema'], parameter))) {
+      return errorMessage(`Parameter object is not equal to: ${JSON.stringify(options.spec)}.`, paramPath);
+    }
+
+    return options.validateSchema(parameter.schema ?? {}, paramPath);
+  }
 
   if (!equals(spec, parameter)) {
-    return errorMessage(`Parameter object is not equal to: ${JSON.stringify(options.spec)}.`, [
-      ...context.path,
-      'parameters',
-      paramIndex,
-    ]);
+    return errorMessage(`Parameter object is not equal to: ${JSON.stringify(options.spec)}.`, paramPath);
   }
 
   return [];

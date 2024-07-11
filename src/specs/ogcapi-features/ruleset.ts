@@ -5,6 +5,8 @@ import { oasDocumentSchema, oasPathParam } from '@stoplight/spectral-rulesets/di
 import { APPLICATION_GEO_JSON_TYPE } from '../../constants';
 import hasParameter from '../../functions/hasParameter';
 import responseMatchSchema from '../../functions/responseMatchSchema';
+import { OpenAPIV3_0 } from '../../openapi-types';
+import { errorMessage } from '../../util';
 
 const ruleset: RulesetDefinition = {
   documentationUrl: 'https://ogcapi.ogc.org/features/',
@@ -148,15 +150,25 @@ const ruleset: RulesetDefinition = {
           spec: {
             name: 'limit',
             in: 'query',
-            required: false,
-            schema: {
-              type: 'integer',
-              minimum: 0,
-              maximum: 10000,
-              default: 10,
-            },
-            style: 'form',
             explode: false,
+          },
+          validateSchema: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]) => {
+            if (!schema.type) {
+              return errorMessage('Schema is missing.', paramPath);
+            }
+
+            if (schema.type !== 'integer') {
+              return errorMessage('Schema type must be integer.', [...paramPath, 'schema']);
+            }
+
+            if (schema.minimum == undefined || schema.maximum === undefined || schema.default === undefined) {
+              return errorMessage(
+                'Integer schema must contain explicit values for "minimum", "maximum" and "default".',
+                [...paramPath, 'schema']
+              );
+            }
+
+            return [];
           },
         },
       },
