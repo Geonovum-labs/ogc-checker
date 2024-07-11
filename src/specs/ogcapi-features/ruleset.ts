@@ -173,6 +173,31 @@ const ruleset: RulesetDefinition = {
         },
       },
     },
+    '/req/core/fc-bbox-definition': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
+      message: 'The operation SHALL support a parameter `bbox`. {{error}}',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'bbox',
+            in: 'query',
+            explode: false,
+            schema: {
+              type: 'array',
+              oneOf: [
+                { minItems: 4, maxItems: 4 },
+                { minItems: 6, maxItems: 6 },
+              ],
+              items: {
+                type: 'number',
+              },
+            },
+          },
+        },
+      },
+    },
     '/req/core/f-op': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))]',
       message:

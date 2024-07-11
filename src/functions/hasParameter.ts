@@ -47,6 +47,7 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
   }
 
   if (!equals(spec, parameter)) {
+    // TODO: Ignore properties which have no impact on validation (such as $id, $schema and description)
     return errorMessage(`Parameter object is not equal to: ${JSON.stringify(options.spec)}.`, paramPath);
   }
 
