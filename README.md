@@ -40,3 +40,17 @@ requirement names as listed in the OGC standard document. The table mentions sep
 | /rec/types-schemas/homogeneous-collection |    no     | `featureType` and `geometryDimension` stated on collection level when all are the same |
 | /req/types-schemas/feature-schemas        |    no     | Referenced schemas must conform to OGC API Features part 5: Schemas                    |
 | /req/types-schemas/single-feature-schema  |    no     | Consistency between feature schema and feature type                                    |
+
+## Development
+
+Prepare your local environment:
+
+- Install project dependencies: `npm install`
+- Install VSCode extensions: Prettier, ESLint, Tailwind CSS IntelliSense
+- Set VSCode default formatter to `esbenp.prettier-vscode`
+
+Start the development server:
+
+```bash
+npm run dev
+```
