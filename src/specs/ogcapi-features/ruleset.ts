@@ -1,7 +1,7 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
-import { oas } from '@stoplight/spectral-rulesets';
+import { oasDocumentSchema, oasPathParam } from '@stoplight/spectral-rulesets/dist/oas/functions';
 import responseMatchSchema from '../../functions/responseMatchSchema';
 
 const ruleset: RulesetDefinition = {
@@ -10,8 +10,18 @@ const ruleset: RulesetDefinition = {
   formats: [oas3_0],
   rules: {
     '/req/oas30/oas-definition-2': {
-      ...oas.rules['oas3-schema'],
+      given: '$',
       message: 'The JSON representation SHALL conform to the OpenAPI Specification, version 3.0. {{error}}.',
+      severity: 'error',
+      then: [
+        {
+          function: oasDocumentSchema,
+        },
+        {
+          field: 'paths',
+          function: oasPathParam,
+        },
+      ],
     },
     '/req/core/root-op': {
       given: '$.paths',
@@ -26,15 +36,13 @@ const ruleset: RulesetDefinition = {
       given: "$.paths['/'].get.responses",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      then: [
-        {
-          field: '200',
-          function: responseMatchSchema,
-          functionOptions: {
-            schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
-          },
+      then: {
+        field: '200',
+        function: responseMatchSchema,
+        functionOptions: {
+          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
         },
-      ],
+      },
     },
     '/req/core/conformance-op': {
       given: '$.paths',
@@ -49,15 +57,13 @@ const ruleset: RulesetDefinition = {
       given: "$.paths['/conformance'].get.responses",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      then: [
-        {
-          field: '200',
-          function: responseMatchSchema,
-          functionOptions: {
-            schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml',
-          },
+      then: {
+        field: '200',
+        function: responseMatchSchema,
+        functionOptions: {
+          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml',
         },
-      ],
+      },
     },
     '/req/core/fc-md-op': {
       given: '$.paths',
@@ -72,15 +78,35 @@ const ruleset: RulesetDefinition = {
       given: "$.paths['/collections'].get.responses",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      then: [
-        {
-          field: '200',
-          function: responseMatchSchema,
-          functionOptions: {
-            schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml',
-          },
+      then: {
+        field: '200',
+        function: responseMatchSchema,
+        functionOptions: {
+          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml',
         },
-      ],
+      },
+    },
+    '/req/core/sfc-md-op': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))]',
+      message: 'The server SHALL support the HTTP GET operation at the path `/collections/{collectionId}`.',
+      severity: 'error',
+      then: {
+        field: 'get',
+        function: truthy,
+      },
+    },
+    '/req/core/sfc-md-success': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses',
+      message:
+        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: responseMatchSchema,
+        functionOptions: {
+          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml',
+        },
+      },
     },
   },
 };
