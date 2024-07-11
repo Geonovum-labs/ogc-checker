@@ -58,9 +58,10 @@ const CodeEditor: FC<Props> = ({ spec }) => {
               {diagnostics.map((diagnostic, i) => (
                 <li key={i}>
                   <div
-                    className={clsx('mb-4 p-4 bg-white rounded shadow-lg', {
+                    className={clsx('mb-4 p-4 rounded shadow-lg', {
                       'bg-red-200': diagnostic.severity === 'error',
                       'bg-yellow-100': diagnostic.severity === 'warning',
+                      'bg-white': diagnostic.severity === 'info' || diagnostic.severity === 'hint',
                     })}
                   >
                     {diagnostic.message}
