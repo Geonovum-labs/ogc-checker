@@ -1,7 +1,8 @@
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { resolveHttp } from '@stoplight/json-ref-readers';
+import { extname } from '@stoplight/path';
 import { RulesetFunction } from '@stoplight/spectral-core';
-import { Yaml } from '@stoplight/spectral-parsers';
-import { clone } from 'ramda';
+import { Json, Yaml } from '@stoplight/spectral-parsers';
+import { Resolver } from '@stoplight/spectral-ref-resolver';
 import { APPLICATION_JSON_TYPE } from '../constants';
 import { OpenAPIV3_0 } from '../openapi-types';
 import { errorMessage, matchSchema } from '../util';
@@ -10,7 +11,21 @@ interface Options {
   schemaUri?: string;
 }
 
-const resolver = new Resolver();
+const resolver = new Resolver({
+  resolvers: {
+    http: { resolve: resolveHttp },
+    https: { resolve: resolveHttp },
+  },
+  parseResolveResult: opts => {
+    const source = opts.targetAuthority.href().replace(/\/$/, '');
+    const parser = extname(source) === '.json' ? Json : Yaml;
+    const parseResult = parser.parse(opts.result);
+
+    return Promise.resolve({
+      result: parseResult.data,
+    });
+  },
+});
 
 const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefined, Options> = async (
   response,
@@ -39,7 +54,7 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefine
   const refSchema: OpenAPIV3_0.SchemaObject = await fetch(options.schemaUri)
     .then(response => response.text())
     .then(responseText => Yaml.parse(responseText).data)
-    .then(responseSchema => resolver.resolve(responseSchema).then(r => clone(r.result)));
+    .then(responseSchema => resolver.resolve(responseSchema, { baseUri: options.schemaUri }).then(r => r.result));
 
   const errors = matchSchema(schema, refSchema);
 

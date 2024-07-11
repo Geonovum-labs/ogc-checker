@@ -59,6 +59,29 @@ const ruleset: RulesetDefinition = {
         },
       ],
     },
+    '/req/core/fc-md-op': {
+      given: '$.paths',
+      message: 'The server SHALL support the HTTP GET operation at the path `/collections`.',
+      severity: 'error',
+      then: {
+        field: '/collections.get',
+        function: truthy,
+      },
+    },
+    '/req/core/fc-md-success': {
+      given: "$.paths['/collections'].get.responses",
+      message:
+        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
+      then: [
+        {
+          field: '200',
+          function: responseMatchSchema,
+          functionOptions: {
+            schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml',
+          },
+        },
+      ],
+    },
   },
 };
 

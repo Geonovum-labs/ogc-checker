@@ -1,3 +1,4 @@
+import mergeAllOf from 'json-schema-merge-allof';
 import { OpenAPIV3_0 } from './openapi-types';
 
 export const groupBy = <T>(arr: T[], key: (i: T) => string) =>
@@ -24,6 +25,14 @@ export const errorMessage = (message: string) => [
  */
 export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPIV3_0.SchemaObject): string[] => {
   const errors: string[] = [];
+
+  if (schema.allOf || refSchema.allOf) {
+    // TODO: Handle situations where merged JSON schema is not compatible with OpenAPI 3.0 schema object (e.g. multiple types)
+    return matchSchema(
+      schema.allOf ? (mergeAllOf(schema.allOf) as OpenAPIV3_0.SchemaObject) : schema,
+      refSchema.allOf ? (mergeAllOf(refSchema.allOf) as OpenAPIV3_0.SchemaObject) : refSchema
+    );
+  }
 
   if (refSchema.type && schema.type !== refSchema.type) {
     errors.push(`Schema type must be "${refSchema.type}".`);
