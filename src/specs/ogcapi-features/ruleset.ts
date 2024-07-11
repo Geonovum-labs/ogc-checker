@@ -3,6 +3,7 @@ import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import { oasDocumentSchema, oasPathParam } from '@stoplight/spectral-rulesets/dist/oas/functions';
 import { APPLICATION_GEO_JSON_TYPE } from '../../constants';
+import hasParameter from '../../functions/hasParameter';
 import responseMatchSchema from '../../functions/responseMatchSchema';
 
 const ruleset: RulesetDefinition = {
@@ -134,6 +135,29 @@ const ruleset: RulesetDefinition = {
           schemaUri:
             'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureCollectionGeoJSON.yaml',
           mediaType: APPLICATION_GEO_JSON_TYPE,
+        },
+      },
+    },
+    '/req/core/fc-limit-definition': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
+      message: 'The operation SHALL support a parameter `limit`. {{error}}',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'limit',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'integer',
+              minimum: 0,
+              maximum: 10000,
+              default: 10,
+            },
+            style: 'form',
+            explode: false,
+          },
         },
       },
     },
