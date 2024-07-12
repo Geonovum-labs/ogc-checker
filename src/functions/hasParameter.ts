@@ -1,7 +1,7 @@
 import { IFunctionResult, RulesetFunction } from '@stoplight/spectral-core';
 import { equals, omit } from 'ramda';
 import { OpenAPIV3_0 } from '../openapi-types';
-import { errorMessage } from '../util';
+import { errorMessage, matchSchema } from '../util';
 
 interface Options {
   spec: OpenAPIV3_0.ParameterObject;
@@ -42,15 +42,16 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
   const paramPath = [...context.path, 'parameters', paramIndex];
 
   if (options.validateSchema) {
-    if (!equals(omit(['schema'], spec), omit(['schema'], parameter))) {
-      return errorMessage(`Parameter object is not compatible with: ${JSON.stringify(options.spec)}.`, paramPath);
-    }
-
     return options.validateSchema(parameter.schema ?? {}, paramPath);
+  } else if (spec.schema) {
+    const errors = matchSchema(parameter.schema ?? {}, spec.schema);
+
+    if (errors.length > 0) {
+      return errorMessage(`Parameter schema is not compatible. ` + errors.join(' '), [...paramPath, 'schema']);
+    }
   }
 
-  if (!equals(spec, parameter)) {
-    // TODO: Ignore properties which have no impact on validation (such as $id, $schema and description)
+  if (!equals(omit(['schema'], spec), omit(['schema'], parameter))) {
     return errorMessage(`Parameter object is not compatible with: ${JSON.stringify(options.spec)}.`, paramPath);
   }
 
