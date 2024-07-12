@@ -1,6 +1,7 @@
 import { APPLICATION_OPENAPI_JSON_3_0_TYPE } from '../../constants';
 import { spectralLinter } from '../../spectral';
 import { Spec, SpecResponseMapper } from '../../types';
+import { handleResponse } from '../../util';
 import example from './example.json';
 import ruleset from './ruleset';
 
@@ -24,7 +25,7 @@ const responseMapper: SpecResponseMapper = responseText => {
       return fetch(serviceDescLink.href, {
         headers: { Accept: serviceDescLink.type },
       })
-        .then(res => res.text())
+        .then(response => handleResponse(response, serviceDescLink.href))
         .then(content => ({ content }));
     }
   }

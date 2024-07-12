@@ -4,6 +4,7 @@ import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from 
 import clsx from 'clsx';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Spec, SpecInput } from '../types';
+import { handleResponse } from '../util';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
 
@@ -32,13 +33,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
       setDiagnostics([]);
 
       fetch(uri)
-        .then(response => {
-          if (response.status !== 200) {
-            return Promise.reject(`Error while fetching URI \`${uri}\` (status code \`${response.status}\`).`);
-          }
-
-          return response.text();
-        })
+        .then(response => handleResponse(response, uri))
         .then(responseText =>
           spec.responseMapper //
             ? spec.responseMapper(responseText)
@@ -88,7 +83,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
       </div>
       <div className="flex-1 overflow-auto p-4 bg-sky-100 text-sm">
         {checking && <p>Checking...</p>}
-        {error && <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">{error}</div>}
+        {!checking && error && <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">{error}</div>}
         {!checking &&
           !error &&
           (diagnostics.length === 0 ? (

@@ -8,6 +8,14 @@ export const groupBy = <T>(arr: T[], key: (i: T) => string) =>
     return groups;
   }, {} as Record<string, T[]>);
 
+export const handleResponse = (response: Response, uri: string) => {
+  if (response.status !== 200) {
+    return Promise.reject(`Error while fetching URI \`${uri}\` (status code \`${response.status}\`).`);
+  }
+
+  return response.text();
+};
+
 export const errorMessage = (message: string, path?: (string | number)[]): IFunctionResult[] => [{ message, path }];
 
 export const errorStr = (error: string, path: string[]) =>
