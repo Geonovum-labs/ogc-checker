@@ -150,7 +150,6 @@ const ruleset: RulesetDefinition = {
           spec: {
             name: 'limit',
             in: 'query',
-            explode: false,
           },
           validateSchema: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]) => {
             if (!schema.type) {
@@ -208,7 +207,6 @@ const ruleset: RulesetDefinition = {
           spec: {
             name: 'datetime',
             in: 'query',
-            explode: false,
             schema: {
               type: 'string',
             },

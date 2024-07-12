@@ -13,6 +13,11 @@ type OptParamKey = Exclude<keyof OpenAPIV3_0.ParameterObject, 'name' | 'in'>;
 const applyDefaults = (parameter: OpenAPIV3_0.ParameterObject): OpenAPIV3_0.ParameterObject => {
   const style = parameter.style ?? (['query', 'cookie'].includes(parameter.in) ? 'form' : 'simple');
   const extProps = Object.keys(parameter).filter(key => /^x-/.test(key)) as OptParamKey[];
+  let explode = false;
+
+  if (style === 'form' && ['array', 'object'].includes(parameter.schema?.type ?? '')) {
+    explode = parameter.explode ?? true;
+  }
 
   return {
     ...omit(['description', 'example', 'examples', ...extProps], parameter),
@@ -20,7 +25,7 @@ const applyDefaults = (parameter: OpenAPIV3_0.ParameterObject): OpenAPIV3_0.Para
     deprecated: parameter.deprecated ?? false,
     allowEmptyValue: parameter.allowEmptyValue ?? false,
     style,
-    explode: parameter.explode ?? style === 'form',
+    explode,
     allowReserved: parameter.allowReserved ?? false,
   };
 };
