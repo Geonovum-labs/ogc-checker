@@ -5,7 +5,7 @@ import { handleResponse } from '../../util';
 import example from './example.json';
 import ruleset from './ruleset';
 
-const responseMapper: SpecResponseMapper = responseText => {
+const responseMapper: SpecResponseMapper = async responseText => {
   let document;
 
   try {
@@ -22,11 +22,11 @@ const responseMapper: SpecResponseMapper = responseText => {
     );
 
     if (serviceDescLink) {
-      return fetch(serviceDescLink.href, {
+      const content = await fetch(serviceDescLink.href, {
         headers: { Accept: serviceDescLink.type },
-      })
-        .then(response => handleResponse(response, serviceDescLink.href))
-        .then(content => ({ content }));
+      }).then(response => handleResponse(response, serviceDescLink.href));
+
+      return { content };
     }
   }
 
