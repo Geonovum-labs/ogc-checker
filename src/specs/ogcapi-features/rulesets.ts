@@ -30,12 +30,30 @@ const apiFeatures1Core: RulesetDefinition = {
         function: truthy,
       },
     },
+    '/req/core/root-success': {
+      given: "$.paths['/'].get.responses",
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: truthy,
+      },
+    },
     '/req/core/conformance-op': {
       given: '$.paths',
       message: 'The server SHALL support the HTTP GET operation at the path `/conformance`.',
       severity: 'error',
       then: {
         field: '/conformance.get',
+        function: truthy,
+      },
+    },
+    '/req/core/conformance-success': {
+      given: "$.paths['/conformance'].get.responses",
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      severity: 'error',
+      then: {
+        field: '200',
         function: truthy,
       },
     },
@@ -48,12 +66,30 @@ const apiFeatures1Core: RulesetDefinition = {
         function: truthy,
       },
     },
+    '/req/core/fc-md-success': {
+      given: "$.paths['/collections'].get.responses",
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: truthy,
+      },
+    },
     '/req/core/sfc-md-op': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))]',
       message: 'The server SHALL support the HTTP GET operation at the path `/collections/{collectionId}`.',
       severity: 'error',
       then: {
         field: 'get',
+        function: truthy,
+      },
+    },
+    '/req/core/sfc-md-success': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses',
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      severity: 'error',
+      then: {
+        field: '200',
         function: truthy,
       },
     },
@@ -64,6 +100,15 @@ const apiFeatures1Core: RulesetDefinition = {
       severity: 'error',
       then: {
         field: 'get',
+        function: truthy,
+      },
+    },
+    '/req/core/fc-response': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses',
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      severity: 'error',
+      then: {
+        field: '200',
         function: truthy,
       },
     },
@@ -151,6 +196,15 @@ const apiFeatures1Core: RulesetDefinition = {
         function: truthy,
       },
     },
+    '/req/core/f-response': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))].get.responses',
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: truthy,
+      },
+    },
   },
 };
 
@@ -182,12 +236,11 @@ const apiFeatures1GeoJson: RulesetDefinition = {
   formats: [oas3_0],
   rules: {
     '/req/core/root-success': {
-      given: "$.paths['/'].get.responses",
+      given: "$.paths['/'].get.responses.200",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
       then: {
-        field: '200',
         function: responseMatchSchema,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
@@ -195,12 +248,11 @@ const apiFeatures1GeoJson: RulesetDefinition = {
       },
     },
     '/req/core/conformance-success': {
-      given: "$.paths['/conformance'].get.responses",
+      given: "$.paths['/conformance'].get.responses.200",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
       then: {
-        field: '200',
         function: responseMatchSchema,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml',
@@ -208,12 +260,11 @@ const apiFeatures1GeoJson: RulesetDefinition = {
       },
     },
     '/req/core/fc-md-success': {
-      given: "$.paths['/collections'].get.responses",
+      given: "$.paths['/collections'].get.responses.200",
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
       then: {
-        field: '200',
         function: responseMatchSchema,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml',
@@ -221,12 +272,11 @@ const apiFeatures1GeoJson: RulesetDefinition = {
       },
     },
     '/req/core/sfc-md-success': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses',
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200',
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
       then: {
-        field: '200',
         function: responseMatchSchema,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml',
@@ -234,12 +284,11 @@ const apiFeatures1GeoJson: RulesetDefinition = {
       },
     },
     '/req/core/fc-response': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses',
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses.200',
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
       then: {
-        field: '200',
         function: responseMatchSchema,
         functionOptions: {
           schemaUri:
@@ -249,12 +298,11 @@ const apiFeatures1GeoJson: RulesetDefinition = {
       },
     },
     '/req/core/f-response': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))].get.responses',
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))].get.responses.200',
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
       then: {
-        field: '200',
         function: responseMatchSchema,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureGeoJSON.yaml',

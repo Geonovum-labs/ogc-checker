@@ -28,7 +28,7 @@ const resolver = new Resolver({
   },
 });
 
-const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefined, Options> = async (
+const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> = async (
   response,
   options,
   context
@@ -38,11 +38,6 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject | undefine
   }
 
   const mediaType = options.mediaType ?? APPLICATION_JSON_TYPE;
-
-  if (!response) {
-    return errorMessage('A response with status code 200 is missing.');
-  }
-
   const content = response.content ? response.content[mediaType] : undefined;
 
   if (!content) {
