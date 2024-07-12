@@ -1,3 +1,4 @@
+import { Diagnostic } from '@codemirror/lint';
 import { IFunctionResult } from '@stoplight/spectral-core';
 import mergeAllOf from 'json-schema-merge-allof';
 import { OpenAPIV3_0 } from './openapi-types';
@@ -28,6 +29,8 @@ export const errorMessage = (message: string, path?: (string | number)[]): IFunc
 
 export const errorStr = (error: string, path: string[]) =>
   path.length > 0 ? `${error} (schema path: "${path.map(error => error.replace('/', '\\/')).join('/')}")` : error;
+
+export const groupBySource = (diagnostics: Diagnostic[]) => groupBy(diagnostics, d => d.source ?? '');
 
 /**
  * This function recursively matches a schema with a given reference schema.

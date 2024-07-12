@@ -8,13 +8,36 @@ import responseMatchSchema from '../../functions/responseMatchSchema';
 import { OpenAPIV3_0 } from '../../openapi-types';
 import { errorMessage } from '../../util';
 
+export const API_COMMON_1_OAS3 = 'http://www.opengis.net/spec/ogcapi-common-1/1.0/conf/oas30';
 export const API_FEATURES_1_CORE = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core';
-export const API_FEATURES_1_OAS3 = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas3';
+export const API_FEATURES_1_OAS3 = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30';
 export const API_FEATURES_1_GEOJSON = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson';
 
 interface Rulesets {
   [confClass: string]: RulesetDefinition;
 }
+
+const apiCommon1OpenApi30: RulesetDefinition = {
+  documentationUrl: 'http://www.opengis.net/spec/ogcapi-common-1/1.0/req/oas30',
+  description: 'OGC API - Common - Part 1: Core - Requirements Class "OpenAPI 3.0"',
+  formats: [oas3_0],
+  rules: {
+    '/req/oas30/oas-definition-2': {
+      given: '$',
+      message: 'The JSON representation SHALL conform to the OpenAPI Specification, version 3.0. {{error}}.',
+      severity: 'error',
+      then: [
+        {
+          function: oasDocumentSchema,
+        },
+        {
+          field: 'paths',
+          function: oasPathParam,
+        },
+      ],
+    },
+  },
+};
 
 const apiFeatures1Core: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core',
@@ -187,7 +210,7 @@ const apiFeatures1Core: RulesetDefinition = {
       },
     },
     '/req/core/f-op': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))]',
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))]',
       message:
         'For every feature in a feature collection (path `/collections/{collectionId}`), the server SHALL support the HTTP GET operation at the path `/collections/{collectionId}/items/{featureId}`.',
       severity: 'error',
@@ -197,7 +220,7 @@ const apiFeatures1Core: RulesetDefinition = {
       },
     },
     '/req/core/f-response': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))].get.responses',
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses',
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
       severity: 'error',
       then: {
@@ -298,7 +321,7 @@ const apiFeatures1GeoJson: RulesetDefinition = {
       },
     },
     '/req/core/f-response': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]$/))].get.responses.200',
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses.200',
       message:
         'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       severity: 'error',
@@ -314,6 +337,7 @@ const apiFeatures1GeoJson: RulesetDefinition = {
 };
 
 const rulesets: Rulesets = {
+  [API_COMMON_1_OAS3]: apiCommon1OpenApi30,
   [API_FEATURES_1_CORE]: apiFeatures1Core,
   [API_FEATURES_1_OAS3]: apiFeatures1OpenApi30,
   [API_FEATURES_1_GEOJSON]: apiFeatures1GeoJson,

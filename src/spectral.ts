@@ -4,6 +4,7 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { Document, RulesetDefinition, Spectral } from '@stoplight/spectral-core';
 import { Json } from '@stoplight/spectral-parsers';
 import { DiagnosticSeverity } from '@stoplight/types';
+import { Extension } from '@uiw/react-codemirror';
 import { Severity } from './types';
 
 const mapSeverity = (severity: DiagnosticSeverity): Severity => {
@@ -19,7 +20,7 @@ const mapSeverity = (severity: DiagnosticSeverity): Severity => {
   }
 };
 
-export const spectralLinter = (ruleset: RulesetDefinition) => {
+export const spectralLinter = (name: string, ruleset: RulesetDefinition): Extension => {
   const spectral = new Spectral({
     resolver: new Resolver({
       resolvers: {
@@ -31,17 +32,17 @@ export const spectralLinter = (ruleset: RulesetDefinition) => {
 
   spectral.setRuleset(ruleset);
 
-  return linter(view => {
+  return linter(async view => {
     const doc = view.state.doc;
     const document = new Document(doc.toString(), Json);
+    const violations = await spectral.run(document);
 
-    return spectral.run(document).then(violations =>
-      violations.map(violation => ({
-        from: doc.line(violation.range.start.line + 1).from + violation.range.start.character,
-        to: doc.line(violation.range.end.line + 1).from + violation.range.end.character,
-        severity: mapSeverity(violation.severity),
-        message: `[${violation.code}] ${violation.message}`,
-      }))
-    );
+    return violations.map(violation => ({
+      source: name,
+      from: doc.line(violation.range.start.line + 1).from + violation.range.start.character,
+      to: doc.line(violation.range.end.line + 1).from + violation.range.end.character,
+      severity: mapSeverity(violation.severity),
+      message: `[${violation.code}] ${violation.message}`,
+    }));
   });
 };

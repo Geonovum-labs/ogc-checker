@@ -1,6 +1,7 @@
 import { Diagnostic, linter } from '@codemirror/lint';
 import { EditorView } from '@uiw/react-codemirror';
 import { DocumentTypes, Feature, FeatureCollection, FeatureDocument } from '../../../types';
+import { JSON_FG_CORE } from '../spec';
 import { getJsonPointers } from './pointers';
 import rules from './rules';
 
@@ -70,6 +71,7 @@ const ruleValidation = linter((view: EditorView) => {
       const coordinates = pointers.get(violation.pointer)!;
 
       diagnostics.push({
+        source: JSON_FG_CORE,
         from: coordinates.valueFrom,
         to: coordinates.valueTo,
         severity: 'error',

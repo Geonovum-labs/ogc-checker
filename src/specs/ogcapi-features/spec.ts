@@ -1,7 +1,6 @@
-import { Extension } from '@uiw/react-codemirror';
 import { APPLICATION_JSON_TYPE, APPLICATION_OPENAPI_JSON_3_0_TYPE } from '../../constants';
 import { spectralLinter } from '../../spectral';
-import { Spec, SpecResponseMapper } from '../../types';
+import { Spec, SpecLinter, SpecResponseMapper } from '../../types';
 import { handleResponse, handleResponseJson } from '../../util';
 import example from './example.json';
 import rulesets, { API_FEATURES_1_CORE, API_FEATURES_1_GEOJSON, API_FEATURES_1_OAS3 } from './rulesets';
@@ -29,7 +28,7 @@ const responseMapper: SpecResponseMapper = async responseText => {
         headers: { Accept: serviceDescLink.type },
       }).then(response => handleResponse(response, serviceDescLink.href));
 
-      const linters: Extension[] = [];
+      const linters: SpecLinter[] = [];
 
       if (conformanceLink) {
         const conformance = await fetch(conformanceLink.href, {
@@ -41,7 +40,10 @@ const responseMapper: SpecResponseMapper = async responseText => {
         if (Array.isArray(conformsTo)) {
           conformsTo.forEach(reqClass => {
             if (typeof reqClass === 'string' && rulesets[reqClass]) {
-              linters.push(spectralLinter(rulesets[reqClass]));
+              linters.push({
+                name: reqClass,
+                linter: spectralLinter(reqClass, rulesets[reqClass]),
+              });
             }
           });
         }
@@ -54,14 +56,25 @@ const responseMapper: SpecResponseMapper = async responseText => {
   return Promise.resolve({ content: responseText });
 };
 
+const linterName = (confClass: string) => confClass.replace('http://www.opengis.net/spec/', '');
+
 const spec: Spec = {
   name: 'OGC API - Features',
   slug: 'ogcapi-features',
   example: JSON.stringify(example, undefined, 2),
   linters: [
-    spectralLinter(rulesets[API_FEATURES_1_CORE]),
-    spectralLinter(rulesets[API_FEATURES_1_OAS3]),
-    spectralLinter(rulesets[API_FEATURES_1_GEOJSON]),
+    {
+      name: linterName(API_FEATURES_1_CORE),
+      linter: spectralLinter(linterName(API_FEATURES_1_CORE), rulesets[API_FEATURES_1_CORE]),
+    },
+    {
+      name: linterName(API_FEATURES_1_OAS3),
+      linter: spectralLinter(linterName(API_FEATURES_1_OAS3), rulesets[API_FEATURES_1_OAS3]),
+    },
+    {
+      name: linterName(API_FEATURES_1_GEOJSON),
+      linter: spectralLinter(linterName(API_FEATURES_1_GEOJSON), rulesets[API_FEATURES_1_GEOJSON]),
+    },
   ],
   responseMapper,
 };
