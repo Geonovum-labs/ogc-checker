@@ -8,6 +8,11 @@ const spec: Spec = {
   slug: 'ogcapi-features',
   example: JSON.stringify(example, undefined, 2),
   linters: [spectralLinter(ruleset)],
+  responseMapper: responseText =>
+    Promise.resolve({
+      content: responseText,
+      additionaLinters: [],
+    }),
 };
 
 export default spec;

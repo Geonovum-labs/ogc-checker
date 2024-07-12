@@ -3,9 +3,17 @@ import { Extension } from '@uiw/react-codemirror';
 export interface Spec {
   name: string;
   slug: string;
-  example?: string;
+  example: string;
   linters: Extension[];
+  responseMapper?: SpecResponseMapper;
 }
+
+export interface SpecInput {
+  content: string;
+  additionaLinters?: Extension[];
+}
+
+export type SpecResponseMapper = (responseText: string) => Promise<SpecInput>;
 
 export type Severity = 'hint' | 'info' | 'warning' | 'error';
 

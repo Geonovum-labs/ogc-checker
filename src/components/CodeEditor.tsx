@@ -3,7 +3,7 @@ import { Diagnostic, forEachDiagnostic, linter, lintGutter, setDiagnosticsEffect
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import clsx from 'clsx';
 import { FC, useEffect, useRef, useState } from 'react';
-import { Spec } from '../types';
+import { Spec, SpecInput } from '../types';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
 
@@ -13,94 +13,122 @@ interface Props {
 }
 
 const CodeEditor: FC<Props> = ({ spec, uri }) => {
-  const [value, setValue] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState('{}');
+  const [checking, setChecking] = useState(false);
+  const [error, setError] = useState<string>();
+  const [extensions, setExtensions] = useState<Extension[]>(EXTENSIONS);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
 
   useEffect(() => {
-    setValue(spec.example ?? '');
-    setDiagnostics([]);
+    setContent(spec.example);
+    setExtensions([...EXTENSIONS, spec.linters]);
   }, [spec]);
 
   useEffect(() => {
     if (uri) {
-      setValue('');
-      setLoading(true);
+      setError(undefined);
+      setChecking(true);
+      setDiagnostics([]);
 
       fetch(uri)
-        .then(response => response.text())
-        .then(responseText => setValue(responseText));
+        .then(response => {
+          if (response.status !== 200) {
+            return Promise.reject(`Error while fetching URI \`${uri}\` (status code \`${response.status}\`).`);
+          }
+
+          return response.text();
+        })
+        .then(responseText =>
+          spec.responseMapper //
+            ? spec.responseMapper(responseText)
+            : Promise.resolve({ content: responseText })
+        )
+        .then((input: SpecInput) => {
+          setChecking(false);
+          setContent(input.content);
+          setExtensions([...EXTENSIONS, ...spec.linters, ...(input.additionaLinters ?? [])]);
+        })
+        .catch(error => {
+          setChecking(false);
+          setError(error);
+        });
     }
-  }, [uri]);
+  }, [uri, spec]);
 
   return (
     <div className="flex h-full">
       <div className="w-[50%] min-w-[400px] overflow-auto">
         <ReactCodeMirror
           ref={codeMirrorRef}
-          value={value}
-          extensions={[EXTENSIONS, ...spec.linters]}
+          value={content}
+          extensions={extensions}
           onUpdate={viewUpdate => {
+            if (error) {
+              return;
+            }
+
             viewUpdate.transactions.forEach(transaction => {
               transaction.effects.forEach(effect => {
                 if (effect.is(setDiagnosticsEffect)) {
                   const diagnostics: Diagnostic[] = [];
                   forEachDiagnostic(viewUpdate.state, d => diagnostics.push(d));
                   setDiagnostics(diagnostics);
-                  setLoading(false);
+                  setChecking(false);
                 }
               });
             });
 
             if (viewUpdate.docChanged) {
-              setValue(viewUpdate.state.doc.toString());
-              setLoading(true);
+              setContent(viewUpdate.state.doc.toString());
+              setChecking(true);
             }
           }}
         />
       </div>
       <div className="flex-1 overflow-auto p-4 bg-sky-100 text-sm">
-        {loading && <p>Checking...</p>}
-        {!loading && diagnostics.length === 0 && (
-          <div className="mb-4 p-4 bg-green-600 text-white rounded shadow-lg">Found no linting errors.</div>
-        )}
-        {!loading && diagnostics.length > 0 && (
-          <>
-            <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">
-              Found {diagnostics.length} linting error(s).
-            </div>
-            <ul>
-              {diagnostics.map((diagnostic, i) => (
-                <li key={i}>
-                  <div
-                    className={clsx('mb-4 p-4 rounded shadow-lg', {
-                      'bg-red-200': diagnostic.severity === 'error',
-                      'bg-yellow-100': diagnostic.severity === 'warning',
-                      'bg-white': diagnostic.severity === 'info' || diagnostic.severity === 'hint',
-                    })}
-                  >
-                    {diagnostic.message}
-                    &nbsp;
-                    <span className="text-blue-600 underline">
-                      <a
-                        className="cursor-pointer"
-                        onClick={() =>
-                          codeMirrorRef.current?.view?.dispatch({
-                            selection: EditorSelection.single(diagnostic.from, diagnostic.to),
-                            scrollIntoView: true,
-                          })
-                        }
-                      >
-                        (show)
-                      </a>
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+        {checking && <p>Checking...</p>}
+        {error && <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">{error}</div>}
+        {!checking &&
+          !error &&
+          (diagnostics.length === 0 ? (
+            <div className="mb-4 p-4 bg-green-600 text-white rounded shadow-lg">Found no linting errors.</div>
+          ) : (
+            <>
+              <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">
+                Found {diagnostics.length} linting error(s).
+              </div>
+              <ul>
+                {diagnostics.map((diagnostic, i) => (
+                  <li key={i}>
+                    <div
+                      className={clsx('mb-4 p-4 rounded shadow-lg', {
+                        'bg-red-200': diagnostic.severity === 'error',
+                        'bg-yellow-100': diagnostic.severity === 'warning',
+                        'bg-white': diagnostic.severity === 'info' || diagnostic.severity === 'hint',
+                      })}
+                    >
+                      {diagnostic.message}
+                      &nbsp;
+                      <span className="text-blue-600 underline">
+                        <a
+                          className="cursor-pointer"
+                          onClick={() =>
+                            codeMirrorRef.current?.view?.dispatch({
+                              selection: EditorSelection.single(diagnostic.from, diagnostic.to),
+                              scrollIntoView: true,
+                            })
+                          }
+                        >
+                          (show)
+                        </a>
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ))}
       </div>
     </div>
   );
