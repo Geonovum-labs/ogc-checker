@@ -14,6 +14,7 @@ interface Props {
 
 const CodeEditor: FC<Props> = ({ spec, uri }) => {
   const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(false);
   const [diagnostics, setDiagnostics] = useState<Diagnostic[]>([]);
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
 
@@ -24,6 +25,9 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
 
   useEffect(() => {
     if (uri) {
+      setValue('');
+      setLoading(true);
+
       fetch(uri)
         .then(response => response.text())
         .then(responseText => setValue(responseText));
@@ -44,21 +48,24 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
                   const diagnostics: Diagnostic[] = [];
                   forEachDiagnostic(viewUpdate.state, d => diagnostics.push(d));
                   setDiagnostics(diagnostics);
+                  setLoading(false);
                 }
               });
             });
 
             if (viewUpdate.docChanged) {
               setValue(viewUpdate.state.doc.toString());
+              setLoading(true);
             }
           }}
         />
       </div>
       <div className="flex-1 overflow-auto p-4 bg-sky-100 text-sm">
-        {diagnostics.length === 0 && (
+        {loading && <p>Checking...</p>}
+        {!loading && diagnostics.length === 0 && (
           <div className="mb-4 p-4 bg-green-600 text-white rounded shadow-lg">Found no linting errors.</div>
         )}
-        {diagnostics.length > 0 && (
+        {!loading && diagnostics.length > 0 && (
           <>
             <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">
               Found {diagnostics.length} linting error(s).
