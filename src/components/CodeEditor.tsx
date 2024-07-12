@@ -42,7 +42,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
         .then((input: SpecInput) => {
           setChecking(false);
           setContent(input.content);
-          setExtensions([...EXTENSIONS, ...spec.linters, ...(input.additionaLinters ?? [])]);
+          setExtensions([...EXTENSIONS, ...(input.linters ?? spec.linters)]);
         })
         .catch(error => {
           setChecking(false);

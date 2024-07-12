@@ -10,7 +10,7 @@ export interface Spec {
 
 export interface SpecInput {
   content: string;
-  additionaLinters?: Extension[];
+  linters?: Extension[];
 }
 
 export type SpecResponseMapper = (responseText: string) => Promise<SpecInput>;

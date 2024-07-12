@@ -16,6 +16,14 @@ export const handleResponse = (response: Response, uri: string) => {
   return response.text();
 };
 
+export const handleResponseJson = (response: Response, uri: string) => {
+  if (response.status !== 200) {
+    return Promise.reject(`Error while fetching URI \`${uri}\` (status code \`${response.status}\`).`);
+  }
+
+  return response.json();
+};
+
 export const errorMessage = (message: string, path?: (string | number)[]): IFunctionResult[] => [{ message, path }];
 
 export const errorStr = (error: string, path: string[]) =>
