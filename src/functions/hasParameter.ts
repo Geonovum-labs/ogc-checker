@@ -8,11 +8,14 @@ interface Options {
   validateSchema?: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]) => IFunctionResult[];
 }
 
+type OptParamKey = Exclude<keyof OpenAPIV3_0.ParameterObject, 'name' | 'in'>;
+
 const applyDefaults = (parameter: OpenAPIV3_0.ParameterObject): OpenAPIV3_0.ParameterObject => {
   const style = parameter.style ?? (['query', 'cookie'].includes(parameter.in) ? 'form' : 'simple');
+  const extProps = Object.keys(parameter).filter(key => /^x-/.test(key)) as OptParamKey[];
 
   return {
-    ...omit(['description', 'example', 'examples'], parameter),
+    ...omit(['description', 'example', 'examples', ...extProps], parameter),
     required: parameter.required ?? false,
     deprecated: parameter.deprecated ?? false,
     allowEmptyValue: parameter.allowEmptyValue ?? false,
@@ -40,7 +43,7 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
 
   if (options.validateSchema) {
     if (!equals(omit(['schema'], spec), omit(['schema'], parameter))) {
-      return errorMessage(`Parameter object is not equal to: ${JSON.stringify(options.spec)}.`, paramPath);
+      return errorMessage(`Parameter object is not compatible with: ${JSON.stringify(options.spec)}.`, paramPath);
     }
 
     return options.validateSchema(parameter.schema ?? {}, paramPath);
@@ -48,7 +51,7 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
 
   if (!equals(spec, parameter)) {
     // TODO: Ignore properties which have no impact on validation (such as $id, $schema and description)
-    return errorMessage(`Parameter object is not equal to: ${JSON.stringify(options.spec)}.`, paramPath);
+    return errorMessage(`Parameter object is not compatible with: ${JSON.stringify(options.spec)}.`, paramPath);
   }
 
   return [];
