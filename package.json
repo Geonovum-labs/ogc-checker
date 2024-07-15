@@ -21,7 +21,7 @@
     "@stoplight/spectral-parsers": "^1.0.4",
     "@stoplight/spectral-rulesets": "^1.19.1",
     "@uiw/react-codemirror": "^4.23.0",
-    "ajv": "^8.16.0",
+    "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "clsx": "^2.1.1",
     "json-schema-merge-allof": "^0.8.1",
