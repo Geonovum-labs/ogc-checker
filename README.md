@@ -1,4 +1,4 @@
-# OGC Checker
+# Geonovum OGC Checker
 
 This repository contains a checker (validation & linting) for [OGC API Standards](https://ogcapi.ogc.org/) and [OGC Features and Geometries JSON (JSON-FG): Part 1 Core](https://docs.ogc.org/DRAFTS/21-045.html).
 
