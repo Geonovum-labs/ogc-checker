@@ -93,7 +93,7 @@ export namespace OpenAPIV3_0 {
     in: string;
   }
 
-  export interface HeaderObject extends ParameterBaseObject {}
+  export type HeaderObject = ParameterBaseObject;
 
   export interface ParameterBaseObject {
     description?: string;

@@ -10,7 +10,7 @@ const responseMapper: SpecResponseMapper = async responseText => {
 
   try {
     document = JSON.parse(responseText);
-  } catch (err) {
+  } catch {
     return Promise.resolve({ content: responseText });
   }
 
