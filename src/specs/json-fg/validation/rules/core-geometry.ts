@@ -54,7 +54,7 @@ const rules: Rule[] = [];
 rules.push({
   name: '/req/core/coordinate-dimension',
   validateFeature: feature => {
-    if (feature.geometry !== null) {
+    if (feature.geometry) {
       const geometry = feature.geometry;
 
       const dimensions =
@@ -70,7 +70,7 @@ rules.push({
       }
     }
 
-    if (feature.place !== null) {
+    if (feature.place) {
       const geometry = feature.place;
       let dimensions: number[] = [];
 
@@ -97,7 +97,7 @@ rules.push({
 rules.push({
   name: '/req/core/geometry-wgs84',
   validateFeature: feature => {
-    if (feature.geometry !== null) {
+    if (feature.geometry) {
       const geometry = feature.geometry;
 
       const longDegrees =
@@ -130,7 +130,7 @@ rules.push({
 rules.push({
   name: '/req/core/place',
   validateFeature: (feature, isRoot) => {
-    if (isRoot && feature.place !== null) {
+    if (isRoot && feature.place) {
       const place = feature.place;
       const coordRefSys = place.coordRefSys ?? feature.coordRefSys;
 
@@ -150,7 +150,7 @@ rules.push({
     for (let i = 0; i < featureCollection.features.length; i++) {
       const feature = featureCollection.features[i];
 
-      if (feature.place !== null) {
+      if (feature.place) {
         const place = feature.place;
         const coordRefSys = place.coordRefSys ?? feature.coordRefSys ?? featureCollection.coordRefSys;
 
@@ -172,7 +172,7 @@ rules.push({
 rules.push({
   name: '/req/core/geometry-collection',
   validateFeature: feature => {
-    if (feature.place !== null) {
+    if (feature.place) {
       const place = feature.place;
 
       if (
@@ -196,11 +196,7 @@ rules.push({
 rules.push({
   name: '/req/core/fallback',
   validateFeature: feature => {
-    if (
-      feature.place !== null &&
-      feature.geometry !== null &&
-      JSON.stringify(feature.place) === JSON.stringify(feature.geometry)
-    ) {
+    if (feature.place && feature.geometry && JSON.stringify(feature.place) === JSON.stringify(feature.geometry)) {
       return {
         pointer: '/place',
         message:

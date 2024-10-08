@@ -53,7 +53,7 @@ rules.push({
 rules.push({
   name: '/req/core/instant-and-interval',
   validateFeature: feature => {
-    if (feature.time !== null) {
+    if (feature.time) {
       const { date, timestamp, interval } = feature.time;
 
       if (date !== undefined && timestamp !== undefined && !timestamp.startsWith(date)) {

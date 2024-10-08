@@ -15,7 +15,7 @@ const TYPES_3D = [
 const conformsTo3D = (doc: FeatureDocument) =>
   doc.conformsTo !== undefined && (doc.conformsTo.includes(CC_3D_URI) || doc.conformsTo.includes(CC_3D_CURIE));
 
-const is3D = (feature: Feature) => feature.place !== null && TYPES_3D.includes(feature.place.type);
+const is3D = (feature: Feature) => feature.place && TYPES_3D.includes(feature.place.type);
 
 const rules: Rule[] = [];
 

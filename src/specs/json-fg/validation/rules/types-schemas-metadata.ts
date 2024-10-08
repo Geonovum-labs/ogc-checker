@@ -10,9 +10,9 @@ const conformsToTypesSchemas = (doc: FeatureDocument) =>
   (doc.conformsTo.includes(CC_TYPES_SCHEMAS_URI) || doc.conformsTo.includes(CC_TYPES_SCHEMAS_CURIE));
 
 const containsValidTypes = (feature: Feature, allowedTypes: GeometryTypes[]) => {
-  if (feature.place !== null) {
+  if (feature.place) {
     return allowedTypes.includes(feature.place.type);
-  } else if (feature.geometry !== null) {
+  } else if (feature.geometry) {
     return allowedTypes.includes(feature.geometry.type);
   } else {
     return true;
