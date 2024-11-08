@@ -1,4 +1,5 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
+import remoteSchema from '../../functions/remoteSchema';
 import { Rulesets } from '../../spectral';
 
 export const JSON_FG_CORE = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
@@ -8,7 +9,24 @@ export const JSON_FG_TYPES_SCHEMAS = 'http://www.opengis.net/spec/json-fg-1/0.2/
 const jsonFgCore: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/core',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Core"',
-  rules: {},
+  rules: {
+    '/req/core/schema-valid': {
+      given: '$',
+      message:
+        'The JSON document SHALL validate against the JSON Schema of a JSON-FG feature (a JSON-FG feature) or the JSON Schema of a JSON-FG feature collection (a JSON-FG feature collection). {{error}}.',
+      severity: 'error',
+      then: [
+        {
+          function: remoteSchema,
+          functionOptions: {
+            schema: {
+              $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json',
+            },
+          },
+        },
+      ],
+    },
+  },
 };
 
 const jsonFg3D: RulesetDefinition = {
