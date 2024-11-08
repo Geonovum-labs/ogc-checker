@@ -91,3 +91,18 @@ export const matchSchema = (
 
   return errors;
 };
+
+/**
+ * This function formats JSON documents.
+ *
+ * @param content  The raw content to format
+ * @returns A formatted document
+ */
+export const formatDocument = (content: string): string => {
+  try {
+    const doc = JSON.parse(content);
+    return JSON.stringify(doc, undefined, 2);
+  } catch {
+    throw new Error('JSON document could not be parsed.');
+  }
+};

@@ -4,7 +4,7 @@ import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from 
 import clsx from 'clsx';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Spec, SpecInput, SpecLinter } from '../types';
-import { groupBySource, handleResponse } from '../util';
+import { formatDocument, groupBySource, handleResponse } from '../util';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
 
@@ -41,7 +41,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
         )
         .then((input: SpecInput) => {
           setChecking(false);
-          setContent(input.content);
+          setContent(formatDocument(input.content));
           setLinters(input.linters ?? spec.linters);
         })
         .catch(error => {
