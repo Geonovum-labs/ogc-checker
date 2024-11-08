@@ -7,6 +7,10 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { Extension } from '@uiw/react-codemirror';
 import { Severity } from './types';
 
+export interface Rulesets {
+  [confClass: string]: RulesetDefinition;
+}
+
 const mapSeverity = (severity: DiagnosticSeverity): Severity => {
   switch (severity) {
     case DiagnosticSeverity.Warning:
