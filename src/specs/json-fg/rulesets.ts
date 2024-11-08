@@ -30,7 +30,7 @@ const jsonFgCore: RulesetDefinition = {
                     return {
                       error: {
                         message: 'Property `type` must contain "Feature" or "FeatureCollection".',
-                        path: ['$.type'],
+                        path: ['type'],
                       },
                     };
                 }
@@ -38,14 +38,12 @@ const jsonFgCore: RulesetDefinition = {
                 return {
                   error: {
                     message: 'Object must have required property "type".',
-                    path: ['$'],
                   },
                 };
               } else {
                 return {
                   error: {
                     message: 'Document is not an object.',
-                    path: ['$'],
                   },
                 };
               }
