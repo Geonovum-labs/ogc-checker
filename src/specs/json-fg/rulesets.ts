@@ -1,5 +1,5 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import remoteSchema from '../../functions/remoteSchema';
+import remoteSchema, { SchemaFunctionResult } from '../../functions/remoteSchema';
 import { Rulesets } from '../../spectral';
 
 export const JSON_FG_CORE = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
@@ -19,8 +19,36 @@ const jsonFgCore: RulesetDefinition = {
         {
           function: remoteSchema,
           functionOptions: {
-            schema: {
-              $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json',
+            schema: (input: unknown): SchemaFunctionResult => {
+              if (input && typeof input === 'object' && 'type' in input) {
+                switch (input.type) {
+                  case 'Feature':
+                    return { schema: { $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json' } };
+                  case 'FeatureCollection':
+                    return { schema: { $ref: 'https://beta.schemas.opengis.net/json-fg/featurecollection.json' } };
+                  default:
+                    return {
+                      error: {
+                        message: 'Property `type` must contain "Feature" or "FeatureCollection".',
+                        path: ['$.type'],
+                      },
+                    };
+                }
+              } else if (typeof input === 'object') {
+                return {
+                  error: {
+                    message: 'Object must have required property "type".',
+                    path: ['$'],
+                  },
+                };
+              } else {
+                return {
+                  error: {
+                    message: 'Document is not an object.',
+                    path: ['$'],
+                  },
+                };
+              }
             },
           },
         },
