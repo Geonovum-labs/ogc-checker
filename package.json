@@ -13,7 +13,7 @@
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/language": "^6.10.5",
-    "@codemirror/lint": "^6.8.3",
+    "@codemirror/lint": "^6.8.4",
     "@stoplight/json-ref-resolver": "^3.1.6",
     "@stoplight/spectral-core": "^1.19.4",
     "@stoplight/spectral-formats": "^1.8.2",
