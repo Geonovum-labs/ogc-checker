@@ -52,8 +52,6 @@ export const remoteSchema: RulesetFunction<unknown, Options> = async (input, opt
         path: [...context.path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
       }));
     }
-
-    return [];
   });
 };
 

@@ -1,10 +1,15 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
+import { falsy, truthy } from '@stoplight/spectral-functions';
+import { includes } from '../../functions/includes';
 import remoteSchema, { SchemaFunctionResult } from '../../functions/remoteSchema';
 import { Rulesets } from '../../spectral';
 
 export const JSON_FG_CORE = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 export const JSON_FG_3D = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
 export const JSON_FG_TYPES_SCHEMAS = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/types-schemas';
+
+export const CC_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
+export const CC_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
 
 const jsonFgCore: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/core',
@@ -51,6 +56,36 @@ const jsonFgCore: RulesetDefinition = {
           },
         },
       ],
+    },
+    '/req/core/metadata#A': {
+      given: '$',
+      message: 'The JSON document SHALL include a "conformsTo" member.',
+      severity: 'error',
+      then: {
+        field: 'conformsTo',
+        function: truthy,
+      },
+    },
+    '/req/core/metadata#B': {
+      given: '$',
+      message: 'The "conformsTo" member of the JSON document SHALL include at least the core conformance class.',
+      severity: 'error',
+      then: {
+        field: 'conformsTo',
+        function: includes,
+        functionOptions: {
+          anyOf: [CC_CORE_URI, CC_CORE_CURIE],
+        },
+      },
+    },
+    '/req/core/metadata#C': {
+      given: '$.features',
+      message: 'Only the root object of the JSON document SHALL include a "conformsTo" member.',
+      severity: 'error',
+      then: {
+        field: 'conformsTo',
+        function: falsy,
+      },
     },
   },
 };
