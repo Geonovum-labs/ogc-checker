@@ -1,7 +1,13 @@
 import { spectralLinter } from '../../spectral';
 import { Spec } from '../../types';
 import example from './example.json';
-import rulesets, { JSON_FG_3D, JSON_FG_CORE, JSON_FG_TYPES_SCHEMAS } from './rulesets';
+import jsonFg3D from './rulesets/3d';
+import jsonFgCore from './rulesets/core';
+import jsonFgTypesSchemas from './rulesets/types-schemas';
+
+const JSON_FG_CORE = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
+const JSON_FG_3D = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
+const JSON_FG_TYPES_SCHEMAS = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/types-schemas';
 
 const linterName = (confClass: string) => confClass.replace('http://www.opengis.net/spec/', '');
 
@@ -12,15 +18,15 @@ const spec: Spec = {
   linters: [
     {
       name: linterName(JSON_FG_CORE),
-      linter: spectralLinter(linterName(JSON_FG_CORE), rulesets[JSON_FG_CORE]),
+      linter: spectralLinter(linterName(JSON_FG_CORE), jsonFgCore),
     },
     {
       name: linterName(JSON_FG_3D),
-      linter: spectralLinter(linterName(JSON_FG_3D), rulesets[JSON_FG_3D]),
+      linter: spectralLinter(linterName(JSON_FG_3D), jsonFg3D),
     },
     {
       name: linterName(JSON_FG_TYPES_SCHEMAS),
-      linter: spectralLinter(linterName(JSON_FG_TYPES_SCHEMAS), rulesets[JSON_FG_TYPES_SCHEMAS]),
+      linter: spectralLinter(linterName(JSON_FG_TYPES_SCHEMAS), jsonFgTypesSchemas),
     },
   ],
 };
