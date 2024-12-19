@@ -1,10 +1,15 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { falsy, truthy } from '@stoplight/spectral-functions';
+import { DateTime } from 'luxon';
+import { isValidDate } from '../../../functions/date';
+import { isValidDateTime } from '../../../functions/datetime';
 import { includes } from '../../../functions/includes';
 import remoteSchema, { SchemaFunctionResult } from '../../../functions/remoteSchema';
 
 export const CC_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 export const CC_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
+
+const isUnbounded = (input: unknown) => typeof input === 'string' && input === '..';
 
 const jsonFgCore: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/core',
@@ -80,6 +85,204 @@ const jsonFgCore: RulesetDefinition = {
       then: {
         field: 'conformsTo',
         function: falsy,
+      },
+    },
+    '/req/core/interval#B': {
+      given: '$..time.interval',
+      severity: 'error',
+      then: {
+        function: input => {
+          if (!Array.isArray(input) || !isValidDate(input[0])) {
+            return;
+          }
+
+          if (!isValidDate(input[1]) && !isUnbounded(input[1])) {
+            return [
+              {
+                message: 'If the start is a date, the end SHALL be a date, too, or "..".',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/interval#C': {
+      given: '$..time.interval',
+      severity: 'error',
+      then: {
+        function: input => {
+          if (!Array.isArray(input) || !isValidDateTime(input[0])) {
+            return;
+          }
+
+          if (!isValidDateTime(input[1]) && !isUnbounded(input[1])) {
+            return [
+              {
+                message: 'If the start is a timestamp, the end SHALL be a timestamp, too, or "..".',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/instant-and-interval#A': {
+      given: '$..time',
+      severity: 'error',
+      then: {
+        function: input => {
+          if (
+            !(input && typeof input === 'object') ||
+            !('date' in input && isValidDate(input.timestamp)) ||
+            !('timestamp' in input && isValidDateTime(input.timestamp))
+          ) {
+            return;
+          }
+
+          const { date, timestamp } = input;
+
+          if (!timestamp.startsWith(date)) {
+            return [
+              {
+                message:
+                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "date" and a "timestamp" member, the full-date parts SHALL be identical.',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/instant-and-interval#B': {
+      given: '$..time',
+      severity: 'error',
+      then: {
+        function: (input: unknown) => {
+          if (
+            !(input && typeof input === 'object') ||
+            !('timestamp' in input && isValidDateTime(input.timestamp)) ||
+            !(
+              'interval' in input &&
+              Array.isArray(input.interval) &&
+              isValidDate(input.interval[0]) &&
+              (isValidDate(input.interval[1]) || isUnbounded(input.interval[1]))
+            )
+          ) {
+            return;
+          }
+
+          const timestamp = DateTime.fromISO(input.timestamp as string);
+          const intervalStart = DateTime.fromISO(input.interval[0]);
+          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[0]) : undefined;
+
+          if (timestamp < intervalStart || (intervalEnd && timestamp > intervalEnd)) {
+            return [
+              {
+                message:
+                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "timestamp" and an "interval" member with start/end dates, the interval SHALL contain the date of the timestamp.',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/instant-and-interval#C': {
+      given: '$..time',
+      severity: 'error',
+      then: {
+        function: (input: unknown) => {
+          if (
+            !(input && typeof input === 'object') ||
+            !('timestamp' in input && isValidDateTime(input.timestamp)) ||
+            !(
+              'interval' in input &&
+              Array.isArray(input.interval) &&
+              isValidDateTime(input.interval[0]) &&
+              (isValidDateTime(input.interval[1]) || isUnbounded(input.interval[1]))
+            )
+          ) {
+            return;
+          }
+
+          const timestamp = DateTime.fromISO(input.timestamp as string);
+          const intervalStart = DateTime.fromISO(input.interval[0]);
+          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[0]) : undefined;
+
+          if (timestamp < intervalStart || (intervalEnd && timestamp > intervalEnd)) {
+            return [
+              {
+                message:
+                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "timestamp" and an "interval" member with start/end timestamps, the interval SHALL contain the timestamp.',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/instant-and-interval#D': {
+      given: '$..time',
+      severity: 'error',
+      then: {
+        function: (input: unknown) => {
+          if (
+            !(input && typeof input === 'object') ||
+            !('date' in input && isValidDate(input.date)) ||
+            !(
+              'interval' in input &&
+              Array.isArray(input.interval) &&
+              isValidDate(input.interval[0]) &&
+              (isValidDate(input.interval[1]) || isUnbounded(input.interval[1]))
+            )
+          ) {
+            return;
+          }
+
+          const date = DateTime.fromISO(input.date as string);
+          const intervalStart = DateTime.fromISO(input.interval[0]);
+          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[0]) : undefined;
+
+          if (date < intervalStart || (intervalEnd && date > intervalEnd)) {
+            return [
+              {
+                message:
+                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "date" and an "interval" member with start/end dates, the interval SHALL contain the date.',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/instant-and-interval#E': {
+      given: '$..time',
+      severity: 'error',
+      then: {
+        function: (input: unknown) => {
+          if (
+            !(input && typeof input === 'object') ||
+            !('date' in input && isValidDate(input.date)) ||
+            !(
+              'interval' in input &&
+              Array.isArray(input.interval) &&
+              isValidDateTime(input.interval[0]) &&
+              (isValidDateTime(input.interval[1]) || isUnbounded(input.interval[1]))
+            )
+          ) {
+            return;
+          }
+
+          const date = DateTime.fromISO(input.date as string);
+          const intervalStart = DateTime.fromISO(input.interval[0]).startOf('day');
+          const intervalEnd = isValidDateTime(input.interval[1])
+            ? DateTime.fromISO(input.interval[0]).startOf('day')
+            : undefined;
+
+          if (date < intervalStart || (intervalEnd && date > intervalEnd)) {
+            return [
+              {
+                message:
+                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "date" and an "interval" member with start/end timestamps, the interval SHALL include timestamps on the date.',
+              },
+            ];
+          }
+        },
       },
     },
   },
