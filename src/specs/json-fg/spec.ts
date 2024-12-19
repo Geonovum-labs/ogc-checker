@@ -1,9 +1,7 @@
 import { spectralLinter } from '../../spectral';
 import { Spec } from '../../types';
 import example from './example.json';
-import jsonFg3D from './rulesets/3d';
-import jsonFgCore from './rulesets/core';
-import jsonFgTypesSchemas from './rulesets/types-schemas';
+import { jsonFg3D, jsonFgCore, jsonFgTypesSchemas } from './rulesets';
 
 const JSON_FG_CORE = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 const JSON_FG_3D = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
