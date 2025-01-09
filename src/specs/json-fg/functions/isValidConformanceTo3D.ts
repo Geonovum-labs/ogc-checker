@@ -22,7 +22,7 @@ const featureCollectionContains3dPlace = (input: unknown) =>
   Array.isArray(input.features) &&
   input.features.some(featureContains3dPlace);
 
-export const isValidConformsTo3D: RulesetFunction<unknown> = async input => {
+export const isValidConformanceTo3D: RulesetFunction<unknown> = async input => {
   if (featureContains3dPlace(input) || featureCollectionContains3dPlace(input)) {
     const conformsTo = getConformsTo(input);
 

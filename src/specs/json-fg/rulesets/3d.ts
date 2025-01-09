@@ -1,5 +1,5 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
-import { isValidConformsTo3D } from '../functions/isValidConformsTo3D';
+import { isValidConformanceTo3D } from '../functions/isValidConformanceTo3D';
 
 export const CC_3D_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
 export const CC_3D_CURIE = '[ogc-json-fg-1-0.2:3d]';
@@ -12,7 +12,7 @@ const jsonFg3D: RulesetDefinition = {
       given: '$',
       severity: 'error',
       then: {
-        function: isValidConformsTo3D,
+        function: isValidConformanceTo3D,
       },
     },
   },
