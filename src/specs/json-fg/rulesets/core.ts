@@ -132,7 +132,7 @@ const jsonFgCore: RulesetDefinition = {
         function: input => {
           if (
             !(input && typeof input === 'object') ||
-            !('date' in input && isValidDate(input.timestamp)) ||
+            !('date' in input && isValidDate(input.date)) ||
             !('timestamp' in input && isValidDateTime(input.timestamp))
           ) {
             return;
@@ -171,7 +171,9 @@ const jsonFgCore: RulesetDefinition = {
 
           const timestamp = DateTime.fromISO(input.timestamp as string);
           const intervalStart = DateTime.fromISO(input.interval[0]);
-          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[0]) : undefined;
+          const intervalEnd = isValidDate(input.interval[1])
+            ? DateTime.fromISO(input.interval[1]).endOf('day')
+            : undefined;
 
           if (timestamp < intervalStart || (intervalEnd && timestamp > intervalEnd)) {
             return [
@@ -204,7 +206,7 @@ const jsonFgCore: RulesetDefinition = {
 
           const timestamp = DateTime.fromISO(input.timestamp as string);
           const intervalStart = DateTime.fromISO(input.interval[0]);
-          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[0]) : undefined;
+          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[1]) : undefined;
 
           if (timestamp < intervalStart || (intervalEnd && timestamp > intervalEnd)) {
             return [
@@ -237,7 +239,9 @@ const jsonFgCore: RulesetDefinition = {
 
           const date = DateTime.fromISO(input.date as string);
           const intervalStart = DateTime.fromISO(input.interval[0]);
-          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[0]) : undefined;
+          const intervalEnd = isValidDate(input.interval[1])
+            ? DateTime.fromISO(input.interval[1]).endOf('day')
+            : undefined;
 
           if (date < intervalStart || (intervalEnd && date > intervalEnd)) {
             return [
@@ -271,7 +275,7 @@ const jsonFgCore: RulesetDefinition = {
           const date = DateTime.fromISO(input.date as string);
           const intervalStart = DateTime.fromISO(input.interval[0]).startOf('day');
           const intervalEnd = isValidDateTime(input.interval[1])
-            ? DateTime.fromISO(input.interval[0]).startOf('day')
+            ? DateTime.fromISO(input.interval[1]).startOf('day')
             : undefined;
 
           if (date < intervalStart || (intervalEnd && date > intervalEnd)) {
