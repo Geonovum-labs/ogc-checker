@@ -6,4 +6,7 @@ const jsonFg3D: RulesetDefinition = {
   rules: {},
 };
 
+export const CC_3D_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
+export const CC_3D_CURIE = '[ogc-json-fg-1-0.2:3d]';
+
 export default jsonFg3D;

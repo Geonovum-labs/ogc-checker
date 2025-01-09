@@ -79,7 +79,7 @@ const jsonFgCore: RulesetDefinition = {
       },
     },
     '/req/core/metadata#C': {
-      given: '$.features',
+      given: '$.features.*',
       message: 'Only the root object of the JSON document SHALL include a "conformsTo" member.',
       severity: 'error',
       then: {
