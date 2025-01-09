@@ -5,6 +5,11 @@ import { isValidDate } from '../../../functions/date';
 import { isValidDateTime } from '../../../functions/datetime';
 import { includes } from '../../../functions/includes';
 import remoteSchema, { SchemaFunctionResult } from '../../../functions/remoteSchema';
+import { hasPositionRange } from '../functions/hasPositionRange';
+import { hasSameDimensions } from '../functions/hasSameDimensions';
+import { isPlaceAndGeometryNotEqual } from '../functions/isPlaceAndGeometryNotEqual';
+import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
+import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
 
 export const CC_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 export const CC_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
@@ -287,6 +292,42 @@ const jsonFgCore: RulesetDefinition = {
             ];
           }
         },
+      },
+    },
+    '/req/core/coordinate-dimension': {
+      given: ['$..geometry', '$..place', '$..place..base'],
+      severity: 'error',
+      then: {
+        function: hasSameDimensions,
+      },
+    },
+    '/req/core/geometry-wgs84': {
+      given: '$..geometry',
+      severity: 'error',
+      then: {
+        function: hasPositionRange,
+        functionOptions: { x: [-180, 180], y: [-90, 90] },
+      },
+    },
+    '/req/core/place': {
+      given: '$..place',
+      severity: 'error',
+      then: {
+        function: isValidPlaceCrs,
+      },
+    },
+    '/req/core/geometry-collection': {
+      given: '$..place',
+      severity: 'error',
+      then: {
+        function: isValidCollectionCrs,
+      },
+    },
+    '/req/core/fallback': {
+      given: '$',
+      severity: 'error',
+      then: {
+        function: isPlaceAndGeometryNotEqual,
       },
     },
   },

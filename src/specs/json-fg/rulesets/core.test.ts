@@ -1,5 +1,6 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { describe, expect, test } from 'vitest';
+import { DocumentTypes, GeometryTypes } from '../../../types';
 import { CC_3D_URI } from './3d';
 import ruleset, { CC_CORE_CURIE, CC_CORE_URI } from './core';
 
@@ -7,7 +8,7 @@ const spectral = new Spectral();
 spectral.setRuleset(ruleset);
 
 const feature = {
-  type: 'Feature',
+  type: DocumentTypes.FEATURE,
   time: null,
   place: null,
   geometry: null,
@@ -15,7 +16,7 @@ const feature = {
 };
 
 const featureCollection = {
-  type: 'FeatureCollection',
+  type: DocumentTypes.FEATURECOLLECTION,
   features: [feature],
 };
 
@@ -335,5 +336,365 @@ describe('/req/core/instant-and-interval', () => {
     });
 
     expect(violations).toContainViolation('/req/core/instant-and-interval#E');
+  });
+});
+
+describe('/req/core/coordinate-dimension', () => {
+  test('Succeeds when all coordinates of the "geometry" member have the same dimension', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      geometry: {
+        type: GeometryTypes.MULTIPOINT,
+        coordinates: [
+          [10, 20],
+          [20, 30],
+        ],
+      },
+    });
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when some coordinates of the "geometry" member have different dimensions', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      geometry: {
+        type: GeometryTypes.MULTIPOINT,
+        coordinates: [
+          [10, 20],
+          [20, 30, 40],
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/coordinate-dimension');
+  });
+
+  test('Succeeds when all coordinates of the "place" member have the same dimension', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.PRISM,
+        base: {
+          type: GeometryTypes.MULTIPOINT,
+          coordinates: [
+            [10, 20],
+            [20, 30],
+          ],
+        },
+        upper: 10,
+      },
+    });
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when some coordinates of the "place" member have different dimensions', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.MULTIPOINT,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        coordinates: [
+          [10, 20],
+          [20, 30, 40],
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/coordinate-dimension');
+  });
+
+  test('Fails when some coordinates of the "place" member being a Prism have different dimensions', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.PRISM,
+        base: {
+          type: GeometryTypes.MULTIPOINT,
+          coordinates: [
+            [10, 20],
+            [20, 30, 40],
+          ],
+        },
+        upper: 10,
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/coordinate-dimension');
+  });
+
+  test('Fails when some coordinates of the "place" member being a MultiPrism have different dimensions', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.MULTIPRISM,
+        prisms: [
+          {
+            type: GeometryTypes.PRISM,
+            base: {
+              type: GeometryTypes.MULTIPOINT,
+              coordinates: [
+                [10, 20],
+                [20, 30, 40],
+              ],
+            },
+            upper: 10,
+          },
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/coordinate-dimension');
+  });
+});
+
+describe('/req/core/geometry-wgs84', () => {
+  test('Fails when some first elements have a value out of bounds.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      geometry: {
+        type: GeometryTypes.MULTIPOINT,
+        coordinates: [
+          [-181, 20],
+          [20, 30],
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/geometry-wgs84');
+  });
+
+  test('Fails when some first elements have a value out of bounds.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      geometry: {
+        type: GeometryTypes.MULTIPOINT,
+        coordinates: [
+          [10, -91],
+          [20, 30],
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/geometry-wgs84');
+  });
+});
+
+describe('/req/core/place', () => {
+  test('Fails when a GeoJSON type and no coordRefSys is given.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.POINT,
+        coordinates: [10, 10],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/place');
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the geometry level.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.POINT,
+        coordRefSys: '[OGC:CRS84]',
+        coordinates: [10, 10],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/place');
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the feature level.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      coordRefSys: '[OGC:CRS84]',
+      place: {
+        type: GeometryTypes.POINT,
+        coordinates: [10, 10],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/place');
+  });
+
+  test('Succeeds when a GeoJSON type and a non-CRS84 coordRefSys is given on the feature collection level.', async () => {
+    const violations = await spectral.run({
+      ...featureCollection,
+      conformsTo: [CC_CORE_URI],
+      coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+      features: [
+        {
+          ...feature,
+          place: {
+            type: GeometryTypes.POINT,
+            coordinates: [10, 10],
+          },
+        },
+      ],
+    });
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys is given on the feature collection level.', async () => {
+    const violations = await spectral.run({
+      ...featureCollection,
+      conformsTo: [CC_CORE_URI],
+      coordRefSys: '[OGC:CRS84]',
+      features: [
+        {
+          ...feature,
+          place: {
+            type: GeometryTypes.POINT,
+            coordinates: [10, 10],
+          },
+        },
+      ],
+    });
+
+    expect(violations).toContainViolation('/req/core/place');
+  });
+
+  test('Fails when a GeoJSON type and a CRS84 coordRefSys by ref is given on the geometry level.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.POINT,
+        coordRefSys: {
+          type: 'Reference',
+          href: '[OGC:CRS84]',
+        },
+        coordinates: [10, 10],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/place');
+  });
+});
+
+describe('/req/core/geometry-collection', () => {
+  test('Fails when a GeometryCollection member contains a "coordRefSys" member.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.GEOMETRYCOLLECTION,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        geometries: [
+          {
+            type: GeometryTypes.POINT,
+            coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+            coordinates: [10, 20],
+          },
+        ],
+      },
+    });
+
+    // TODO: Change back once schema issue is fixed: https://github.com/opengeospatial/ogc-feat-geo-json/issues/134
+    // expect(violations).toContainViolation('/req/core/place');
+    expect(violations.length).toBe(7);
+  });
+
+  test('Fails when a Prism base contains a "coordRefSys" member.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.PRISM,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        base: {
+          type: GeometryTypes.POINT,
+          coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+          coordinates: [10, 20],
+        },
+        upper: 10,
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/geometry-collection');
+  });
+
+  test('Fails when a PrismCollection member contains a "coordRefSys" member.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.MULTIPRISM,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        prisms: [
+          {
+            type: GeometryTypes.PRISM,
+            coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+            base: {
+              type: GeometryTypes.POINT,
+              coordinates: [10, 20],
+            },
+            upper: 10,
+          },
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/geometry-collection');
+  });
+
+  test('Fails when a PrismCollection member base contains a "coordRefSys" member.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.MULTIPRISM,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        prisms: [
+          {
+            type: GeometryTypes.PRISM,
+            base: {
+              type: GeometryTypes.POINT,
+              coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+              coordinates: [10, 20],
+            },
+            upper: 10,
+          },
+        ],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/core/geometry-collection');
+  });
+});
+
+describe('/req/core/fallback', () => {
+  test('Fails when the values for the "place" and "geometry" members are equal.', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [CC_CORE_URI],
+      place: {
+        type: GeometryTypes.POINT,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        coordinates: [10, 20],
+      },
+      geometry: {
+        type: GeometryTypes.POINT,
+        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
+        coordinates: [10, 20],
+      },
+    });
+
+    expect(violations.length).toBe(1);
   });
 });

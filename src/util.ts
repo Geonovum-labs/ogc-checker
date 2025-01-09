@@ -1,6 +1,8 @@
 import { Diagnostic } from '@codemirror/lint';
-import { IFunctionResult } from '@stoplight/spectral-core';
+import { IFunctionResult, RulesetFunctionContext } from '@stoplight/spectral-core';
 import mergeAllOf from 'json-schema-merge-allof';
+import nimma from 'nimma';
+import { last } from 'ramda';
 import { OpenAPIV3_0 } from './openapi-types';
 
 export const groupBy = <T>(arr: T[], key: (i: T) => string) =>
@@ -105,4 +107,35 @@ export const formatDocument = (content: string): string => {
   } catch {
     throw new Error('JSON document could not be parsed.');
   }
+};
+
+export const queryPath = (context: RulesetFunctionContext, path: string): Promise<unknown> => {
+  const documentInventory = context.documentInventory;
+
+  if (!('resolved' in documentInventory)) {
+    throw new Error('Context does not contain resolved document.');
+  }
+
+  const document = documentInventory.resolved;
+
+  return new Promise(resolve => {
+    nimma.query(document, {
+      [path]: scope => resolve(scope.value),
+    });
+  });
+};
+
+export const getParent = (context: RulesetFunctionContext): unknown => {
+  if (context.path.length === 0) {
+    return;
+  }
+
+  const parentPath = ['$', ...context.path.slice(0, context.path.length - 1)];
+  const lastSegment = last(parentPath);
+
+  if (typeof lastSegment === 'number') {
+    parentPath.pop();
+  }
+
+  return queryPath(context, parentPath.join('.'));
 };
