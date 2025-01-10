@@ -59,8 +59,6 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
   if (!equals(omit(['schema'], spec), omit(['schema'], parameter))) {
     return errorMessage(`Parameter object is not compatible with: ${JSON.stringify(options.spec)}.`, paramPath);
   }
-
-  return [];
 };
 
 export default hasParameter;

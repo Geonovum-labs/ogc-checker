@@ -6,18 +6,15 @@ import { APPLICATION_GEO_JSON_TYPE } from '../../constants';
 import hasParameter from '../../functions/hasParameter';
 import responseMatchSchema from '../../functions/responseMatchSchema';
 import { OpenAPIV3_0 } from '../../openapi-types';
+import { Rulesets } from '../../spectral';
 import { errorMessage } from '../../util';
 
 export const API_FEATURES_1_CORE = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core';
 export const API_FEATURES_1_OAS3 = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30';
 export const API_FEATURES_1_GEOJSON = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson';
 
-interface Rulesets {
-  [confClass: string]: RulesetDefinition;
-}
-
 const apiFeatures1Core: RulesetDefinition = {
-  documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core',
+  documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/req/core',
   description: 'OGC API - Features - Part 1: Core - Requirements Class "Core"',
   formats: [oas3_0],
   rules: {

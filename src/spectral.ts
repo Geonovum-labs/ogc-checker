@@ -1,11 +1,13 @@
 import { linter } from '@codemirror/lint';
-import { resolveHttp } from '@stoplight/json-ref-readers';
-import { Resolver } from '@stoplight/json-ref-resolver';
 import { Document, RulesetDefinition, Spectral } from '@stoplight/spectral-core';
 import { Json } from '@stoplight/spectral-parsers';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Extension } from '@uiw/react-codemirror';
 import { Severity } from './types';
+
+export interface Rulesets {
+  [confClass: string]: RulesetDefinition;
+}
 
 const mapSeverity = (severity: DiagnosticSeverity): Severity => {
   switch (severity) {
@@ -21,14 +23,7 @@ const mapSeverity = (severity: DiagnosticSeverity): Severity => {
 };
 
 export const spectralLinter = (name: string, ruleset: RulesetDefinition): Extension => {
-  const spectral = new Spectral({
-    resolver: new Resolver({
-      resolvers: {
-        http: { resolve: resolveHttp },
-        https: { resolve: resolveHttp },
-      },
-    }),
-  });
+  const spectral = new Spectral();
 
   spectral.setRuleset(ruleset);
 

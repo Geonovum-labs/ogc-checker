@@ -34,7 +34,7 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> 
   context
 ) => {
   if (!options.schemaUri) {
-    return [];
+    return;
   }
 
   const mediaType = options.mediaType ?? APPLICATION_JSON_TYPE;
@@ -68,8 +68,6 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> 
       mediaType,
     ]);
   }
-
-  return [];
 };
 
 export default responseMatchSchema;
