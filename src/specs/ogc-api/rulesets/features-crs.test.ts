@@ -102,6 +102,22 @@ describe('/req/crs/fc-bbox-crs-definition', () => {
 
     expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
   });
+
+  test('Fails when the features GET operation supports a "bbox-crs" parameter with a valid schema without default', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.parameters['bbox-crs'].schema as Record<string, unknown>).default = undefined;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
+  });
+
+  test('Fails when the features GET operation supports a "bbox-crs" parameter with a valid schema with a non-CRS84 default', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.parameters['bbox-crs'].schema as Record<string, unknown>).default = 'http://www.opengis.net/def/crs/EPSG/0/4326';
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
+  });
 });
 
 describe('/req/crs/fc-bbox-crs-valid-value', () => {
@@ -156,6 +172,22 @@ describe('/req/crs/fc-crs-definition', () => {
   test('Fails when the features GET operation supports a "crs" parameter with an invalid schema', async () => {
     const oasDoc = clone(exampleDoc);
     (oasDoc.components.parameters['crs'].schema as unknown) = { type: 'number' };
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-crs-definition', 2);
+  });
+
+  test('Fails when the features GET operation supports a "crs" parameter with a valid schema without default', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.parameters['crs'].schema as Record<string, unknown>).default = undefined;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-crs-definition', 2);
+  });
+
+  test('Fails when the features GET operation supports a "crs" parameter with a valid schema with a non-CRS84 default', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.parameters['crs'].schema as Record<string, unknown>).default = 'http://www.opengis.net/def/crs/EPSG/0/4326';
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toContainViolation('/req/crs/fc-crs-definition', 2);
