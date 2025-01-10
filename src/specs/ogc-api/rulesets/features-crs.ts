@@ -1,7 +1,6 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { schema } from '@stoplight/spectral-functions';
-import { errorMessage } from '../../../util';
 
 export const OGC_API_FEATURES_CRS_URI = 'http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs';
 
@@ -21,14 +20,19 @@ const featuresCrs: RulesetDefinition = {
         'supported by the server for that collection. {{error}}',
       severity: 'error',
       then: {
-        function: input => {
-          if (!(typeof input === 'object')) {
-            return;
-          }
-
-          if (!('required' in input) || !Array.isArray(input.required) || !input.required.includes('crs')) {
-            return errorMessage('The "crs" property must be set as required.');
-          }
+        function: schema,
+        functionOptions: {
+          schema: {
+            $schema: 'https://json-schema.org/draft/2020-12/schema',
+            type: 'object',
+            required: ['required'],
+            properties: {
+              required: {
+                type: 'array',
+                contains: { const: 'crs' },
+              },
+            },
+          },
         },
       },
     },
