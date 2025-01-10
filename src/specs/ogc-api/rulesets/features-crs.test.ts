@@ -64,14 +64,22 @@ describe('/req/crs/fc-md-storageCrs-valid-value', () => {
 });
 
 describe('/req/crs/fc-bbox-crs-definition', () => {
-  test('Succeeds when the features schema contains a "bbox-crs" query-parameter with a valid schema', async () => {
+  test('Succeeds when the features GET operation supports a "bbox-crs" query-parameter with a valid schema', async () => {
     const oasDoc = clone(exampleDoc);
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toHaveLength(0);
   });
 
-  test('Fails when the features schema contains a "bbox-crs" query-parameter which is required', async () => {
+  test('Fails when the features GET operation does not support a "bbox-crs" query-parameter', async () => {
+    const oasDoc = clone(exampleDoc);
+    oasDoc.components.parameters['bbox-crs'].name = 'foo';
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
+  });
+
+  test('Fails when the features GET operation supports a "bbox-crs" query-parameter which is required', async () => {
     const oasDoc = clone(exampleDoc);
     oasDoc.components.parameters['bbox-crs'].required = true;
     const violations = await spectral.run(oasDoc);
@@ -79,7 +87,7 @@ describe('/req/crs/fc-bbox-crs-definition', () => {
     expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
   });
 
-  test('Fails when the features schema contains a "bbox-crs" path-parameter', async () => {
+  test('Fails when the features GET operation supports a "bbox-crs" path-parameter', async () => {
     const oasDoc = clone(exampleDoc);
     oasDoc.components.parameters['bbox-crs'].in = 'path';
     const violations = await spectral.run(oasDoc);
@@ -87,11 +95,28 @@ describe('/req/crs/fc-bbox-crs-definition', () => {
     expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
   });
 
-  test('Fails when the features schema contains a "bbox-crs" parameter with an invalid schema', async () => {
+  test('Fails when the features GET operation supports a "bbox-crs" parameter with an invalid schema', async () => {
     const oasDoc = clone(exampleDoc);
-    (oasDoc.components.parameters['bbox-crs'].schema as Record<string, unknown>) = { type: 'number' };
+    (oasDoc.components.parameters['bbox-crs'].schema as unknown) = { type: 'number' };
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
+  });
+});
+
+describe('/req/crs/fc-bbox-crs-valid-value', () => {
+  test('Succeeds when the features GET operation supports a 400 response', async () => {
+    const oasDoc = clone(exampleDoc);
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when the features GET operation does not support a 400 response', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.paths['/collections/{collectionId}/items'].get.responses[400] as unknown) = undefined;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-valid-value', 1);
   });
 });

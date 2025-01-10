@@ -1,6 +1,6 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
-import { schema } from '@stoplight/spectral-functions';
+import { schema, truthy } from '@stoplight/spectral-functions';
 
 export const OGC_API_FEATURES_CRS_URI = 'http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs';
 
@@ -114,6 +114,17 @@ const featuresCrs: RulesetDefinition = {
             },
           },
         },
+      },
+    },
+    '/req/crs/fc-bbox-crs-valid-value': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses',
+      message:
+        'If the value of the bbox-crs parameter is not one of the CRS identifiers from the list of supported CRS identifiers, then the ' +
+        'server SHALL respond with the HTTP status code 400. {{error}}',
+      severity: 'error',
+      then: {
+        field: '400',
+        function: truthy,
       },
     },
   },
