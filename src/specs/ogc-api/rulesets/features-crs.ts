@@ -16,6 +16,9 @@ const featuresCrs: RulesetDefinition = {
         "$.paths['/collections'].get.responses.200.content[application/json].schema.properties.collections.items",
         '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200.content[application/json].schema',
       ],
+      message:
+        'The crs property in the collection object of a spatial feature collection SHALL contain the identifiers for the list of CRSs ' +
+        'supported by the server for that collection. {{error}}',
       severity: 'error',
       then: {
         function: input => {
@@ -34,6 +37,9 @@ const featuresCrs: RulesetDefinition = {
         "$.paths['/collections'].get.responses.200.content[application/json].schema.properties.collections.items",
         '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200.content[application/json].schema',
       ],
+      message:
+        'The value of the storageCrs property SHALL be one of the CRS identifiers from the list of supported CRS identifiers found in the ' +
+        'collection object using the crs property. {{error}}',
       severity: 'error',
       then: {
         function: schema,
