@@ -35,14 +35,12 @@ export const isFeatureTypePresent: RulesetFunction<unknown> = async input => {
 
   if (
     isFeatureCollection(input) &&
-    ((documentContainsFeatureType(input) && !someFeaturesContainFeatureType(input)) ||
-      (!documentContainsFeatureType(input) && allFeaturesContainFeatureType(input)))
+    ((documentContainsFeatureType(input) && someFeaturesContainFeatureType(input)) ||
+      (!documentContainsFeatureType(input) && !allFeaturesContainFeatureType(input)))
   ) {
-    return;
+    return errorMessage(
+      'If the JSON document is a JSON-FG feature collection, either the feature collection object SHALL have a member ' +
+        '"featureType" or each feature object SHALL have a member "featureType".'
+    );
   }
-
-  return errorMessage(
-    'If the JSON document is a JSON-FG feature collection, either the feature collection object SHALL have a member ' +
-      '"featureType" or each feature object SHALL have a member "featureType".'
-  );
 };

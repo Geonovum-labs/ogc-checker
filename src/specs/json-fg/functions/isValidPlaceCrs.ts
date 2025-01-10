@@ -38,7 +38,7 @@ const isCrs84 = (coordRefSys: unknown) => {
   return false;
 };
 
-export const isValidPlaceCrs: RulesetFunction<unknown> = async (input, options, context) => {
+export const isValidPlaceCrs: RulesetFunction<unknown> = async (input, _options, context) => {
   if (
     !(input && typeof input === 'object') ||
     !('type' in input && typeof input.type === 'string' && GEOJSON_TYPES.includes(input.type))
