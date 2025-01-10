@@ -1,6 +1,6 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
 import { errorMessage } from '../../../util';
-import { CC_TYPES_SCHEMAS_CURIE, CC_TYPES_SCHEMAS_URI } from '../rulesets/types-schemas';
+import { JSON_FG_TYPES_SCHEMAS_CURIE, JSON_FG_TYPES_SCHEMAS_URI } from '../rulesets/types-schemas';
 import { getConformsTo, isFeature, isFeatureCollection } from './util';
 
 const documentContainsFeatureType = (input: unknown) =>
@@ -23,7 +23,7 @@ const someFeaturesContainFeatureType = (input: unknown) =>
 export const isFeatureTypePresent: RulesetFunction<unknown> = async input => {
   const conformsTo = getConformsTo(input);
 
-  if (!conformsTo.includes(CC_TYPES_SCHEMAS_URI) && !conformsTo.includes(CC_TYPES_SCHEMAS_CURIE)) {
+  if (!conformsTo.includes(JSON_FG_TYPES_SCHEMAS_URI) && !conformsTo.includes(JSON_FG_TYPES_SCHEMAS_CURIE)) {
     return;
   }
 

@@ -3,7 +3,7 @@ import { spectralLinter } from '../../spectral';
 import { Spec, SpecLinter, SpecResponseMapper } from '../../types';
 import { handleResponse, handleResponseJson } from '../../util';
 import example from './example.json';
-import rulesets, { API_FEATURES_1_CORE, API_FEATURES_1_GEOJSON, API_FEATURES_1_OAS3 } from './rulesets';
+import rulesets from './rulesets';
 
 const responseMapper: SpecResponseMapper = async responseText => {
   let document;
@@ -62,20 +62,10 @@ const spec: Spec = {
   name: 'OGC API',
   slug: 'ogc-api',
   example: JSON.stringify(example, undefined, 2),
-  linters: [
-    {
-      name: linterName(API_FEATURES_1_CORE),
-      linter: spectralLinter(linterName(API_FEATURES_1_CORE), rulesets[API_FEATURES_1_CORE]),
-    },
-    {
-      name: linterName(API_FEATURES_1_OAS3),
-      linter: spectralLinter(linterName(API_FEATURES_1_OAS3), rulesets[API_FEATURES_1_OAS3]),
-    },
-    {
-      name: linterName(API_FEATURES_1_GEOJSON),
-      linter: spectralLinter(linterName(API_FEATURES_1_GEOJSON), rulesets[API_FEATURES_1_GEOJSON]),
-    },
-  ],
+  linters: Object.entries(rulesets).map(entry => ({
+    name: linterName(entry[0]),
+    linter: spectralLinter(linterName(entry[0]), entry[1]),
+  })),
   responseMapper,
 };
 

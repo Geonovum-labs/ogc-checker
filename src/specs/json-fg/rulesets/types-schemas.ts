@@ -3,8 +3,8 @@ import { isFeatureTypePresent } from '../functions/isFeatureTypePresent';
 import { isValidConformanceTypesSchemas } from '../functions/isValidConformanceTypesSchemas';
 import { isValidGeometryDimension } from '../functions/isValidGeometryDimension';
 
-export const CC_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/types-schemas';
-export const CC_TYPES_SCHEMAS_CURIE = '[ogc-json-fg-1-0.2:types-schemas]';
+export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/types-schemas';
+export const JSON_FG_TYPES_SCHEMAS_CURIE = '[ogc-json-fg-1-0.2:types-schemas]';
 
 const jsonFgTypesSchemas: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/types-schemas',

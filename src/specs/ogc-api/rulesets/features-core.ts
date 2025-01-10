@@ -1,19 +1,13 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
-import { oasDocumentSchema, oasPathParam } from '@stoplight/spectral-rulesets/dist/oas/functions';
-import { APPLICATION_GEO_JSON_TYPE } from '../../constants';
-import hasParameter from '../../functions/hasParameter';
-import responseMatchSchema from '../../functions/responseMatchSchema';
-import { OpenAPIV3_0 } from '../../openapi-types';
-import { Rulesets } from '../../spectral';
-import { errorMessage } from '../../util';
+import hasParameter from '../../../functions/hasParameter';
+import { OpenAPIV3_0 } from '../../../openapi-types';
+import { errorMessage } from '../../../util';
 
-export const API_FEATURES_1_CORE = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core';
-export const API_FEATURES_1_OAS3 = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30';
-export const API_FEATURES_1_GEOJSON = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson';
+export const OGC_API_FEATURES_CORE_URI = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core';
 
-const apiFeatures1Core: RulesetDefinition = {
+const featuresCore: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/req/core',
   description: 'OGC API - Features - Part 1: Core - Requirements Class "Core"',
   formats: [oas3_0],
@@ -205,115 +199,4 @@ const apiFeatures1Core: RulesetDefinition = {
   },
 };
 
-const apiFeatures1OpenApi30: RulesetDefinition = {
-  documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/req/oas30',
-  description: 'OGC API - Features - Part 1: Core - Requirements Class "OpenAPI 3.0"',
-  formats: [oas3_0],
-  rules: {
-    '/req/oas30/oas-definition-2': {
-      given: '$',
-      message: 'The JSON representation SHALL conform to the OpenAPI Specification, version 3.0. {{error}}.',
-      severity: 'error',
-      then: [
-        {
-          function: oasDocumentSchema,
-        },
-        {
-          field: 'paths',
-          function: oasPathParam,
-        },
-      ],
-    },
-  },
-};
-
-const apiFeatures1GeoJson: RulesetDefinition = {
-  documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/req/geojson',
-  description: 'OGC API - Features - Part 1: Core - Requirements Class "GeoJSON"',
-  formats: [oas3_0],
-  rules: {
-    '/req/core/root-success': {
-      given: "$.paths['/'].get.responses.200",
-      message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      severity: 'error',
-      then: {
-        function: responseMatchSchema,
-        functionOptions: {
-          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
-        },
-      },
-    },
-    '/req/core/conformance-success': {
-      given: "$.paths['/conformance'].get.responses.200",
-      message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      severity: 'error',
-      then: {
-        function: responseMatchSchema,
-        functionOptions: {
-          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml',
-        },
-      },
-    },
-    '/req/core/fc-md-success': {
-      given: "$.paths['/collections'].get.responses.200",
-      message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      severity: 'error',
-      then: {
-        function: responseMatchSchema,
-        functionOptions: {
-          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml',
-        },
-      },
-    },
-    '/req/core/sfc-md-success': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200',
-      message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      severity: 'error',
-      then: {
-        function: responseMatchSchema,
-        functionOptions: {
-          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml',
-        },
-      },
-    },
-    '/req/core/fc-response': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses.200',
-      message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      severity: 'error',
-      then: {
-        function: responseMatchSchema,
-        functionOptions: {
-          schemaUri:
-            'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureCollectionGeoJSON.yaml',
-          mediaType: APPLICATION_GEO_JSON_TYPE,
-        },
-      },
-    },
-    '/req/core/f-response': {
-      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses.200',
-      message:
-        'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
-      severity: 'error',
-      then: {
-        function: responseMatchSchema,
-        functionOptions: {
-          schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureGeoJSON.yaml',
-          mediaType: APPLICATION_GEO_JSON_TYPE,
-        },
-      },
-    },
-  },
-};
-
-const rulesets: Rulesets = {
-  [API_FEATURES_1_CORE]: apiFeatures1Core,
-  [API_FEATURES_1_OAS3]: apiFeatures1OpenApi30,
-  [API_FEATURES_1_GEOJSON]: apiFeatures1GeoJson,
-};
-
-export default rulesets;
+export default featuresCore;
