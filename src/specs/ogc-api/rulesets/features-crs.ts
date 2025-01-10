@@ -168,6 +168,46 @@ const featuresCrs: RulesetDefinition = {
         },
       },
     },
+    '/req/crs/ogc-crs-header': {
+      given: [
+        '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses.200',
+        '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses.200',
+      ],
+      message: "Each GET request on a 'features' or 'feature' resource SHALL support a query parameter named crs. {{error}}",
+      severity: 'error',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            $schema: 'https://json-schema.org/draft/2020-12/schema',
+            type: 'object',
+            required: ['headers'],
+            properties: {
+              headers: {
+                type: 'object',
+                required: ['Content-Crs'],
+                properties: {
+                  'Content-Crs': {
+                    type: 'object',
+                    required: ['schema'],
+                    properties: {
+                      schema: {
+                        type: 'object',
+                        required: ['type'],
+                        properties: {
+                          type: { const: 'string' },
+                        },
+                        not: { required: ['format'] },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
 

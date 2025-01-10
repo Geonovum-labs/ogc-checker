@@ -161,3 +161,36 @@ describe('/req/crs/fc-crs-definition', () => {
     expect(violations).toContainViolation('/req/crs/fc-crs-definition', 2);
   });
 });
+
+describe('/req/crs/ogc-crs-header', () => {
+  test('Succeeds when the features GET operation supports a "Content-Crs" response header', async () => {
+    const oasDoc = clone(exampleDoc);
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when the features GET operation does not support a "crs" query-parameter', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.responses.Features.headers['Content-Crs'] as unknown) = undefined;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/ogc-crs-header', 1);
+  });
+
+  test('Fails when the feature GET operation does not support a "crs" query-parameter', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.responses.Feature.headers['Content-Crs'] as unknown) = undefined;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/ogc-crs-header', 1);
+  });
+
+  test('Fails when the "crs" query-parameter specifies a format.', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.headers['Content-Crs'].schema as Record<string, unknown>).format = 'uri';
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/ogc-crs-header', 2);
+  });
+});
