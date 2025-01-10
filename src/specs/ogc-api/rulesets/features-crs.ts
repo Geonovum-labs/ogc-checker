@@ -1,5 +1,6 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
+import { schema } from '@stoplight/spectral-functions';
 import { errorMessage } from '../../../util';
 
 export const OGC_API_FEATURES_CRS_URI = 'http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs';
@@ -25,6 +26,45 @@ const featuresCrs: RulesetDefinition = {
           if (!('required' in input) || !Array.isArray(input.required) || !input.required.includes('crs')) {
             return errorMessage('The "crs" property must be set as required.');
           }
+        },
+      },
+    },
+    '/req/crs/fc-md-storageCrs-valid-value': {
+      given: [
+        "$.paths['/collections'].get.responses.200.content[application/json].schema.properties.collections.items",
+        '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200.content[application/json].schema',
+      ],
+      severity: 'error',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            $schema: 'https://json-schema.org/draft/2020-12/schema',
+            type: 'object',
+            properties: {
+              properties: {
+                type: 'object',
+                dependentRequired: {
+                  storageCrsCoordinateEpoch: ['storageCrs'],
+                },
+                properties: {
+                  storageCrs: {
+                    required: ['type', 'format'],
+                    properties: {
+                      type: { const: 'string' },
+                      format: { const: 'uri' },
+                    },
+                  },
+                  storageCrsCoordinateEpoch: {
+                    required: ['type'],
+                    properties: {
+                      type: { const: 'number' },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
