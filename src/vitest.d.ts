@@ -2,7 +2,7 @@
 import 'vitest';
 
 interface CustomMatchers<R = unknown> {
-  toContainViolation: (code: string, message?: string | RegExp) => R;
+  toContainViolation: (code: string, count: number = 1, message?: string | RegExp) => R;
 }
 
 declare module 'vitest' {
