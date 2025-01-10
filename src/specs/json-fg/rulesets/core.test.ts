@@ -28,7 +28,7 @@ describe('/req/core/schema-valid', () => {
       place: undefined,
     });
 
-    expect(violations).toContainViolation('/req/core/schema-valid', /Object must have required property "place"\.$/);
+    expect(violations).toContainViolation('/req/core/schema-valid', 1, /Object must have required property "place"\.$/);
   });
 
   test('Fails when required properties are absent on feature collection', async () => {
@@ -38,7 +38,11 @@ describe('/req/core/schema-valid', () => {
       features: undefined,
     });
 
-    expect(violations).toContainViolation('/req/core/schema-valid', /Object must have required property "features"\.$/);
+    expect(violations).toContainViolation(
+      '/req/core/schema-valid',
+      1,
+      /Object must have required property "features"\.$/
+    );
   });
 });
 
