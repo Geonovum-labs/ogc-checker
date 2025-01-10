@@ -38,11 +38,7 @@ describe('/req/core/schema-valid', () => {
       features: undefined,
     });
 
-    expect(violations).toContainViolation(
-      '/req/core/schema-valid',
-      1,
-      /Object must have required property "features"\.$/
-    );
+    expect(violations).toContainViolation('/req/core/schema-valid', 1, /Object must have required property "features"\.$/);
   });
 });
 
