@@ -1,8 +1,8 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { describe, expect, test } from 'vitest';
 import { DocumentTypes, GeometryTypes } from '../../../types';
-import { CC_CORE_URI } from './core';
-import ruleset, { CC_TYPES_SCHEMAS_URI } from './types-schemas';
+import { JSON_FG_CORE_URI } from './core';
+import ruleset, { JSON_FG_TYPES_SCHEMAS_URI } from './types-schemas';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
@@ -24,7 +24,7 @@ describe('/req/types-schemas/metadata', () => {
   test('Fails when a feature contains a "featureType" member and does not include the Feature Types and Schemas conformance class', async () => {
     const violations = await spectral.run({
       ...feature,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       featureType: 'app:building',
     });
 
@@ -34,7 +34,7 @@ describe('/req/types-schemas/metadata', () => {
   test('Fails when a feature collection contains a "featureType" member and does not include the Feature Types and Schemas conformance class', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       featureType: 'app:building',
     });
 
@@ -44,7 +44,7 @@ describe('/req/types-schemas/metadata', () => {
   test('Fails when a feature collection member contains a "featureType" member and does not include the Feature Types and Schemas conformance class', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       features: [
         {
           ...feature,
@@ -61,7 +61,7 @@ describe('/req/types-schemas/feature-type', () => {
   test('Fails when a feature conforms to the Feature Types and Schemas conformance class and does not contain a "featureType" member', async () => {
     const violations = await spectral.run({
       ...feature,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
     });
 
     expect(violations).toContainViolation('/req/types-schemas/feature-type');
@@ -70,7 +70,7 @@ describe('/req/types-schemas/feature-type', () => {
   test('Succeeds when a feature collection contains a "featureType" member', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       features: [
         {
@@ -85,7 +85,7 @@ describe('/req/types-schemas/feature-type', () => {
   test('Succeeds when a feature collection contains a "featureType" member in every individual feature', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       features: [
         {
           ...feature,
@@ -104,7 +104,7 @@ describe('/req/types-schemas/feature-type', () => {
   test('Fails when both a feature collection and individual features contain a "featureType" member', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       features: [
         {
@@ -120,7 +120,7 @@ describe('/req/types-schemas/feature-type', () => {
   test('Fails when not every individual feature contains a "featureType" member', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       features: [
         {
           ...feature,
@@ -140,7 +140,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Succeeds when a feature collection with "geometryDimension" 0 contains valid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 0,
       features: [
@@ -165,7 +165,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Fails when a feature collection with "geometryDimension" 0 contains invalid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 0,
       features: [
@@ -185,7 +185,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Succeeds when a feature collection with "geometryDimension" 1 contains valid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 1,
       features: [
@@ -210,7 +210,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Fails when a feature collection with "geometryDimension" 1 contains invalid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 1,
       features: [
@@ -229,7 +229,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Succeeds when a feature collection with "geometryDimension" 2 contains valid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 2,
       features: [
@@ -254,7 +254,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Fails when a feature collection with "geometryDimension" 2 contains invalid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 2,
       features: [
@@ -273,7 +273,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Succeeds when a feature collection with "geometryDimension" 3 contains valid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 3,
       features: [
@@ -310,7 +310,7 @@ describe('/req/types-schemas/geometry-dimension', () => {
   test('Fails when a feature collection with "geometryDimension" 3 contains invalid geometry types', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_TYPES_SCHEMAS_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_TYPES_SCHEMAS_URI],
       featureType: 'app:building',
       geometryDimension: 3,
       features: [

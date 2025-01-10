@@ -1,8 +1,8 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { describe, expect, test } from 'vitest';
 import { DocumentTypes, GeometryTypes } from '../../../types';
-import ruleset, { CC_3D_URI } from './3d';
-import { CC_CORE_URI } from './core';
+import ruleset, { JSON_FG_3D_URI } from './3d';
+import { JSON_FG_CORE_URI } from './core';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
@@ -24,7 +24,7 @@ describe('/req/3d/metadata', () => {
   test('Succeeds when a feature does not contain a 3D geometry and does not include the 3D conformance class', async () => {
     const violations = await spectral.run({
       ...feature,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       place: {
         type: GeometryTypes.POLYGON,
       },
@@ -36,7 +36,7 @@ describe('/req/3d/metadata', () => {
   test('Succeeds when a feature contains a 3D geometry and does include the 3D conformance class', async () => {
     const violations = await spectral.run({
       ...feature,
-      conformsTo: [CC_CORE_URI, CC_3D_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_3D_URI],
       place: {
         type: GeometryTypes.POLYHEDRON,
       },
@@ -48,7 +48,7 @@ describe('/req/3d/metadata', () => {
   test('Fails when a feature contains a 3D geometry and does not include the 3D conformance class', async () => {
     const violations = await spectral.run({
       ...feature,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       place: {
         type: GeometryTypes.POLYHEDRON,
       },
@@ -60,7 +60,7 @@ describe('/req/3d/metadata', () => {
   test('Succeeds when a feature collection does not contain a 3D geometry and does not include the 3D conformance class', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       features: [
         {
           type: DocumentTypes.FEATURE,
@@ -77,7 +77,7 @@ describe('/req/3d/metadata', () => {
   test('Succeeds when a feature collection contains a 3D geometry and does not include the 3D conformance class', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI, CC_3D_URI],
+      conformsTo: [JSON_FG_CORE_URI, JSON_FG_3D_URI],
       features: [
         {
           type: DocumentTypes.FEATURE,
@@ -94,7 +94,7 @@ describe('/req/3d/metadata', () => {
   test('Fails when a feature collection contains a 3D geometry and does not include the 3D conformance class', async () => {
     const violations = await spectral.run({
       ...featureCollection,
-      conformsTo: [CC_CORE_URI],
+      conformsTo: [JSON_FG_CORE_URI],
       features: [
         {
           type: DocumentTypes.FEATURE,

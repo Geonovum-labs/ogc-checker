@@ -11,8 +11,8 @@ import { isPlaceAndGeometryNotEqual } from '../functions/isPlaceAndGeometryNotEq
 import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
 import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
 
-export const CC_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
-export const CC_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
+export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
+export const JSON_FG_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
 
 const isUnbounded = (input: unknown) => typeof input === 'string' && input === '..';
 
@@ -73,13 +73,13 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/metadata#B': {
       given: '$',
-      message: `The "conformsTo" member of the JSON document SHALL include at least one of the two following values: "${CC_CORE_URI}", "${CC_CORE_CURIE}".`,
+      message: `The "conformsTo" member of the JSON document SHALL include at least one of the two following values: "${JSON_FG_CORE_URI}", "${JSON_FG_CORE_CURIE}".`,
       severity: 'error',
       then: {
         field: 'conformsTo',
         function: includes,
         functionOptions: {
-          anyOf: [CC_CORE_URI, CC_CORE_CURIE],
+          anyOf: [JSON_FG_CORE_URI, JSON_FG_CORE_CURIE],
         },
       },
     },
