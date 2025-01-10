@@ -8,14 +8,14 @@ const spectral = new Spectral();
 spectral.setRuleset(ruleset);
 
 describe('/req/crs/fc-md-crs-list', () => {
-  test('Succeeds when the collection object schema sets the "crs" property as required', async () => {
+  test('Succeeds when the collection schema sets the "crs" property as required', async () => {
     const oasDoc = clone(exampleDoc);
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toHaveLength(0);
   });
 
-  test('Fails when the collection object schema does not set the "crs" property as required', async () => {
+  test('Fails when the collection schema does not set the "crs" property as required', async () => {
     const oasDoc = clone(exampleDoc);
     oasDoc.components.schemas.collection.required = ['id', 'links'];
     const violations = await spectral.run(oasDoc);
@@ -60,5 +60,38 @@ describe('/req/crs/fc-md-storageCrs-valid-value', () => {
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value', 2);
+  });
+});
+
+describe('/req/crs/fc-bbox-crs-definition', () => {
+  test('Succeeds when the features schema contains a "bbox-crs" query-parameter with a valid schema', async () => {
+    const oasDoc = clone(exampleDoc);
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when the features schema contains a "bbox-crs" query-parameter which is required', async () => {
+    const oasDoc = clone(exampleDoc);
+    oasDoc.components.parameters['bbox-crs'].required = true;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
+  });
+
+  test('Fails when the features schema contains a "bbox-crs" path-parameter', async () => {
+    const oasDoc = clone(exampleDoc);
+    oasDoc.components.parameters['bbox-crs'].in = 'path';
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
+  });
+
+  test('Fails when the features schema contains a "bbox-crs" parameter with an invalid schema', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.parameters['bbox-crs'].schema as Record<string, unknown>) = { type: 'number' };
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/crs/fc-bbox-crs-definition', 1);
   });
 });

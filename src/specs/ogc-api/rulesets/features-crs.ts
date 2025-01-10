@@ -74,6 +74,44 @@ const featuresCrs: RulesetDefinition = {
         },
       },
     },
+    '/req/crs/fc-bbox-crs-definition': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
+      message: "Each GET request on a 'features' resource SHALL support a query parameter bbox-crs. {{error}}",
+      severity: 'error',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            $schema: 'https://json-schema.org/draft/2020-12/schema',
+            type: 'object',
+            required: ['parameters'],
+            properties: {
+              parameters: {
+                type: 'array',
+                maxContains: 1,
+                contains: {
+                  type: 'object',
+                  required: ['name', 'in', 'schema'],
+                  properties: {
+                    name: { const: 'bbox-crs' },
+                    in: { const: 'query' },
+                    required: { const: false },
+                    schema: {
+                      type: 'object',
+                      required: ['type', 'format'],
+                      properties: {
+                        type: { const: 'string' },
+                        format: { const: 'uri' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
 
