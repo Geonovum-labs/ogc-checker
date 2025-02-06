@@ -1,17 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 @layer base {
   input[type='text'] {
-    @apply p-1 text-slate-700 text-sm rounded-md focus:ring-0;
+    @apply p-1 bg-white text-slate-700 text-sm rounded-md focus:ring-0;
   }
 
   select {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 10 6'%3E%3Cpath stroke='%23334155' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 1 4 4 4-4'/%3E%3C/svg%3E");
     background-position: right 0.75rem center;
     background-size: 0.75em 0.75em;
-    @apply appearance-none bg-no-repeat p-2 pr-8 text-slate-700 text-sm leading-none rounded-md focus:ring-0;
+    @apply appearance-none bg-white bg-no-repeat p-2 pr-8 text-slate-700 text-sm leading-none rounded-md focus:ring-0;
   }
 
   button {
@@ -20,5 +36,5 @@
 }
 
 .cm-selectionBackground {
-  @apply !bg-red-200;
+  @apply bg-red-200!;
 }
