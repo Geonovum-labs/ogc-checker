@@ -83,25 +83,25 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
       </div>
       <div className="flex-1 overflow-auto p-4 bg-sky-100 text-sm">
         {checking && <p>Checking...</p>}
-        {!checking && error && <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">{error}</div>}
+        {!checking && error && <div className="mb-4 p-4 bg-red-500 text-white rounded-sm shadow-lg">{error}</div>}
         {!checking &&
           !error &&
           linters.map(linter => (
             <div key={linter.name}>
               {!diagnostics[linter.name] ? (
-                <div className="mb-4 p-4 bg-green-600 text-white rounded shadow-lg">
+                <div className="mb-4 p-4 bg-green-600 text-white rounded-sm shadow-lg">
                   [{linter.name}] No violations found.
                 </div>
               ) : (
                 <>
-                  <div className="mb-4 p-4 bg-red-500 text-white rounded shadow-lg">
+                  <div className="mb-4 p-4 bg-red-500 text-white rounded-sm shadow-lg">
                     [{linter.name}] Found {diagnostics[linter.name].length} linting error(s).
                   </div>
                   <ul>
                     {diagnostics[linter.name].map((diagnostic, i) => (
                       <li key={i}>
                         <div
-                          className={clsx('mb-4 p-4 rounded shadow-lg', {
+                          className={clsx('mb-4 p-4 rounded-sm shadow-lg', {
                             'bg-red-200': diagnostic.severity === 'error',
                             'bg-yellow-100': diagnostic.severity === 'warning',
                             'bg-white': diagnostic.severity === 'info' || diagnostic.severity === 'hint',
