@@ -17,7 +17,7 @@
     "@stoplight/better-ajv-errors": "^1.0.3",
     "@stoplight/spectral-core": "^1.19.5",
     "@stoplight/spectral-formats": "^1.8.2",
-    "@stoplight/spectral-functions": "^1.9.3",
+    "@stoplight/spectral-functions": "^1.9.4",
     "@stoplight/spectral-parsers": "^1.0.5",
     "@stoplight/spectral-rulesets": "^1.21.4",
     "@uiw/react-codemirror": "^4.23.10",
