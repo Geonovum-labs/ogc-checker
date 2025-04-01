@@ -2,7 +2,7 @@ import { Diagnostic } from '@codemirror/lint';
 import { IFunctionResult, RulesetFunctionContext } from '@stoplight/spectral-core';
 import mergeAllOf from 'json-schema-merge-allof';
 import nimma from 'nimma';
-import { last } from 'ramda';
+import { last, omit } from 'ramda';
 import { OpenAPIV3_0 } from './openapi-types';
 
 export const groupBy = <T>(arr: T[], key: (i: T) => string) =>
@@ -44,12 +44,20 @@ export const groupBySource = (diagnostics: Diagnostic[]) => groupBy(diagnostics,
  * @param refSchema The reference schema
  * @returns An array of error messages
  */
-export const matchSchema = (
-  schema: OpenAPIV3_0.SchemaObject,
-  refSchema: OpenAPIV3_0.SchemaObject,
-  path: string[] = []
-): string[] => {
+export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPIV3_0.SchemaObject, path: string[] = []): string[] => {
   const errors: string[] = [];
+
+  if (schema.oneOf) {
+    return schema.oneOf.flatMap(oneOf =>
+      matchSchema(
+        {
+          ...omit(['oneOf'], schema),
+          ...oneOf,
+        } as OpenAPIV3_0.SchemaObject,
+        refSchema
+      )
+    );
+  }
 
   if (schema.allOf || refSchema.allOf) {
     // TODO: Handle situations where merged JSON schema is not compatible with OpenAPI 3.0 schema object (e.g. multiple types)
