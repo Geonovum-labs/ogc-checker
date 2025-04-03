@@ -332,6 +332,38 @@
           }
         }
       },
+      "featureCollection": {
+        "allOf": [
+          { "$ref": "#/components/schemas/collection" },
+          {
+            "type": "object",
+            "required": ["itemType"],
+            "properties": {
+              "itemType": {
+                "description": "indicator about the type of the items in the collection.",
+                "type": "string",
+                "enum": ["feature"]
+              }
+            }
+          }
+        ]
+      },
+      "recordCollection": {
+        "allOf": [
+          { "$ref": "#/components/schemas/collection" },
+          {
+            "type": "object",
+            "required": ["itemType"],
+            "properties": {
+              "itemType": {
+                "description": "indicator about the type of the items in the collection.",
+                "type": "string",
+                "enum": ["record"]
+              }
+            }
+          }
+        ]
+      },
       "collections": {
         "type": "object",
         "required": ["links", "collections"],
@@ -345,7 +377,7 @@
           "collections": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/collection"
+              "oneOf": [{ "$ref": "#/components/schemas/featureCollection" }, { "$ref": "#/components/schemas/recordCollection" }]
             }
           }
         }
