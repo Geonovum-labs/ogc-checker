@@ -98,6 +98,7 @@ Specification: https://docs.ogc.org/DRAFTS/20-004r1.html
 | --------------------------- | :------: | :----: | ------- |
 | `/req/json/conformance`     |    No    |   No   |         |
 | `/req/json/record-response` |   Yes    |  Yes   |         |
+| `/req/json/record-content`  |   Yes    |  Yes   |         |
 
 ## Development
 
