@@ -1022,7 +1022,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/collection"
+              "$ref": "#/components/schemas/featureCollection"
             },
             "example": {
               "id": "buildings",
@@ -1062,6 +1062,11 @@
                   "title": "CC0-1.0"
                 }
               ]
+            }
+          },
+          "application/ogc-catalog+json": {
+            "schema": {
+              "$ref": "#/components/schemas/recordCollection"
             }
           },
           "text/html": {

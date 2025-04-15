@@ -94,11 +94,13 @@ Specification: https://docs.ogc.org/is/18-058r1/18-058r1.html
 Version: 1.0 (Draft)\
 Specification: https://docs.ogc.org/DRAFTS/20-004r1.html
 
-| Requirement                 | Testable | Tested | Remarks |
-| --------------------------- | :------: | :----: | ------- |
-| `/req/json/conformance`     |    No    |   No   |         |
-| `/req/json/record-response` |   Yes    |  Yes   |         |
-| `/req/json/record-content`  |   Yes    |  Yes   |         |
+| Requirement                        | Testable | Tested | Remarks |
+| ---------------------------------- | :------: | :----: | ------- |
+| `/req/json/conformance`            |    No    |   No   |         |
+| `/req/json/record-response`        |   Yes    |  Yes   |         |
+| `/req/json/record-content`         |   Yes    |  Yes   |         |
+| `/req/json/record-content-profile` |    No    |   No   |         |
+| `/req/json/collection-response`    |   Yes    |  Yes   |         |
 
 ## Development
 

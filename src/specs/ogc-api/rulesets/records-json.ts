@@ -12,7 +12,7 @@ const recordsJson: RulesetDefinition = {
   rules: {
     '/req/json/record-response': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items(\\/[^/]+)?$/))].get.responses.200.content',
-      message: '200-responses of the server SHALL support the "application/geo+json" media type. {{error}}',
+      message: '200-responses of the server SHALL support the "application/geo+json; application=ogc-record" media type. {{error}}',
       severity: 'error',
       then: {
         function: schema,
@@ -27,7 +27,7 @@ const recordsJson: RulesetDefinition = {
     '/req/json/record-content#records': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses.200',
       message:
-        'Every 200-response with the media type application/geo+json SHALL validate against the corresponding OpenAPI 3.0 schema document. {{error}}',
+        'Every 200-response with the media type "application/geo+json; application=ogc-record" SHALL validate against the corresponding OpenAPI 3.0 schema document. {{error}}',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -42,7 +42,7 @@ const recordsJson: RulesetDefinition = {
     '/req/json/record-content#record': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses.200',
       message:
-        'Every 200-response with the media type application/geo+json SHALL validate against the corresponding OpenAPI 3.0 schema document. {{error}}',
+        'Every 200-response with the media type "application/geo+json; application=ogc-record" SHALL validate against the corresponding OpenAPI 3.0 schema document. {{error}}',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -50,6 +50,20 @@ const recordsJson: RulesetDefinition = {
           // Revert user to "opengeospatial" and branch to "master" once issue is resolved: https://github.com/opengeospatial/ogcapi-records/pull/466
           schemaUri: 'https://raw.githubusercontent.com/joostfarla/ogcapi-records/refs/heads/temp/core/openapi/schemas/recordGeoJSON.yaml',
           mediaType: 'application/geo+json; application=ogc-record',
+        },
+      },
+    },
+    '/req/json/collection-response': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200.content',
+      message: '200-responses of the server SHALL support the "application/ogc-catalog+json" media type. {{error}}',
+      severity: 'error',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+            required: ['application/ogc-catalog+json'],
+          },
         },
       },
     },
