@@ -38,7 +38,7 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> 
   const content = response.content ? response.content[mediaType] : undefined;
 
   if (!content) {
-    return errorMessage(`Response media type "${mediaType}" is missing.`, [...context.path, 'content']);
+    return;
   }
 
   const schema = content.schema as OpenAPIV3_0.SchemaObject | undefined;

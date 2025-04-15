@@ -76,6 +76,10 @@ export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPI
     errors.push(errorStr(`Schema format must be "${refSchema.format}".`, path));
   }
 
+  if (refSchema.enum && schema.enum && !schema.enum.every(value => refSchema.enum?.includes(value))) {
+    errors.push(errorStr(`Schema enum must match [${refSchema.enum}].`, path));
+  }
+
   if (refSchema.type === 'object' && schema.type === 'object') {
     refSchema.required?.forEach(req => {
       if (!schema.required?.includes(req)) {

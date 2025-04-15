@@ -353,12 +353,16 @@
           { "$ref": "#/components/schemas/collection" },
           {
             "type": "object",
-            "required": ["itemType"],
+            "required": ["itemType", "type"],
             "properties": {
               "itemType": {
                 "description": "indicator about the type of the items in the collection.",
                 "type": "string",
                 "enum": ["record"]
+              },
+              "type": {
+                "type": "string",
+                "enum": ["Collection"]
               }
             }
           }
@@ -722,7 +726,8 @@
             "example": "application/geo+json"
           },
           "varBase": {
-            "type": "string"
+            "type": "string",
+            "format": "uri-reference"
           }
         }
       },

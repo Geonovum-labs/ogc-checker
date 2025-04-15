@@ -101,6 +101,7 @@ Specification: https://docs.ogc.org/DRAFTS/20-004r1.html
 | `/req/json/record-content`         |   Yes    |  Yes   |         |
 | `/req/json/record-content-profile` |    No    |   No   |         |
 | `/req/json/collection-response`    |   Yes    |  Yes   |         |
+| `/req/json/catalog-content`        |   Yes    |  Yes   |         |
 
 ## Development
 

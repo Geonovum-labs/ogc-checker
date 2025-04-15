@@ -67,6 +67,20 @@ const recordsJson: RulesetDefinition = {
         },
       },
     },
+    '/req/json/catalog-content': {
+      given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200',
+      message:
+        'The schema of all responses with the media type application/ogc-catalog+json SHALL validate against the OpenAPI 3.0 schema. {{error}}',
+      severity: 'error',
+      then: {
+        function: responseMatchSchema,
+        functionOptions: {
+          // Revert user to "opengeospatial" and branch to "master" once issue is resolved: https://github.com/opengeospatial/ogcapi-records/pull/466
+          schemaUri: 'https://raw.githubusercontent.com/joostfarla/ogcapi-records/refs/heads/temp/core/openapi/schemas/catalog.yaml',
+          mediaType: 'application/ogc-catalog+json',
+        },
+      },
+    },
   },
 };
 
