@@ -54,7 +54,8 @@ export const matchSchema = (schema: OpenAPIV3_0.SchemaObject, refSchema: OpenAPI
           ...omit(['oneOf'], schema),
           ...oneOf,
         } as OpenAPIV3_0.SchemaObject,
-        refSchema
+        refSchema,
+        path
       )
     );
   }

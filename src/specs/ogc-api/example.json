@@ -512,6 +512,9 @@
         "type": "object",
         "required": ["type", "geometry", "properties"],
         "properties": {
+          "id": {
+            "oneOf": [{ "type": "string" }, { "type": "integer" }]
+          },
           "type": {
             "type": "string",
             "enum": ["Feature"]
@@ -523,15 +526,61 @@
             "type": "object",
             "nullable": true
           },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          }
+        }
+      },
+      "recordCollectionGeoJSON": {
+        "type": "object",
+        "required": ["type", "features"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["FeatureCollection"]
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/recordGeoJSON"
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          },
+          "timeStamp": {
+            "$ref": "#/components/schemas/timeStamp"
+          },
+          "numberMatched": {
+            "$ref": "#/components/schemas/numberMatched"
+          },
+          "numberReturned": {
+            "$ref": "#/components/schemas/numberReturned"
+          }
+        }
+      },
+      "recordGeoJSON": {
+        "type": "object",
+        "required": ["id", "type", "geometry", "properties"],
+        "properties": {
           "id": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "integer"
-              }
-            ]
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["Feature"]
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/geometryGeoJSON"
+          },
+          "properties": {
+            "type": "object"
           },
           "links": {
             "type": "array",
@@ -1084,6 +1133,11 @@
               ]
             }
           },
+          "application/geo+json; application=ogc-record": {
+            "schema": {
+              "$ref": "#/components/schemas/recordCollectionGeoJSON"
+            }
+          },
           "text/html": {
             "schema": {
               "type": "string"
@@ -1140,6 +1194,11 @@
                 "floors": "2",
                 "lastUpdate": "2015-08-01T12:34:56Z"
               }
+            }
+          },
+          "application/geo+json; application=ogc-record": {
+            "schema": {
+              "$ref": "#/components/schemas/recordGeoJSON"
             }
           },
           "text/html": {
