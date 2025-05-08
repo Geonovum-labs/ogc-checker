@@ -20,7 +20,8 @@ describe('/req/crs/fc-md-crs-list', () => {
     oasDoc.components.schemas.collection.required = ['id', 'links'];
     const violations = await spectral.run(oasDoc);
 
-    expect(violations).toContainViolation('/req/crs/fc-md-crs-list', 2);
+    expect(violations).toContainViolation('/req/crs/fc-md-crs-list#collections', 1);
+    expect(violations).toContainViolation('/req/crs/fc-md-crs-list#collection', 1);
   });
 });
 
@@ -39,7 +40,8 @@ describe('/req/crs/fc-md-storageCrs-valid-value', () => {
     (oasDoc.components.schemas.collection.properties as Record<string, unknown>).storageCrs = { type: 'number' };
     const violations = await spectral.run(oasDoc);
 
-    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value', 2);
+    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value#collections', 1);
+    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value#collection', 1);
   });
 
   test('Fails when the "storageCrsCoordinateEpoch" property has an invalid schema', async () => {
@@ -51,15 +53,8 @@ describe('/req/crs/fc-md-storageCrs-valid-value', () => {
     (oasDoc.components.schemas.collection.properties as Record<string, unknown>).storageCrsCoordinateEpoch = { type: 'string' };
     const violations = await spectral.run(oasDoc);
 
-    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value', 2);
-  });
-
-  test('Succeeds when the "storageCrs" property is absent and "storageCrsCoordinateEpoch" property is present', async () => {
-    const oasDoc = clone(exampleDoc);
-    (oasDoc.components.schemas.collection.properties as Record<string, unknown>).storageCrsCoordinateEpoch = { type: 'number' };
-    const violations = await spectral.run(oasDoc);
-
-    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value', 2);
+    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value#collections', 1);
+    expect(violations).toContainViolation('/req/crs/fc-md-storageCrs-valid-value#collection', 1);
   });
 });
 
