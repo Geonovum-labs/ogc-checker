@@ -46,7 +46,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
         })
         .catch(error => {
           setChecking(false);
-          setError(error);
+          setError(error.message);
         });
     }
   }, [uri, spec]);
