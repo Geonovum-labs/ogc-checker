@@ -41,7 +41,34 @@ requirement names as listed in the OGC standard document. The table mentions sep
 | /req/types-schemas/feature-schemas        |   No   | Referenced schemas must conform to OGC API Features part 5: Schemas                                           |
 | /req/types-schemas/single-feature-schema  |   No   | Consistency between feature schema and feature type                                                           |
 
-## OGC API Features: CRS
+## OGC API - Features - Part 1: Core
+
+Version: 1.0.1\
+Specification: https://docs.ogc.org/is/17-069r4/17-069r4.html
+
+| Requirement                     | Testable | Tested | Remarks |
+| ------------------------------- | :------: | :----: | ------- |
+| `/req/core/root-op`             |   Yes    |  Yes   |         |
+| `/req/core/root-success`        |   Yes    |  Yes   |         |
+| `/req/core/conformance-op`      |   Yes    |  Yes   |         |
+| `/req/core/conformance-success` |   Yes    |  Yes   |         |
+| `/req/core/fc-md-op`            |   Yes    |  Yes   |         |
+| `/req/core/fc-md-success`       |   Yes    |  Yes   |         |
+| `/req/core/sfc-md-op`           |   Yes    |  Yes   |         |
+| `/req/core/sfc-md-success`      |   Yes    |  Yes   |         |
+| `/req/core/fc-op`               |   Yes    |  Yes   |         |
+| `/req/core/fc-response`         |   Yes    |  Yes   |         |
+| `/req/core/fc-limit-definition` |   Yes    |  Yes   |         |
+| `/req/core/fc-bbox-definition`  |   Yes    |  Yes   |         |
+| `/req/core/fc-time-definition`  |   Yes    |  Yes   |         |
+| `/req/core/f-op`                |   Yes    |  Yes   |         |
+| `/req/core/f-response`          |   Yes    |  Yes   |         |
+| `/req/oas30/oas-definition-2`   |   Yes    |  Yes   |         |
+
+## OGC API - Features - Part 2: Coordinate Reference Systems by Reference
+
+Version: 1.0.1\
+Specification: https://docs.ogc.org/is/18-058r1/18-058r1.html
 
 | Requirement                               | Testable | Tested | Remarks                                       |
 | ----------------------------------------- | :------: | :----: | --------------------------------------------- |
@@ -61,6 +88,20 @@ requirement names as listed in the OGC standard document. The table mentions sep
 | `/req/crs/geojson`                        |    No    |   No   |                                               |
 | `/req/crs/ogc-crs-header`                 |   Yes    |  Yes   |                                               |
 | `/req/crs/ogc-crs-header-value`           |    No    |   No   |                                               |
+
+## OGC API - Records - Part 1: Core
+
+Version: 1.0 (Draft)\
+Specification: https://docs.ogc.org/DRAFTS/20-004r1.html
+
+| Requirement                        | Testable | Tested | Remarks |
+| ---------------------------------- | :------: | :----: | ------- |
+| `/req/json/conformance`            |    No    |   No   |         |
+| `/req/json/record-response`        |   Yes    |  Yes   |         |
+| `/req/json/record-content`         |   Yes    |  Yes   |         |
+| `/req/json/record-content-profile` |    No    |   No   |         |
+| `/req/json/collection-response`    |   Yes    |  Yes   |         |
+| `/req/json/catalog-content`        |   Yes    |  Yes   |         |
 
 ## Development
 

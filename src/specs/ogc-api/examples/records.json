@@ -133,7 +133,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Features"
+            "$ref": "#/components/responses/Records"
           },
           "400": {
             "$ref": "#/components/responses/InvalidParameter"
@@ -166,7 +166,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Feature"
+            "$ref": "#/components/responses/Record"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -277,35 +277,21 @@
         "properties": {
           "id": {
             "description": "identifier of the collection used, for example, in URIs",
-            "type": "string",
-            "example": "address"
+            "type": "string"
           },
           "title": {
             "description": "human readable title of the collection",
-            "type": "string",
-            "example": "address"
+            "type": "string"
           },
           "description": {
             "description": "a description of the features in the collection",
-            "type": "string",
-            "example": "An address."
+            "type": "string"
           },
           "links": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/link"
-            },
-            "example": [
-              {
-                "href": "https://data.example.com/buildings",
-                "rel": "item"
-              },
-              {
-                "href": "https://example.com/concepts/buildings.html",
-                "rel": "describedby",
-                "type": "text/html"
-              }
-            ]
+            }
           },
           "linkTemplates": {
             "type": "array",
@@ -327,10 +313,29 @@
             "items": {
               "type": "string"
             },
-            "default": ["http://www.opengis.net/def/crs/OGC/1.3/CRS84"],
-            "example": ["http://www.opengis.net/def/crs/OGC/1.3/CRS84", "http://www.opengis.net/def/crs/EPSG/0/4326"]
+            "default": ["http://www.opengis.net/def/crs/OGC/1.3/CRS84"]
           }
         }
+      },
+      "recordCollection": {
+        "allOf": [
+          { "$ref": "#/components/schemas/collection" },
+          {
+            "type": "object",
+            "required": ["itemType", "type"],
+            "properties": {
+              "itemType": {
+                "description": "indicator about the type of the items in the collection.",
+                "type": "string",
+                "enum": ["record"]
+              },
+              "type": {
+                "type": "string",
+                "enum": ["Collection"]
+              }
+            }
+          }
+        ]
       },
       "collections": {
         "type": "object",
@@ -345,7 +350,7 @@
           "collections": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/collection"
+              "$ref": "#/components/schemas/recordCollection"
             }
           }
         }
@@ -402,8 +407,7 @@
                   ],
                   "items": {
                     "type": "number"
-                  },
-                  "example": [-180, -90, 180, 90]
+                  }
                 }
               },
               "crs": {
@@ -431,8 +435,7 @@
                     "type": "string",
                     "format": "date-time",
                     "nullable": true
-                  },
-                  "example": ["2011-11-11T12:22:11Z", null]
+                  }
                 }
               },
               "trs": {
@@ -445,7 +448,7 @@
           }
         }
       },
-      "featureCollectionGeoJSON": {
+      "recordCollectionGeoJSON": {
         "type": "object",
         "required": ["type", "features"],
         "properties": {
@@ -456,7 +459,7 @@
           "features": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/featureGeoJSON"
+              "$ref": "#/components/schemas/recordGeoJSON"
             }
           },
           "links": {
@@ -476,10 +479,13 @@
           }
         }
       },
-      "featureGeoJSON": {
+      "recordGeoJSON": {
         "type": "object",
-        "required": ["type", "geometry", "properties"],
+        "required": ["id", "type", "geometry", "properties"],
         "properties": {
+          "id": {
+            "type": "string"
+          },
           "type": {
             "type": "string",
             "enum": ["Feature"]
@@ -488,18 +494,7 @@
             "$ref": "#/components/schemas/geometryGeoJSON"
           },
           "properties": {
-            "type": "object",
-            "nullable": true
-          },
-          "id": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "integer"
-              }
-            ]
+            "type": "object"
           },
           "links": {
             "type": "array",
@@ -556,12 +551,10 @@
         "required": ["links"],
         "properties": {
           "title": {
-            "type": "string",
-            "example": "Buildings in Bonn"
+            "type": "string"
           },
           "description": {
-            "type": "string",
-            "example": "Access to data about buildings in the city of Bonn via a Web API that conforms to the OGC API Features specification."
+            "type": "string"
           },
           "links": {
             "type": "array",
@@ -598,23 +591,19 @@
         "properties": {
           "href": {
             "type": "string",
-            "example": "https://data.example.com/buildings/123"
+            "format": "uri"
           },
           "rel": {
-            "type": "string",
-            "example": "alternate"
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "example": "application/geo+json"
+            "type": "string"
           },
           "hreflang": {
-            "type": "string",
-            "example": "en"
+            "type": "string"
           },
           "title": {
-            "type": "string",
-            "example": "Trierer Strasse 70, 53115 Bonn"
+            "type": "string"
           },
           "length": {
             "type": "integer"
@@ -626,22 +615,20 @@
         "required": ["uriTemplate", "rel"],
         "properties": {
           "uriTemplate": {
-            "type": "string",
-            "example": "https://data.example.org/collections/buildings/items/{featureId}"
+            "type": "string"
           },
           "rel": {
             "type": "string"
           },
           "title": {
-            "type": "string",
-            "example": "Link template for building features"
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "example": "application/geo+json"
+            "type": "string"
           },
           "varBase": {
-            "type": "string"
+            "type": "string",
+            "format": "uri-reference"
           }
         }
       },
@@ -719,14 +706,12 @@
       "numberMatched": {
         "description": "The number of features of the feature type that match the selection\nparameters like `bbox`.",
         "type": "integer",
-        "minimum": 0,
-        "example": 127
+        "minimum": 0
       },
       "numberReturned": {
         "description": "The number of features in the feature collection.\n\nA server may omit this information in a response, if the information\nabout the number of features is not known or difficult to compute.\n\nIf the value is provided, the value shall be identical to the number\nof items in the \"features\" array.",
         "type": "integer",
-        "minimum": 0,
-        "example": 10
+        "minimum": 0
       },
       "pointGeoJSON": {
         "type": "object",
@@ -772,8 +757,7 @@
       "timeStamp": {
         "description": "This property indicates the time and date when the response was generated.",
         "type": "string",
-        "format": "date-time",
-        "example": "2017-08-17T08:05:32Z"
+        "format": "date-time"
       }
     },
     "responses": {
@@ -783,42 +767,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/landingPage"
-            },
-            "example": {
-              "title": "Buildings in Bonn",
-              "description": "Access to data about buildings in the city of Bonn via a Web API that conforms to the OGC API Features specification.",
-              "links": [
-                {
-                  "href": "https://data.example.org/",
-                  "rel": "self",
-                  "type": "application/json",
-                  "title": "this document"
-                },
-                {
-                  "href": "https://data.example.org/api",
-                  "rel": "service-desc",
-                  "type": "application/vnd.oai.openapi+json;version=3.0",
-                  "title": "the API definition"
-                },
-                {
-                  "href": "https://data.example.org/api.html",
-                  "rel": "service-doc",
-                  "type": "text/html",
-                  "title": "the API documentation"
-                },
-                {
-                  "href": "https://data.example.org/conformance",
-                  "rel": "conformance",
-                  "type": "application/json",
-                  "title": "OGC API conformance classes implemented by this server"
-                },
-                {
-                  "href": "https://data.example.org/collections",
-                  "rel": "data",
-                  "type": "application/json",
-                  "title": "Information about the feature collections"
-                }
-              ]
             }
           },
           "text/html": {
@@ -834,14 +782,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/confClasses"
-            },
-            "example": {
-              "conformsTo": [
-                "http://www.opengis.net/spec/ogcapi-features-1/1.1/conf/core",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.1/conf/oas31",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.1/conf/html",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.1/conf/geojson"
-              ]
             }
           },
           "text/html": {
@@ -857,76 +797,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/collections"
-            },
-            "example": {
-              "links": [
-                {
-                  "href": "https://data.example.org/collections.json",
-                  "rel": "self",
-                  "type": "application/json",
-                  "title": "this document"
-                },
-                {
-                  "href": "https://data.example.org/collections.html",
-                  "rel": "alternate",
-                  "type": "text/html",
-                  "title": "this document as HTML"
-                },
-                {
-                  "href": "https://schemas.example.org/1.0/buildings.xsd",
-                  "rel": "describedby",
-                  "type": "application/xml",
-                  "title": "GML application schema for Acme Corporation building data"
-                },
-                {
-                  "href": "https://download.example.org/buildings.gpkg",
-                  "rel": "enclosure",
-                  "type": "application/geopackage+sqlite3",
-                  "title": "Bulk download (GeoPackage)",
-                  "length": 472546
-                }
-              ],
-              "collections": [
-                {
-                  "id": "buildings",
-                  "title": "Buildings",
-                  "description": "Buildings in the city of Bonn.",
-                  "extent": {
-                    "spatial": {
-                      "bbox": [[7.01, 50.63, 7.22, 50.78]]
-                    },
-                    "temporal": {
-                      "interval": [["2010-02-15T12:34:56Z", null]]
-                    }
-                  },
-                  "links": [
-                    {
-                      "href": "https://data.example.org/collections/buildings/items",
-                      "rel": "items",
-                      "type": "application/geo+json",
-                      "title": "Buildings"
-                    },
-                    {
-                      "href": "https://data.example.org/collections/buildings/items.html",
-                      "rel": "items",
-                      "type": "text/html",
-                      "title": "Buildings"
-                    },
-                    {
-                      "href": "https://creativecommons.org/publicdomain/zero/1.0/",
-                      "rel": "license",
-                      "type": "text/html",
-                      "title": "CC0-1.0"
-                    },
-                    {
-                      "href": "https://creativecommons.org/publicdomain/zero/1.0/rdf",
-                      "rel": "license",
-                      "type": "application/rdf+xml",
-                      "title": "CC0-1.0"
-                    }
-                  ]
-                }
-              ]
             }
           },
           "text/html": {
@@ -941,46 +811,12 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/collection"
-            },
-            "example": {
-              "id": "buildings",
-              "title": "Buildings",
-              "description": "Buildings in the city of Bonn.",
-              "extent": {
-                "spatial": {
-                  "bbox": [[7.01, 50.63, 7.22, 50.78]]
-                },
-                "temporal": {
-                  "interval": [["2010-02-15T12:34:56Z", null]]
-                }
-              },
-              "links": [
-                {
-                  "href": "https://data.example.org/collections/buildings/items",
-                  "rel": "items",
-                  "type": "application/geo+json",
-                  "title": "Buildings"
-                },
-                {
-                  "href": "https://data.example.org/collections/buildings/items.html",
-                  "rel": "items",
-                  "type": "text/html",
-                  "title": "Buildings"
-                },
-                {
-                  "href": "https://creativecommons.org/publicdomain/zero/1.0/",
-                  "rel": "license",
-                  "type": "text/html",
-                  "title": "CC0-1.0"
-                },
-                {
-                  "href": "https://creativecommons.org/publicdomain/zero/1.0/rdf",
-                  "rel": "license",
-                  "type": "application/rdf+xml",
-                  "title": "CC0-1.0"
-                }
-              ]
+              "$ref": "#/components/schemas/recordCollection"
+            }
+          },
+          "application/ogc-catalog+json": {
+            "schema": {
+              "$ref": "#/components/schemas/recordCollection"
             }
           },
           "text/html": {
@@ -990,66 +826,12 @@
           }
         }
       },
-      "Features": {
+      "Records": {
         "description": "The response is a document consisting of features in the collection.\nThe features included in the response are determined by the server\nbased on the query parameters of the request. To support access to\nlarger collections without overloading the client, the API supports\npaged access with links to the next page, if more features are selected\nthat the page size.\n\nThe `bbox` and `datetime` parameter can be used to select only a\nsubset of the features in the collection (the features that are in the\nbounding box or time interval). The `bbox` parameter matches all features\nin the collection that are not associated with a location, too. The\n`datetime` parameter matches all features in the collection that are\nnot associated with a time stamp or interval, too.\n\nThe `limit` parameter may be used to control the subset of the\nselected features that should be returned in the response, the page size.\nEach page may include information about the number of selected and\nreturned features (`numberMatched` and `numberReturned`) as well as\nlinks to support paging (link relation `next`).",
         "content": {
           "application/geo+json": {
             "schema": {
-              "$ref": "#/components/schemas/featureCollectionGeoJSON"
-            },
-            "example": {
-              "type": "FeatureCollection",
-              "links": [
-                {
-                  "href": "https://data.example.com/collections/buildings/items.json",
-                  "rel": "self",
-                  "type": "application/geo+json",
-                  "title": "this document"
-                },
-                {
-                  "href": "https://data.example.com/collections/buildings/items.html",
-                  "rel": "alternate",
-                  "type": "text/html",
-                  "title": "this document as HTML"
-                },
-                {
-                  "href": "https://data.example.com/collections/buildings/items.json&offset=10&limit=2",
-                  "rel": "next",
-                  "type": "application/geo+json",
-                  "title": "next page"
-                }
-              ],
-              "timeStamp": "2018-04-03T14:52:23Z",
-              "numberMatched": 123,
-              "numberReturned": 2,
-              "features": [
-                {
-                  "type": "Feature",
-                  "id": "123",
-                  "geometry": {
-                    "type": "Polygon",
-                    "coordinates": ["..."]
-                  },
-                  "properties": {
-                    "function": "residential",
-                    "floors": "2",
-                    "lastUpdate": "2015-08-01T12:34:56Z"
-                  }
-                },
-                {
-                  "type": "Feature",
-                  "id": "132",
-                  "geometry": {
-                    "type": "Polygon",
-                    "coordinates": ["..."]
-                  },
-                  "properties": {
-                    "function": "public use",
-                    "floors": "10",
-                    "lastUpdate": "2013-12-03T10:15:37Z"
-                  }
-                }
-              ]
+              "$ref": "#/components/schemas/recordCollectionGeoJSON"
             }
           },
           "text/html": {
@@ -1064,50 +846,12 @@
           }
         }
       },
-      "Feature": {
+      "Record": {
         "description": "fetch the feature with id `featureId` in the feature collection\nwith id `collectionId`",
         "content": {
           "application/geo+json": {
             "schema": {
-              "$ref": "#/components/schemas/featureGeoJSON"
-            },
-            "example": {
-              "type": "Feature",
-              "links": [
-                {
-                  "href": "https://data.example.com/id/building/123",
-                  "rel": "canonical",
-                  "title": "canonical URI of the building"
-                },
-                {
-                  "href": "https://data.example.com/collections/buildings/items/123.json",
-                  "rel": "self",
-                  "type": "application/geo+json",
-                  "title": "this document"
-                },
-                {
-                  "href": "https://data.example.com/collections/buildings/items/123.html",
-                  "rel": "alternate",
-                  "type": "text/html",
-                  "title": "this document as HTML"
-                },
-                {
-                  "href": "https://data.example.com/collections/buildings",
-                  "rel": "collection",
-                  "type": "application/geo+json",
-                  "title": "the collection document"
-                }
-              ],
-              "id": "123",
-              "geometry": {
-                "type": "Polygon",
-                "coordinates": ["..."]
-              },
-              "properties": {
-                "function": "residential",
-                "floors": "2",
-                "lastUpdate": "2015-08-01T12:34:56Z"
-              }
+              "$ref": "#/components/schemas/recordGeoJSON"
             }
           },
           "text/html": {
@@ -1164,8 +908,7 @@
         "description": "a URI, in angular brackets, identifying the coordinate reference system used in the content / payload",
         "schema": {
           "type": "string"
-        },
-        "example": "<http://www.opengis.net/def/crs/EPSG/0/3395>"
+        }
       }
     }
   }

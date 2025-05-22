@@ -1,4 +1,4 @@
-import jsonFgSpec from './json-fg/spec';
-import ogcApiSpec from './ogc-api/spec';
+import { jsonFgSpec } from './json-fg/spec';
+import { ogcApiFeaturesSpec, ogcApiRecordsSpec } from './ogc-api/spec';
 
-export default [jsonFgSpec, ogcApiSpec];
+export default [jsonFgSpec, ogcApiFeaturesSpec, ogcApiRecordsSpec];
