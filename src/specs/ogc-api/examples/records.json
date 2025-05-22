@@ -133,7 +133,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Features"
+            "$ref": "#/components/responses/Records"
           },
           "400": {
             "$ref": "#/components/responses/InvalidParameter"
@@ -166,7 +166,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Feature"
+            "$ref": "#/components/responses/Record"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -826,7 +826,7 @@
           }
         }
       },
-      "Features": {
+      "Records": {
         "description": "The response is a document consisting of features in the collection.\nThe features included in the response are determined by the server\nbased on the query parameters of the request. To support access to\nlarger collections without overloading the client, the API supports\npaged access with links to the next page, if more features are selected\nthat the page size.\n\nThe `bbox` and `datetime` parameter can be used to select only a\nsubset of the features in the collection (the features that are in the\nbounding box or time interval). The `bbox` parameter matches all features\nin the collection that are not associated with a location, too. The\n`datetime` parameter matches all features in the collection that are\nnot associated with a time stamp or interval, too.\n\nThe `limit` parameter may be used to control the subset of the\nselected features that should be returned in the response, the page size.\nEach page may include information about the number of selected and\nreturned features (`numberMatched` and `numberReturned`) as well as\nlinks to support paging (link relation `next`).",
         "content": {
           "application/geo+json": {
@@ -846,7 +846,7 @@
           }
         }
       },
-      "Feature": {
+      "Record": {
         "description": "fetch the feature with id `featureId` in the feature collection\nwith id `collectionId`",
         "content": {
           "application/geo+json": {
