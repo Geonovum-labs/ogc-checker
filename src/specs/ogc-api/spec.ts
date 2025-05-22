@@ -2,7 +2,8 @@ import { APPLICATION_JSON_TYPE, APPLICATION_OPENAPI_JSON_3_0_TYPE } from '../../
 import { spectralLinter } from '../../spectral';
 import { Spec, SpecLinter, SpecResponseMapper } from '../../types';
 import { handleResponse, handleResponseJson } from '../../util';
-import example from './example.json';
+import featuresExample from './examples/features.json';
+import recordsExample from './examples/records.json';
 import rulesets from './rulesets';
 
 const responseMapper: SpecResponseMapper = async responseText => {
@@ -17,9 +18,7 @@ const responseMapper: SpecResponseMapper = async responseText => {
   const links = document.links;
 
   if (Array.isArray(links)) {
-    const serviceDescLink = links.find(
-      link => link.rel === 'service-desc' && link.type === APPLICATION_OPENAPI_JSON_3_0_TYPE
-    );
+    const serviceDescLink = links.find(link => link.rel === 'service-desc' && link.type === APPLICATION_OPENAPI_JSON_3_0_TYPE);
 
     const conformanceLink = links.find(link => link.rel === 'conformance');
 
@@ -58,15 +57,28 @@ const responseMapper: SpecResponseMapper = async responseText => {
 
 const linterName = (confClass: string) => confClass.replace('http://www.opengis.net/spec/', '');
 
-const spec: Spec = {
-  name: 'OGC API',
-  slug: 'ogc-api',
-  example: JSON.stringify(example, undefined, 2),
-  linters: Object.entries(rulesets).map(entry => ({
-    name: linterName(entry[0]),
-    linter: spectralLinter(linterName(entry[0]), entry[1]),
-  })),
+export const ogcApiFeaturesSpec: Spec = {
+  name: 'OGC API - Features',
+  slug: 'ogc-api-features',
+  example: JSON.stringify(featuresExample, undefined, 2),
+  linters: Object.entries(rulesets)
+    .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-features-'))
+    .map(entry => ({
+      name: linterName(entry[0]),
+      linter: spectralLinter(linterName(entry[0]), entry[1]),
+    })),
   responseMapper,
 };
 
-export default spec;
+export const ogcApiRecordsSpec: Spec = {
+  name: 'OGC API - Records',
+  slug: 'ogc-api-records',
+  example: JSON.stringify(recordsExample, undefined, 2),
+  linters: Object.entries(rulesets)
+    .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-records-'))
+    .map(entry => ({
+      name: linterName(entry[0]),
+      linter: spectralLinter(linterName(entry[0]), entry[1]),
+    })),
+  responseMapper,
+};

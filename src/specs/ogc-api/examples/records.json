@@ -1,0 +1,915 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "A sample API conforming to the draft standard OGC API - Features - Part 1: Core",
+    "version": "1.0.0",
+    "description": "This is a sample OpenAPI definition that conforms to the conformance\nclasses \"Core\", \"GeoJSON\", \"HTML\" and \"OpenAPI 3.0\" of the draft\nstandard \"OGC API - Features - Part 1: Core\".\n\nThis example is a generic OGC API Features definition that uses path\nparameters to describe all feature collections and all features.\nThe generic OpenAPI definition does not provide any details on the\ncollections or the feature content. This information is only available\nfrom accessing the feature collection resources.\n\nThere is [another example](ogcapi-features-1-example2.yaml)\nthat specifies each collection explicitly.",
+    "contact": {
+      "name": "Acme Corporation",
+      "email": "info@example.org",
+      "url": "http://example.org/"
+    },
+    "license": {
+      "name": "CC-BY 4.0 license",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://data.example.org/",
+      "description": "Production server"
+    },
+    {
+      "url": "https://dev.example.org/",
+      "description": "Development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Capabilities",
+      "description": "essential characteristics of this API"
+    },
+    {
+      "name": "Data",
+      "description": "access to data (features)"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Capabilities"],
+        "summary": "landing page",
+        "description": "The landing page provides links to the API definition, the conformance\nstatements and to the feature collections in this dataset.",
+        "operationId": "getLandingPage",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/LandingPage"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/conformance": {
+      "get": {
+        "tags": ["Capabilities"],
+        "summary": "information about specifications that this API conforms to",
+        "description": "A list of all conformance classes specified in a standard that the\nserver conforms to.",
+        "operationId": "getConformanceDeclaration",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ConformanceDeclaration"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/collections": {
+      "get": {
+        "tags": ["Capabilities"],
+        "summary": "the feature collections in the dataset",
+        "operationId": "getCollections",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Collections"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/collections/{collectionId}": {
+      "get": {
+        "tags": ["Capabilities"],
+        "summary": "describe the feature collection with id `collectionId`",
+        "operationId": "describeCollection",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/collectionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Collection"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/collections/{collectionId}/items": {
+      "get": {
+        "tags": ["Data"],
+        "summary": "fetch features",
+        "description": "Fetch features of the feature collection with id `collectionId`.\n\nEvery feature in a dataset belongs to a collection. A dataset may\nconsist of multiple feature collections. A feature collection is often a\ncollection of features of a similar type, based on a common schema.\n\nUse content negotiation to request HTML or GeoJSON.",
+        "operationId": "getFeatures",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/collectionId"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/bbox"
+          },
+          {
+            "$ref": "#/components/parameters/bbox-crs"
+          },
+          {
+            "$ref": "#/components/parameters/crs"
+          },
+          {
+            "$ref": "#/components/parameters/datetime"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Features"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidParameter"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/collections/{collectionId}/items/{featureId}": {
+      "get": {
+        "tags": ["Data"],
+        "summary": "fetch a single feature",
+        "description": "Fetch the feature with id `featureId` in the feature collection\nwith id `collectionId`.\n\nUse content negotiation to request HTML or GeoJSON.",
+        "operationId": "getFeature",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/collectionId"
+          },
+          {
+            "$ref": "#/components/parameters/featureId"
+          },
+          {
+            "$ref": "#/components/parameters/crs"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Feature"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "bbox": {
+        "name": "bbox",
+        "in": "query",
+        "description": "Only features that have a geometry that intersects the bounding box are selected.\nThe bounding box is provided as four or six numbers, depending on whether the\ncoordinate reference system includes a vertical axis (height or depth):\n\n* Lower left corner, coordinate axis 1\n* Lower left corner, coordinate axis 2\n* Minimum value, coordinate axis 3 (optional)\n* Upper right corner, coordinate axis 1\n* Upper right corner, coordinate axis 2\n* Maximum value, coordinate axis 3 (optional)\n\nIf the value consists of four numbers, the coordinate reference system is\nWGS 84 longitude/latitude (http://www.opengis.net/def/crs/OGC/1.3/CRS84)\nunless a different coordinate reference system is specified in the parameter `bbox-crs`.\n\nIf the value consists of six numbers, the coordinate reference system is WGS 84 \nlongitude/latitude/ellipsoidal height (http://www.opengis.net/def/crs/OGC/0/CRS84h)\nunless a different coordinate reference system is specified in the parameter `bbox-crs`.\n\nThe query parameter `bbox-crs` is specified in OGC API - Features - Part 2: Coordinate \nReference Systems by Reference.\n\nFor WGS 84 longitude/latitude the values are in most cases the sequence of\nminimum longitude, minimum latitude, maximum longitude and maximum latitude.\nHowever, in cases where the box spans the antimeridian the first value\n(west-most box edge) is larger than the third or fourth value (east-most box edge).\n\nIf the vertical axis is included, the third and the sixth number are\nthe bottom and the top of the 3-dimensional bounding box.\n\nIf a feature has multiple spatial geometry properties, it is the decision of the\nserver whether only a single spatial geometry property is used to determine\nthe extent or all relevant geometries.",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "oneOf": [
+            {
+              "minItems": 4,
+              "maxItems": 4
+            },
+            {
+              "minItems": 6,
+              "maxItems": 6
+            }
+          ],
+          "items": {
+            "type": "number"
+          }
+        },
+        "style": "form",
+        "explode": false
+      },
+      "bbox-crs": {
+        "name": "bbox-crs",
+        "in": "query",
+        "description": "Asserts the CRS used for the coordinate values of the bbox parameter. The default is WGS 84 longitude/latitude (http://www.opengis.net/def/crs/OGC/1.3/CRS84) for a value with 4 numbers and WGS 84 longitude/latitude/ellipsoidal height (http://www.opengis.net/def/crs/OGC/0/CRS84h) for a value with 6 numbers.",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uri",
+          "default": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+        }
+      },
+      "collectionId": {
+        "name": "collectionId",
+        "in": "path",
+        "description": "local identifier of a collection",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "crs": {
+        "name": "crs",
+        "in": "query",
+        "description": "If the parameter is specified, then the coordinates of all geometry-valued properties in the response document are in the requested CRS. Otherwise the coordinates are in the default CRS, that is http://www.opengis.net/def/crs/OGC/1.3/CRS84 for coordinates without height and http://www.opengis.net/def/crs/OGC/0/CRS84h for coordinates with ellipsoidal height.",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "uri",
+          "default": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+        }
+      },
+      "datetime": {
+        "name": "datetime",
+        "in": "query",
+        "description": "Either a date-time or an interval. Date and time expressions adhere to RFC 3339. \nIntervals may be bounded or half-bounded (double-dots at start or end).\n\nExamples:\n\n* A date-time: \"2018-02-12T23:20:50Z\"\n* A bounded interval: \"2018-02-12T00:00:00Z/2018-03-18T12:31:12Z\"\n* Half-bounded intervals: \"2018-02-12T00:00:00Z/..\" or \"../2018-03-18T12:31:12Z\"\n\nOnly features that have a temporal property that intersects the value of\n`datetime` are selected.\n\nIf a feature has multiple temporal properties, it is the decision of the\nserver whether only a single temporal property is used to determine\nthe extent or all relevant temporal properties.",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "style": "form",
+        "explode": false
+      },
+      "featureId": {
+        "name": "featureId",
+        "in": "path",
+        "description": "local identifier of a feature",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "The optional limit parameter limits the number of items that are presented in the response document.\n\nOnly items are counted that are on the first level of the collection in the response document.\nNested objects contained within the explicitly requested items shall not be counted.\n\nMinimum = 1. Maximum = 10000. Default = 10.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 100
+        },
+        "style": "form",
+        "explode": false
+      }
+    },
+    "schemas": {
+      "collection": {
+        "type": "object",
+        "required": ["id", "links", "crs"],
+        "properties": {
+          "id": {
+            "description": "identifier of the collection used, for example, in URIs",
+            "type": "string"
+          },
+          "title": {
+            "description": "human readable title of the collection",
+            "type": "string"
+          },
+          "description": {
+            "description": "a description of the features in the collection",
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          },
+          "linkTemplates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/linkTemplate"
+            }
+          },
+          "extent": {
+            "$ref": "#/components/schemas/extent"
+          },
+          "itemType": {
+            "description": "indicator about the type of the items in the collection (the default value is 'feature').",
+            "type": "string",
+            "default": "feature"
+          },
+          "crs": {
+            "description": "the list of coordinate reference systems supported by the service",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": ["http://www.opengis.net/def/crs/OGC/1.3/CRS84"]
+          }
+        }
+      },
+      "recordCollection": {
+        "allOf": [
+          { "$ref": "#/components/schemas/collection" },
+          {
+            "type": "object",
+            "required": ["itemType", "type"],
+            "properties": {
+              "itemType": {
+                "description": "indicator about the type of the items in the collection.",
+                "type": "string",
+                "enum": ["record"]
+              },
+              "type": {
+                "type": "string",
+                "enum": ["Collection"]
+              }
+            }
+          }
+        ]
+      },
+      "collections": {
+        "type": "object",
+        "required": ["links", "collections"],
+        "properties": {
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          },
+          "collections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/recordCollection"
+            }
+          }
+        }
+      },
+      "confClasses": {
+        "type": "object",
+        "required": ["conformsTo"],
+        "properties": {
+          "conformsTo": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "exception": {
+        "type": "object",
+        "description": "Information about the exception: an error code plus an optional description.",
+        "required": ["code"],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "extent": {
+        "type": "object",
+        "description": "The extent of the features in the collection. In the Core only spatial and temporal\nextents are specified. Extensions may add additional members to represent other\nextents, for example, thermal or pressure ranges.",
+        "properties": {
+          "spatial": {
+            "description": "The spatial extent of the features in the collection.",
+            "type": "object",
+            "properties": {
+              "bbox": {
+                "description": "One or more bounding boxes that describe the spatial extent of the dataset.\nIn the Core only a single bounding box is supported. Extensions may support\nadditional areas. If multiple areas are provided, the union of the bounding\nboxes describes the spatial extent.",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "description": "Each bounding box is provided as four or six numbers, depending on\nwhether the coordinate reference system includes a vertical axis\n(height or depth):\n\n* Lower left corner, coordinate axis 1\n* Lower left corner, coordinate axis 2\n* Minimum value, coordinate axis 3 (optional)\n* Upper right corner, coordinate axis 1\n* Upper right corner, coordinate axis 2\n* Maximum value, coordinate axis 3 (optional)\n\nThe coordinate reference system of the values is WGS 84 longitude/latitude\n(http://www.opengis.net/def/crs/OGC/1.3/CRS84) unless a different coordinate\nreference system is specified in `crs`.\n\nFor WGS 84 longitude/latitude the values are in most cases the sequence of\nminimum longitude, minimum latitude, maximum longitude and maximum latitude.\nHowever, in cases where the box spans the antimeridian the first value\n(west-most box edge) is larger than the third or fourth value (east-most box edge).\n\nIf the vertical axis is included, the third and the sixth number are\nthe bottom and the top of the 3-dimensional bounding box.\n\nIf a feature has multiple spatial geometry properties, it is the decision of the\nserver whether only a single spatial geometry property is used to determine\nthe extent or all relevant geometries.",
+                  "type": "array",
+                  "oneOf": [
+                    {
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    {
+                      "minItems": 6,
+                      "maxItems": 6
+                    }
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "crs": {
+                "description": "Coordinate reference system of the coordinates in the spatial extent\n(property `bbox`). The default reference system is WGS 84 longitude/latitude.\nIn the Core this is the only supported coordinate reference system.\nExtensions may support additional coordinate reference systems and add\nadditional enum values.",
+                "type": "string",
+                "enum": ["http://www.opengis.net/def/crs/OGC/1.3/CRS84"],
+                "default": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+              }
+            }
+          },
+          "temporal": {
+            "description": "The temporal extent of the features in the collection.",
+            "type": "object",
+            "properties": {
+              "interval": {
+                "description": "One or more time intervals that describe the temporal extent of the dataset.\nThe value `null` is supported and indicates an unbounded interval end.\nIn the Core only a single time interval is supported. Extensions may support\nmultiple intervals. If multiple intervals are provided, the union of the\nintervals describes the temporal extent.",
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "description": "Begin and end times of the time interval. The timestamps are in the\ntemporal coordinate reference system specified in `trs`. By default\nthis is the Gregorian calendar.",
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  }
+                }
+              },
+              "trs": {
+                "description": "Coordinate reference system of the coordinates in the temporal extent\n(property `interval`). The default reference system is the Gregorian calendar.\nIn the Core this is the only supported temporal coordinate reference system.\nExtensions may support additional temporal coordinate reference systems and add\nadditional enum values.",
+                "type": "string",
+                "enum": ["http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"],
+                "default": "http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"
+              }
+            }
+          }
+        }
+      },
+      "recordCollectionGeoJSON": {
+        "type": "object",
+        "required": ["type", "features"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["FeatureCollection"]
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/recordGeoJSON"
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          },
+          "timeStamp": {
+            "$ref": "#/components/schemas/timeStamp"
+          },
+          "numberMatched": {
+            "$ref": "#/components/schemas/numberMatched"
+          },
+          "numberReturned": {
+            "$ref": "#/components/schemas/numberReturned"
+          }
+        }
+      },
+      "recordGeoJSON": {
+        "type": "object",
+        "required": ["id", "type", "geometry", "properties"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["Feature"]
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/geometryGeoJSON"
+          },
+          "properties": {
+            "type": "object"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          }
+        }
+      },
+      "geometryGeoJSON": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/pointGeoJSON"
+          },
+          {
+            "$ref": "#/components/schemas/multipointGeoJSON"
+          },
+          {
+            "$ref": "#/components/schemas/linestringGeoJSON"
+          },
+          {
+            "$ref": "#/components/schemas/multilinestringGeoJSON"
+          },
+          {
+            "$ref": "#/components/schemas/polygonGeoJSON"
+          },
+          {
+            "$ref": "#/components/schemas/multipolygonGeoJSON"
+          },
+          {
+            "$ref": "#/components/schemas/geometrycollectionGeoJSON"
+          }
+        ],
+        "nullable": true
+      },
+      "geometrycollectionGeoJSON": {
+        "type": "object",
+        "required": ["type", "geometries"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["GeometryCollection"]
+          },
+          "geometries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/geometryGeoJSON"
+            }
+          }
+        }
+      },
+      "landingPage": {
+        "type": "object",
+        "required": ["links"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/link"
+            }
+          }
+        }
+      },
+      "linestringGeoJSON": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["LineString"]
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "link": {
+        "type": "object",
+        "required": ["href", "rel"],
+        "properties": {
+          "href": {
+            "type": "string",
+            "format": "uri"
+          },
+          "rel": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "hreflang": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "length": {
+            "type": "integer"
+          }
+        }
+      },
+      "linkTemplate": {
+        "type": "object",
+        "required": ["uriTemplate", "rel"],
+        "properties": {
+          "uriTemplate": {
+            "type": "string"
+          },
+          "rel": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "varBase": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        }
+      },
+      "multilinestringGeoJSON": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["MultiLineString"]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "multipointGeoJSON": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["MultiPoint"]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "multipolygonGeoJSON": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["MultiPolygon"]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "numberMatched": {
+        "description": "The number of features of the feature type that match the selection\nparameters like `bbox`.",
+        "type": "integer",
+        "minimum": 0
+      },
+      "numberReturned": {
+        "description": "The number of features in the feature collection.\n\nA server may omit this information in a response, if the information\nabout the number of features is not known or difficult to compute.\n\nIf the value is provided, the value shall be identical to the number\nof items in the \"features\" array.",
+        "type": "integer",
+        "minimum": 0
+      },
+      "pointGeoJSON": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["Point"]
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "polygonGeoJSON": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["Polygon"]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "timeStamp": {
+        "description": "This property indicates the time and date when the response was generated.",
+        "type": "string",
+        "format": "date-time"
+      }
+    },
+    "responses": {
+      "LandingPage": {
+        "description": "The landing page provides links to the API definition\n(link relations `service-desc` and `service-doc`),\nthe Conformance declaration (path `/conformance`,\nlink relation `conformance`), and the Feature\nCollections (path `/collections`, link relation\n`data`).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/landingPage"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ConformanceDeclaration": {
+        "description": "The URIs of all conformance classes supported by the server.\n\nTo support \"generic\" clients that want to access multiple\nOGC API Features implementations - and not \"just\" a specific\nAPI / server, the server declares the conformance\nclasses it implements and conforms to.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/confClasses"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Collections": {
+        "description": "The feature collections shared by this API.\n\nThe dataset is organized as one or more feature collections. This resource\nprovides information about and access to the collections.\n\nThe response contains the list of collections. For each collection, a link\nto the items in the collection (path `/collections/{collectionId}/items`,\nlink relation `items`) as well as key information about the collection.\nThis information includes:\n\n* A local identifier for the collection that is unique for the dataset;\n* An optional list of coordinate reference systems (CRS) in which geometries may be returned by the server. The default value is a list with the default CRS (WGS 84 with axis order longitude/latitude).\n* An optional title and description for the collection;\n* An optional extent that can be used to provide an indication of the spatial and temporal extent of the collection - typically derived from the data;\n* An optional indicator about the type of the items in the collection (the default value, if the indicator is not provided, is 'feature').",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/collections"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Collection": {
+        "description": "Information about the feature collection with id `collectionId`.\n\nThe response contains a link to the items in the collection\n(path `/collections/{collectionId}/items`, link relation `items`)\nas well as key information about the collection. This information\nincludes:\n\n* A local identifier for the collection that is unique for the dataset;\n* An optional list of coordinate reference systems (CRS) in which geometries may be returned by the server. The default value is a list with the default CRS (WGS 84 with axis order longitude/latitude).\n* An optional title and description for the collection;\n* An optional extent that can be used to provide an indication of the spatial and temporal extent of the collection - typically derived from the data;\n* An optional indicator about the type of the items in the collection (the default value, if the indicator is not provided, is 'feature').",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/recordCollection"
+            }
+          },
+          "application/ogc-catalog+json": {
+            "schema": {
+              "$ref": "#/components/schemas/recordCollection"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Features": {
+        "description": "The response is a document consisting of features in the collection.\nThe features included in the response are determined by the server\nbased on the query parameters of the request. To support access to\nlarger collections without overloading the client, the API supports\npaged access with links to the next page, if more features are selected\nthat the page size.\n\nThe `bbox` and `datetime` parameter can be used to select only a\nsubset of the features in the collection (the features that are in the\nbounding box or time interval). The `bbox` parameter matches all features\nin the collection that are not associated with a location, too. The\n`datetime` parameter matches all features in the collection that are\nnot associated with a time stamp or interval, too.\n\nThe `limit` parameter may be used to control the subset of the\nselected features that should be returned in the response, the page size.\nEach page may include information about the number of selected and\nreturned features (`numberMatched` and `numberReturned`) as well as\nlinks to support paging (link relation `next`).",
+        "content": {
+          "application/geo+json": {
+            "schema": {
+              "$ref": "#/components/schemas/recordCollectionGeoJSON"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "headers": {
+          "Content-Crs": {
+            "$ref": "#/components/headers/Content-Crs"
+          }
+        }
+      },
+      "Feature": {
+        "description": "fetch the feature with id `featureId` in the feature collection\nwith id `collectionId`",
+        "content": {
+          "application/geo+json": {
+            "schema": {
+              "$ref": "#/components/schemas/recordGeoJSON"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "headers": {
+          "Content-Crs": {
+            "$ref": "#/components/headers/Content-Crs"
+          }
+        }
+      },
+      "InvalidParameter": {
+        "description": "A query parameter has an invalid value.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/exception"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The requested resource does not exist on the server. For example, a path parameter had an incorrect value."
+      },
+      "NotAcceptable": {
+        "description": "Content negotiation failed. For example, the `Accept` header submitted in the request did not support any of the media types supported by the server for the requested resource."
+      },
+      "ServerError": {
+        "description": "A server error occurred.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/exception"
+            }
+          },
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "Content-Crs": {
+        "description": "a URI, in angular brackets, identifying the coordinate reference system used in the content / payload",
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -333,26 +333,6 @@
           }
         ]
       },
-      "recordCollection": {
-        "allOf": [
-          { "$ref": "#/components/schemas/collection" },
-          {
-            "type": "object",
-            "required": ["itemType", "type"],
-            "properties": {
-              "itemType": {
-                "description": "indicator about the type of the items in the collection.",
-                "type": "string",
-                "enum": ["record"]
-              },
-              "type": {
-                "type": "string",
-                "enum": ["Collection"]
-              }
-            }
-          }
-        ]
-      },
       "collections": {
         "type": "object",
         "required": ["links", "collections"],
@@ -366,7 +346,7 @@
           "collections": {
             "type": "array",
             "items": {
-              "oneOf": [{ "$ref": "#/components/schemas/featureCollection" }, { "$ref": "#/components/schemas/recordCollection" }]
+              "$ref": "#/components/schemas/featureCollection"
             }
           }
         }
@@ -512,62 +492,6 @@
           "properties": {
             "type": "object",
             "nullable": true
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/link"
-            }
-          }
-        }
-      },
-      "recordCollectionGeoJSON": {
-        "type": "object",
-        "required": ["type", "features"],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": ["FeatureCollection"]
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/recordGeoJSON"
-            }
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/link"
-            }
-          },
-          "timeStamp": {
-            "$ref": "#/components/schemas/timeStamp"
-          },
-          "numberMatched": {
-            "$ref": "#/components/schemas/numberMatched"
-          },
-          "numberReturned": {
-            "$ref": "#/components/schemas/numberReturned"
-          }
-        }
-      },
-      "recordGeoJSON": {
-        "type": "object",
-        "required": ["id", "type", "geometry", "properties"],
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["Feature"]
-          },
-          "geometry": {
-            "$ref": "#/components/schemas/geometryGeoJSON"
-          },
-          "properties": {
-            "type": "object"
           },
           "links": {
             "type": "array",
@@ -886,11 +810,6 @@
               "$ref": "#/components/schemas/featureCollection"
             }
           },
-          "application/ogc-catalog+json": {
-            "schema": {
-              "$ref": "#/components/schemas/recordCollection"
-            }
-          },
           "text/html": {
             "schema": {
               "type": "string"
@@ -904,11 +823,6 @@
           "application/geo+json": {
             "schema": {
               "$ref": "#/components/schemas/featureCollectionGeoJSON"
-            }
-          },
-          "application/geo+json; application=ogc-record": {
-            "schema": {
-              "$ref": "#/components/schemas/recordCollectionGeoJSON"
             }
           },
           "text/html": {
@@ -929,11 +843,6 @@
           "application/geo+json": {
             "schema": {
               "$ref": "#/components/schemas/featureGeoJSON"
-            }
-          },
-          "application/geo+json; application=ogc-record": {
-            "schema": {
-              "$ref": "#/components/schemas/recordGeoJSON"
             }
           },
           "text/html": {

@@ -1,7 +1,7 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { clone } from 'ramda';
 import { describe, expect, test } from 'vitest';
-import exampleDoc from '../example.json';
+import exampleDoc from '../examples/features.json';
 import ruleset from './features-crs';
 
 const spectral = new Spectral();
