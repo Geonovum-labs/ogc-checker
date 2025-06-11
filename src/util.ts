@@ -1,4 +1,4 @@
-import { Diagnostic } from '@codemirror/lint';
+import { Diagnostic } from './types';
 import { IFunctionResult, RulesetFunctionContext } from '@stoplight/spectral-core';
 import mergeAllOf from 'json-schema-merge-allof';
 import nimma from 'nimma';
