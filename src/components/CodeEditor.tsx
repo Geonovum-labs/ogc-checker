@@ -48,7 +48,12 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
         })
         .catch(error => {
           setChecking(false);
-          setError(error.message);
+
+          if (error instanceof TypeError) {
+            setError(`Possible network or CORS failure: "${error.message}". Check your browser console for more details.`);
+          } else {
+            setError(`Error: "${error.message}"`);
+          }
         });
     }
   }, [uri, spec]);
