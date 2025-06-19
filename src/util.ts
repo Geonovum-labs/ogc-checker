@@ -123,7 +123,7 @@ export const formatDocument = (content: string): string => {
       const doc = yaml.load(content);
       return JSON.stringify(doc, undefined, 2);
     } catch {
-      throw new Error('JSON document could not be parsed.');
+      throw new Error('Document could not be parsed as JSON or YAML.');
     }
   }
 };
