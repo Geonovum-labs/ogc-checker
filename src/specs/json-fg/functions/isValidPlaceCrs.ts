@@ -1,15 +1,7 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
 import { errorMessage, getParent, queryPath } from '../../../util';
 
-const GEOJSON_TYPES = [
-  'Point',
-  'MultiPoint',
-  'LineString',
-  'MultiLineString',
-  'Polygon',
-  'MultiPolygon',
-  'GeometryCollection',
-];
+const GEOJSON_TYPES = ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon', 'GeometryCollection'];
 
 const CRS84_URIS = [
   'http://www.opengis.net/def/crs/OGC/0/CRS84',
@@ -39,10 +31,7 @@ const isCrs84 = (coordRefSys: unknown) => {
 };
 
 export const isValidPlaceCrs: RulesetFunction<unknown> = async (input, _options, context) => {
-  if (
-    !(input && typeof input === 'object') ||
-    !('type' in input && typeof input.type === 'string' && GEOJSON_TYPES.includes(input.type))
-  ) {
+  if (!(input && typeof input === 'object') || !('type' in input && typeof input.type === 'string' && GEOJSON_TYPES.includes(input.type))) {
     return;
   }
 

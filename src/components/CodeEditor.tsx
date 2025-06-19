@@ -126,7 +126,6 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
                             <>
                               &nbsp;
                               <span className="text-blue-600 underline">
-                                <strong>{diagnostic.documentationUrl}</strong>
                                 <a href={diagnostic.documentationUrl} target="_blank" rel="noopener noreferrer">
                                   (documentation)
                                 </a>

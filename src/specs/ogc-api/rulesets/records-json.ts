@@ -5,6 +5,8 @@ import responseMatchSchema from '../../../functions/responseMatchSchema';
 
 export const OGC_API_RECORDS_JSON_URI = 'http://www.opengis.net/spec/ogcapi-records-1/1.0/conf/json';
 
+export const OGC_API_RECORDS_JSON_DOC_URI = 'https://docs.ogc.org/is/20-004r1/20-004r1.html#req_records-api_';
+
 const recordsJson: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/ogcapi-records-1/1.0/req/json',
   description: 'OGC API - Records - Part 1: Core - Requirements Class "JSON"',
@@ -13,6 +15,7 @@ const recordsJson: RulesetDefinition = {
     '/req/json/record-response': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items(\\/[^/]+)?$/))].get.responses.200.content',
       message: '200-responses of the server SHALL support the "application/geo+json" media type. {{error}}',
+      documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'record-response',
       severity: 'error',
       then: {
         function: schema,
@@ -28,6 +31,7 @@ const recordsJson: RulesetDefinition = {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses.200',
       message:
         'Every 200-response with the media type "application/geo+json" SHALL validate against the corresponding OpenAPI 3.0 schema document. {{error}}',
+      documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'record-content',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -42,6 +46,7 @@ const recordsJson: RulesetDefinition = {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses.200',
       message:
         'Every 200-response with the media type "application/geo+json" SHALL validate against the corresponding OpenAPI 3.0 schema document. {{error}}',
+      documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'record-content',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -55,6 +60,7 @@ const recordsJson: RulesetDefinition = {
     '/req/json/collection-response': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200.content',
       message: '200-responses of the server SHALL support the "application/ogc-catalog+json" media type. {{error}}',
+      documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'collection-response',
       severity: 'error',
       then: {
         function: schema,
@@ -70,6 +76,7 @@ const recordsJson: RulesetDefinition = {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses.200',
       message:
         'The schema of all responses with the media type application/ogc-catalog+json SHALL validate against the OpenAPI 3.0 schema. {{error}}',
+      documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'catalog-content',
       severity: 'error',
       then: {
         function: responseMatchSchema,

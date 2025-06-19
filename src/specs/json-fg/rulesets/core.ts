@@ -12,7 +12,10 @@ import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
 import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
 
 export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
+
 export const JSON_FG_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
+
+export const JSON_FG_CORE_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#core_';
 
 const isUnbounded = (input: unknown) => typeof input === 'string' && input === '..';
 
@@ -24,6 +27,7 @@ const jsonFgCore: RulesetDefinition = {
       given: '$',
       message:
         'The JSON document SHALL validate against the JSON Schema of a JSON-FG feature (a JSON-FG feature) or the JSON Schema of a JSON-FG feature collection (a JSON-FG feature collection). {{error}}.',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'schema-valid',
       severity: 'error',
       then: [
         {
@@ -65,6 +69,7 @@ const jsonFgCore: RulesetDefinition = {
     '/req/core/metadata#A': {
       given: '$',
       message: 'The JSON document SHALL include a "conformsTo" member.',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'metadata',
       severity: 'error',
       then: {
         field: 'conformsTo',
@@ -74,6 +79,7 @@ const jsonFgCore: RulesetDefinition = {
     '/req/core/metadata#B': {
       given: '$',
       message: `The "conformsTo" member of the JSON document SHALL include at least one of the two following values: "${JSON_FG_CORE_URI}", "${JSON_FG_CORE_CURIE}".`,
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'metadata',
       severity: 'error',
       then: {
         field: 'conformsTo',
@@ -86,6 +92,7 @@ const jsonFgCore: RulesetDefinition = {
     '/req/core/metadata#C': {
       given: '$.features.*',
       message: 'Only the root object of the JSON document SHALL include a "conformsTo" member.',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'metadata',
       severity: 'error',
       then: {
         field: 'conformsTo',
@@ -94,6 +101,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/interval#B': {
       given: '$..time.interval',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'interval',
       severity: 'error',
       then: {
         function: input => {
@@ -113,6 +121,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/interval#C': {
       given: '$..time.interval',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'interval',
       severity: 'error',
       then: {
         function: input => {
@@ -132,6 +141,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/instant-and-interval#A': {
       given: '$..time',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'instant-and-interval',
       severity: 'error',
       then: {
         function: input => {
@@ -158,6 +168,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/instant-and-interval#B': {
       given: '$..time',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'instant-and-interval',
       severity: 'error',
       then: {
         function: (input: unknown) => {
@@ -176,9 +187,7 @@ const jsonFgCore: RulesetDefinition = {
 
           const timestamp = DateTime.fromISO(input.timestamp as string);
           const intervalStart = DateTime.fromISO(input.interval[0]);
-          const intervalEnd = isValidDate(input.interval[1])
-            ? DateTime.fromISO(input.interval[1]).endOf('day')
-            : undefined;
+          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[1]).endOf('day') : undefined;
 
           if (timestamp < intervalStart || (intervalEnd && timestamp > intervalEnd)) {
             return [
@@ -193,6 +202,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/instant-and-interval#C': {
       given: '$..time',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'instant-and-interval',
       severity: 'error',
       then: {
         function: (input: unknown) => {
@@ -226,6 +236,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/instant-and-interval#D': {
       given: '$..time',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'instant-and-interval',
       severity: 'error',
       then: {
         function: (input: unknown) => {
@@ -244,9 +255,7 @@ const jsonFgCore: RulesetDefinition = {
 
           const date = DateTime.fromISO(input.date as string);
           const intervalStart = DateTime.fromISO(input.interval[0]);
-          const intervalEnd = isValidDate(input.interval[1])
-            ? DateTime.fromISO(input.interval[1]).endOf('day')
-            : undefined;
+          const intervalEnd = isValidDate(input.interval[1]) ? DateTime.fromISO(input.interval[1]).endOf('day') : undefined;
 
           if (date < intervalStart || (intervalEnd && date > intervalEnd)) {
             return [
@@ -261,6 +270,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/instant-and-interval#E': {
       given: '$..time',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'instant-and-interval',
       severity: 'error',
       then: {
         function: (input: unknown) => {
@@ -279,9 +289,7 @@ const jsonFgCore: RulesetDefinition = {
 
           const date = DateTime.fromISO(input.date as string);
           const intervalStart = DateTime.fromISO(input.interval[0]).startOf('day');
-          const intervalEnd = isValidDateTime(input.interval[1])
-            ? DateTime.fromISO(input.interval[1]).startOf('day')
-            : undefined;
+          const intervalEnd = isValidDateTime(input.interval[1]) ? DateTime.fromISO(input.interval[1]).startOf('day') : undefined;
 
           if (date < intervalStart || (intervalEnd && date > intervalEnd)) {
             return [
@@ -296,6 +304,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/coordinate-dimension': {
       given: ['$..geometry', '$..place', '$..place..base'],
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'coordinate-dimension',
       severity: 'error',
       then: {
         function: hasSameDimensions,
@@ -303,6 +312,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/geometry-wgs84': {
       given: '$..geometry',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'geometry-wgs84',
       severity: 'error',
       then: {
         function: hasPositionRange,
@@ -311,6 +321,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/place': {
       given: '$..place',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'place',
       severity: 'error',
       then: {
         function: isValidPlaceCrs,
@@ -318,6 +329,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/geometry-collection': {
       given: '$..place',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'geometry-collection',
       severity: 'error',
       then: {
         function: isValidCollectionCrs,
@@ -325,6 +337,7 @@ const jsonFgCore: RulesetDefinition = {
     },
     '/req/core/fallback': {
       given: '$',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'fallback',
       severity: 'error',
       then: {
         function: isPlaceAndGeometryNotEqual,
