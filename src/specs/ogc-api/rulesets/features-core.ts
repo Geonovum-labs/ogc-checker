@@ -7,6 +7,8 @@ import { errorMessage } from '../../../util';
 
 export const OGC_API_FEATURES_CORE_URI = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core';
 
+export const OGC_API_FEATURES_CORE_DOC_URI = 'https://docs.ogc.org/is/17-069r3/17-069r3.html#req_core_';
+
 const featuresCore: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-1/1.0/req/core',
   description: 'OGC API - Features - Part 1: Core - Requirements Class "Core"',
@@ -15,6 +17,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/root-op': {
       given: '$.paths',
       message: 'The server SHALL support the HTTP GET operation at the path `/`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'root-op',
       severity: 'error',
       then: {
         field: '/.get',
@@ -24,6 +27,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/root-success': {
       given: "$.paths['/'].get.responses",
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'root-success',
       severity: 'error',
       then: {
         field: '200',
@@ -33,6 +37,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/conformance-op': {
       given: '$.paths',
       message: 'The server SHALL support the HTTP GET operation at the path `/conformance`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'conformance-op',
       severity: 'error',
       then: {
         field: '/conformance.get',
@@ -42,6 +47,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/conformance-success': {
       given: "$.paths['/conformance'].get.responses",
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'conformance-success',
       severity: 'error',
       then: {
         field: '200',
@@ -51,6 +57,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/fc-md-op': {
       given: '$.paths',
       message: 'The server SHALL support the HTTP GET operation at the path `/collections`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-md-op',
       severity: 'error',
       then: {
         field: '/collections.get',
@@ -60,6 +67,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/fc-md-success': {
       given: "$.paths['/collections'].get.responses",
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-md-success',
       severity: 'error',
       then: {
         field: '200',
@@ -68,6 +76,7 @@ const featuresCore: RulesetDefinition = {
     },
     '/req/core/sfc-md-op': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))]',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'sfc-md-op',
       message: 'The server SHALL support the HTTP GET operation at the path `/collections/{collectionId}`.',
       severity: 'error',
       then: {
@@ -78,6 +87,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/sfc-md-success': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+$/))].get.responses',
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'sfc-md-success',
       severity: 'error',
       then: {
         field: '200',
@@ -88,6 +98,7 @@ const featuresCore: RulesetDefinition = {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))]',
       message:
         'For every feature collection identified in the feature collections response (path `/collections`), the server SHALL support the HTTP GET operation at the path `/collections/{collectionId}/items`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-op',
       severity: 'error',
       then: {
         field: 'get',
@@ -97,6 +108,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/fc-response': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get.responses',
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-response',
       severity: 'error',
       then: {
         field: '200',
@@ -106,6 +118,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/fc-limit-definition': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
       message: 'The operation SHALL support a parameter `limit`. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-limit-definition',
       severity: 'error',
       then: {
         function: hasParameter,
@@ -124,10 +137,10 @@ const featuresCore: RulesetDefinition = {
             }
 
             if (schema.minimum == undefined || schema.maximum === undefined || schema.default === undefined) {
-              return errorMessage(
-                'Integer schema must contain explicit values for "minimum", "maximum" and "default".',
-                [...paramPath, 'schema']
-              );
+              return errorMessage('Integer schema must contain explicit values for "minimum", "maximum" and "default".', [
+                ...paramPath,
+                'schema',
+              ]);
             }
 
             return [];
@@ -138,6 +151,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/fc-bbox-definition': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
       message: 'The operation SHALL support a parameter `bbox`. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-bbox-definition',
       severity: 'error',
       then: {
         function: hasParameter,
@@ -163,6 +177,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/fc-time-definition': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
       message: 'The operation SHALL support a parameter `datetime`. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-time-definition',
       severity: 'error',
       then: {
         function: hasParameter,
@@ -181,6 +196,7 @@ const featuresCore: RulesetDefinition = {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))]',
       message:
         'For every feature in a feature collection (path `/collections/{collectionId}`), the server SHALL support the HTTP GET operation at the path `/collections/{collectionId}/items/{featureId}`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'f-op',
       severity: 'error',
       then: {
         field: 'get',
@@ -190,6 +206,7 @@ const featuresCore: RulesetDefinition = {
     '/req/core/f-response': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses',
       message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'f-response',
       severity: 'error',
       then: {
         field: '200',

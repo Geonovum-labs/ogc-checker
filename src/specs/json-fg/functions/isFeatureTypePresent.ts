@@ -28,9 +28,7 @@ export const isFeatureTypePresent: RulesetFunction<unknown> = async input => {
   }
 
   if (isFeature(input) && !documentContainsFeatureType(input)) {
-    return errorMessage(
-      'If the JSON document is a JSON-FG feature, the feature object SHALL have a member "featureType".'
-    );
+    return errorMessage('If the JSON document is a JSON-FG feature, the feature object SHALL have a member "featureType".');
   }
 
   if (

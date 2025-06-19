@@ -5,6 +5,8 @@ import responseMatchSchema from '../../../functions/responseMatchSchema';
 
 export const OGC_API_FEATURES_CRS_URI = 'http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs';
 
+export const OGC_API_FEATURES_CRS_DOC_URI = 'https://docs.ogc.org/is/18-058r1/18-058r1.html#req_crs_';
+
 const featuresCrs: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/ogcapi-features-2/1.0/req/crs',
   description:
@@ -16,6 +18,7 @@ const featuresCrs: RulesetDefinition = {
       message:
         'The crs property in the collection object of a spatial feature collection SHALL contain the identifiers for the list of CRSs ' +
         'supported by the server for that collection. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-crs-list',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -40,6 +43,7 @@ const featuresCrs: RulesetDefinition = {
       message:
         'The crs property in the collection object of a spatial feature collection SHALL contain the identifiers for the list of CRSs ' +
         'supported by the server for that collection. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-crs-list',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -56,6 +60,7 @@ const featuresCrs: RulesetDefinition = {
       message:
         'The value of the storageCrs property SHALL be one of the CRS identifiers from the list of supported CRS identifiers found in the ' +
         'collection object using the crs property. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-storageCrs-valid-value',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -88,6 +93,7 @@ const featuresCrs: RulesetDefinition = {
       message:
         'The value of the storageCrs property SHALL be one of the CRS identifiers from the list of supported CRS identifiers found in the ' +
         'collection object using the crs property. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-storageCrs-valid-value',
       severity: 'error',
       then: {
         function: responseMatchSchema,
@@ -110,6 +116,7 @@ const featuresCrs: RulesetDefinition = {
     '/req/crs/fc-bbox-crs-definition': {
       given: '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items$/))].get',
       message: "Each GET request on a 'features' resource SHALL support a query parameter bbox-crs. {{error}}",
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-bbox-crs-definition',
       severity: 'error',
       then: {
         function: schema,
@@ -151,6 +158,7 @@ const featuresCrs: RulesetDefinition = {
       message:
         'If the value of the bbox-crs parameter is not one of the CRS identifiers from the list of supported CRS identifiers, then the ' +
         'server SHALL respond with the HTTP status code 400. {{error}}',
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-bbox-crs-valid-value',
       severity: 'error',
       then: {
         field: '400',
@@ -163,6 +171,7 @@ const featuresCrs: RulesetDefinition = {
         '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get',
       ],
       message: "Each GET request on a 'features' or 'feature' resource SHALL support a query parameter named crs. {{error}}",
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-crs-definition',
       severity: 'error',
       then: {
         function: schema,
@@ -205,6 +214,7 @@ const featuresCrs: RulesetDefinition = {
         '$.paths[?(@property.match(/^\\/collections\\/[^/]+\\/items\\/[^/]+$/))].get.responses.200',
       ],
       message: "Each GET request on a 'features' or 'feature' resource SHALL support a query parameter named crs. {{error}}",
+      documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'ogc-crs-header',
       severity: 'error',
       then: {
         function: schema,

@@ -11,32 +11,21 @@ export const isValidGeometryDimension: RulesetFunction<unknown> = async input =>
 
   const features = getFeatures(input);
 
-  if (
-    geometryDimension === 0 &&
-    features.every(feature => ['Point', 'MultiPoint'].includes(getPlaceType(feature) ?? ''))
-  ) {
+  if (geometryDimension === 0 && features.every(feature => ['Point', 'MultiPoint'].includes(getPlaceType(feature) ?? ''))) {
     return;
   }
 
-  if (
-    geometryDimension === 1 &&
-    features.every(feature => ['LineString', 'MultiLineString'].includes(getPlaceType(feature) ?? ''))
-  ) {
+  if (geometryDimension === 1 && features.every(feature => ['LineString', 'MultiLineString'].includes(getPlaceType(feature) ?? ''))) {
     return;
   }
 
-  if (
-    geometryDimension === 2 &&
-    features.every(feature => ['Polygon', 'MultiPolygon'].includes(getPlaceType(feature) ?? ''))
-  ) {
+  if (geometryDimension === 2 && features.every(feature => ['Polygon', 'MultiPolygon'].includes(getPlaceType(feature) ?? ''))) {
     return;
   }
 
   if (
     geometryDimension === 3 &&
-    features.every(feature =>
-      ['Polyhedron', 'MultiPolyhedron', 'Prism', 'MultiPrism'].includes(getPlaceType(feature) ?? '')
-    )
+    features.every(feature => ['Polyhedron', 'MultiPolyhedron', 'Prism', 'MultiPrism'].includes(getPlaceType(feature) ?? ''))
   ) {
     return;
   }

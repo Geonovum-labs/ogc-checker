@@ -2,7 +2,10 @@ import { RulesetDefinition } from '@stoplight/spectral-core';
 import { isValidConformanceTo3D } from '../functions/isValidConformanceTo3D';
 
 export const JSON_FG_3D_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/3d';
+
 export const JSON_FG_3D_CURIE = '[ogc-json-fg-1-0.2:3d]';
+
+export const JSON_FG_3D_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#3d_';
 
 const _3d: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/3d',
@@ -10,6 +13,7 @@ const _3d: RulesetDefinition = {
   rules: {
     '/req/3d/metadata': {
       given: '$',
+      documentationUrl: JSON_FG_3D_DOC_URI + 'metadata',
       severity: 'error',
       then: {
         function: isValidConformanceTo3D,

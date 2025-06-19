@@ -14,12 +14,7 @@ const collectionContainsCrs = (input: unknown) =>
   input.geometries.some(geometry => containsCrs(geometry));
 
 const prismBaseContainsCrs = (input: unknown) =>
-  input &&
-  typeof input === 'object' &&
-  'type' in input &&
-  input.type === GeometryTypes.PRISM &&
-  'base' in input &&
-  containsCrs(input.base);
+  input && typeof input === 'object' && 'type' in input && input.type === GeometryTypes.PRISM && 'base' in input && containsCrs(input.base);
 
 const multiPrismMemberContainsCrs = (input: unknown) =>
   input &&

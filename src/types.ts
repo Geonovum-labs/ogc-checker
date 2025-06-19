@@ -1,4 +1,5 @@
 import { Extension } from '@uiw/react-codemirror';
+import { Diagnostic as CodemirrorDiagnostic } from '@codemirror/lint';
 
 export interface Spec {
   name: string;
@@ -48,3 +49,7 @@ export type Position3D = [number, number, number];
 export type Position = Position2D | Position3D;
 
 export type Coordinates = Position | Coordinates[];
+
+export type Diagnostic = CodemirrorDiagnostic & {
+  documentationUrl?: string;
+};

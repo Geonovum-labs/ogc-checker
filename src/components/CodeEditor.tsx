@@ -1,10 +1,10 @@
 import { json, jsonParseLinter } from '@codemirror/lang-json';
-import { Diagnostic, forEachDiagnostic, linter, lintGutter, setDiagnosticsEffect } from '@codemirror/lint';
+import { forEachDiagnostic, linter, lintGutter, setDiagnosticsEffect } from '@codemirror/lint';
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import clsx from 'clsx';
 import { isEmpty } from 'ramda';
 import { FC, useEffect, useRef, useState } from 'react';
-import { Spec, SpecInput, SpecLinter } from '../types';
+import { Diagnostic, Spec, SpecInput, SpecLinter } from '../types';
 import { formatDocument, groupBySource, handleResponse } from '../util';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
@@ -119,9 +119,19 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
                                 })
                               }
                             >
-                              (show)
+                              (show in editor)
                             </a>
                           </span>
+                          {diagnostic.documentationUrl && (
+                            <>
+                              &nbsp;
+                              <span className="text-blue-600 underline">
+                                <a href={diagnostic.documentationUrl} target="_blank" rel="noopener noreferrer">
+                                  (documentation)
+                                </a>
+                              </span>
+                            </>
+                          )}
                         </div>
                       </li>
                     ))}
