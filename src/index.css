@@ -38,3 +38,33 @@
 .cm-selectionBackground {
   @apply bg-red-200!;
 }
+
+@layer components {
+  .diagnostic {
+    @apply flex items-center gap-3 mb-4 p-4 border rounded-sm shadow-lg;
+  }
+
+  .diagnostic-error {
+    @apply bg-red-50 border-red-500 text-red-700;
+  }
+
+  .diagnostic-error .btn {
+    @apply inline-flex items-center px-2 py-1 border rounded-sm cursor-pointer text-xs bg-white hover:bg-red-200 border-red-300 text-red-800;
+  }
+
+  .diagnostic-warning {
+    @apply bg-amber-50 border-amber-500 text-amber-800;
+  }
+
+  .diagnostic-warning .btn {
+    @apply inline-flex items-center px-2 py-1 border rounded-sm cursor-pointer text-xs bg-white hover:bg-amber-400 border-amber-300 text-amber-800;
+  }
+
+  .diagnostic-info {
+    @apply bg-slate-50 border-slate-200 text-slate-800;
+  }
+
+  .diagnostic-info .btn {
+    @apply inline-flex items-center px-2 py-1 border rounded-sm cursor-pointer text-xs bg-white hover:bg-slate-200 border-slate-300 text-slate-800;
+  }
+}
