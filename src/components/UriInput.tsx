@@ -15,10 +15,15 @@ const UriInput: FC<Props> = ({ onSubmit }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label className="mr-2 font-medium">URI:</label>
-        <input type="text" className="w-96" value={uri} onChange={event => setUri(event.target.value)} />
-        <button type="submit" className="ml-2 cursor-pointer">
-          Check
+        <input
+          type="text"
+          className="w-96 px-1.5"
+          placeholder="Enter URL to load a document from remote location..."
+          value={uri}
+          onChange={event => setUri(event.target.value)}
+        />
+        <button type="submit" className="ml-2 px-2.5 py-1.5 text-sm font-semibold cursor-pointer">
+          Load
         </button>
       </form>
     </div>

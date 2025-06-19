@@ -2,6 +2,7 @@ import { json, jsonParseLinter } from '@codemirror/lang-json';
 import { forEachDiagnostic, linter, lintGutter, setDiagnosticsEffect } from '@codemirror/lint';
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import clsx from 'clsx';
+import { AlertCircle, SquareArrowOutUpRight } from 'lucide-react';
 import { isEmpty } from 'ramda';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Diagnostic, Spec, SpecInput, SpecLinter } from '../types';
@@ -82,7 +83,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
           }}
         />
       </div>
-      <div className="flex-1 overflow-auto p-4 bg-sky-100 text-sm">
+      <div className="flex-1 overflow-auto p-4 bg-sky-50 text-sm">
         {checking && <p>Checking...</p>}
         {!checking && error && <div className="mb-4 p-4 bg-red-500 text-white rounded-sm shadow-lg">{error}</div>}
         {!checking && !error && isEmpty(linters) && <p>No matching rulesets found.</p>}
@@ -101,37 +102,36 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
                     {diagnostics[linter.name].map((diagnostic, i) => (
                       <li key={i}>
                         <div
-                          className={clsx('mb-4 p-4 rounded-sm shadow-lg', {
-                            'bg-red-200': diagnostic.severity === 'error',
-                            'bg-yellow-100': diagnostic.severity === 'warning',
-                            'bg-white': diagnostic.severity === 'info' || diagnostic.severity === 'hint',
+                          className={clsx('diagnostic', {
+                            'diagnostic-error': diagnostic.severity === 'error',
+                            'diagnostic-warning': diagnostic.severity === 'warning',
+                            'diagnostic-info': diagnostic.severity === 'info' || diagnostic.severity === 'hint',
                           })}
                         >
-                          {diagnostic.message}
-                          &nbsp;
-                          <span className="text-blue-600 underline">
-                            <a
-                              className="cursor-pointer"
-                              onClick={() =>
-                                codeMirrorRef.current?.view?.dispatch({
-                                  selection: EditorSelection.single(diagnostic.from, diagnostic.to),
-                                  scrollIntoView: true,
-                                })
-                              }
-                            >
-                              (show in editor)
-                            </a>
-                          </span>
-                          {diagnostic.documentationUrl && (
-                            <>
-                              &nbsp;
-                              <span className="text-blue-600 underline">
-                                <a href={diagnostic.documentationUrl} target="_blank" rel="noopener noreferrer">
-                                  (documentation)
+                          <AlertCircle size={28} />
+                          <div>
+                            <span>{diagnostic.message}</span>
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                className="btn"
+                                onClick={() =>
+                                  codeMirrorRef.current?.view?.dispatch({
+                                    selection: EditorSelection.single(diagnostic.from, diagnostic.to),
+                                    scrollIntoView: true,
+                                  })
+                                }
+                              >
+                                Show in editor
+                                <SquareArrowOutUpRight size={12} strokeWidth={2} className="ml-1.5" />
+                              </button>
+                              {diagnostic.documentationUrl && (
+                                <a className="btn" href={diagnostic.documentationUrl} target="_blank" rel="noopener noreferrer">
+                                  Documentation
+                                  <SquareArrowOutUpRight size={12} strokeWidth={2} className="ml-1.5" />
                                 </a>
-                              </span>
-                            </>
-                          )}
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </li>
                     ))}
