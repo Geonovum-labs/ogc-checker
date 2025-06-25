@@ -24,6 +24,7 @@
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "clsx": "^2.1.1",
+    "js-yaml": "^4.1.0",
     "json-schema-merge-allof": "^0.8.1",
     "lucide-react": "^0.523.0",
     "luxon": "^3.6.1",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@eslint/js": "^9.29.0",
     "@tailwindcss/postcss": "^4.1.10",
+    "@types/js-yaml": "^4.0.9",
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/luxon": "^3.6.2",
     "@types/ramda": "^0.30.2",
