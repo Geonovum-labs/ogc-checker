@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
-    "@codemirror/language": "^6.11.1",
+    "@codemirror/language": "^6.11.2",
     "@codemirror/lint": "^6.8.5",
     "@stoplight/better-ajv-errors": "^1.0.3",
     "@stoplight/spectral-core": "^1.20.0",
