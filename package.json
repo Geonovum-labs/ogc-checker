@@ -20,7 +20,7 @@
     "@stoplight/spectral-functions": "^1.10.1",
     "@stoplight/spectral-parsers": "^1.0.5",
     "@stoplight/spectral-rulesets": "^1.22.0",
-    "@uiw/react-codemirror": "^4.23.14",
+    "@uiw/react-codemirror": "^4.24.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "clsx": "^2.1.1",
