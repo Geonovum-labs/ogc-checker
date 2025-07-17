@@ -30,7 +30,7 @@ const resolver = new Resolver({
 });
 
 const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> = async (response, options, context) => {
-  if (!options.schema && !options.schemaUri) {
+  if (!response || (!options.schema && !options.schemaUri)) {
     return;
   }
 
