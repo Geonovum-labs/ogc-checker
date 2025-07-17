@@ -1,28 +1,31 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.2",
   "info": {
-    "version": "0.1",
-    "title": "OGC API - Processes",
-    "description": "Example API Definition for OGC API - Processes",
+    "title": "A sample API conforming to the draft standard OGC API - Processes - Part 1: Core",
+    "version": "1.0.0",
     "contact": {
-      "name": "Open Geospatial Consortium",
-      "email": "info@ogc.org"
+      "name": "Acme Corporation",
+      "email": "info@example.org",
+      "url": "http://example.org/"
     },
     "license": {
-      "name": "OGC License",
-      "url": "http://www.opengeospatial.org/legal/"
+      "name": "CC-BY 4.0 license",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
     }
   },
   "servers": [
     {
-      "description": "Example Server 1 (GNOSIS, supporting Part 1: Core /Sync and Part 3: Workflows)",
-      "url": "https://maps.gnosis.earth/ogcapi"
+      "url": "https://data.example.org/",
+      "description": "Production server"
+    },
+    {
+      "url": "https://dev.example.org/",
+      "description": "Development server"
     }
   ],
   "paths": {
     "/": {
       "get": {
-        "tags": ["Landing Page"],
         "operationId": "getLandingPage",
         "summary": "Retrieve the OGC API landing page for this service.",
         "parameters": [
@@ -45,7 +48,6 @@
     },
     "/conformance": {
       "get": {
-        "tags": ["Conformance"],
         "operationId": "getConformance",
         "summary": "Retrieve the set of OGC API conformance classes that are supported by this service.",
         "parameters": [
@@ -71,7 +73,6 @@
         "summary": "retrieve the list of available processes",
         "description": "The list of processes contains a summary of each process the OGC API - Processes offers, including the link to a more detailed description of the process.\n\nFor more information, see [Section 7.7]https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_list).\n",
         "operationId": "getProcesses",
-        "tags": ["Processes"],
         "responses": {
           "200": {
             "$ref": "#/components/responses/ProcessList"
@@ -84,7 +85,6 @@
         "summary": "retrieve a process description",
         "description": "The process description contains information about inputs and outputs and a link to the execution-endpoint for the process. The Core does not mandate the use of a specific process description to specify the interface of a process. That said, the Core requirements class makes the following recommendation:\n\nImplementations SHOULD consider supporting the OGC process description.\n\nFor more information, see [Section 7.8](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_description).\n",
         "operationId": "getProcessDescription",
-        "tags": ["Processes"],
         "parameters": [
           {
             "$ref": "#/components/parameters/processID-path"
@@ -105,7 +105,6 @@
         "summary": "retrieve the list of jobs.",
         "description": "Lists available jobs.\n\nFor more information, see [Section 12](https://docs.ogc.org/is/18-062r2/18-062r2.html#Job_list).\n",
         "operationId": "getJobs",
-        "tags": ["Jobs"],
         "parameters": [
           {
             "$ref": "#/components/parameters/limit"
@@ -144,7 +143,6 @@
         "summary": "retrieve the status of a job",
         "description": "Shows the status of a job.\n\n For more information, see [Section 7.10](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_retrieve_status_info).\n",
         "operationId": "getStatus",
-        "tags": ["Jobs"],
         "parameters": [
           {
             "$ref": "#/components/parameters/jobID"
@@ -168,7 +166,6 @@
         "summary": "retrieve the result(s) of a job",
         "description": "Lists available results of a job. In case of a failure, lists exceptions instead.\n\nFor more information, see [Section 7.11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_retrieve_job_results).\n",
         "operationId": "getResult",
-        "tags": ["Jobs"],
         "parameters": [
           {
             "$ref": "#/components/parameters/jobID"
