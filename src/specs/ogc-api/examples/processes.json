@@ -693,7 +693,7 @@
           "jobs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/statusInfo"
+              "$ref": "#/components/schemas/job"
             }
           },
           "links": {
