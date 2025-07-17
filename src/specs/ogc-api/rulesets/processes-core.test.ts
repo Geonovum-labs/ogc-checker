@@ -1,6 +1,7 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { clone } from 'ramda';
 import { describe, expect, test } from 'vitest';
+import { APPLICATION_JSON_TYPE } from '../../../constants';
 import exampleDoc from '../examples/processes.json';
 import ruleset from './processes-core';
 
@@ -110,7 +111,7 @@ describe('/req/core/process-list-success', () => {
 });
 
 describe('/req/core/process-description', () => {
-  test('Fails when process description path', async () => {
+  test('Fails when process description path is absent', async () => {
     const oasDoc = clone(exampleDoc);
     delete (oasDoc.paths as Record<string, unknown>)['/processes/{processID}'];
     const violations = await spectral.run(oasDoc);
@@ -118,7 +119,7 @@ describe('/req/core/process-description', () => {
     expect(violations).toContainViolation('/req/core/process-description', 1);
   });
 
-  test('Fails when process description success response is absent', async () => {
+  test('Fails when process description GET operation is absent', async () => {
     const oasDoc = clone(exampleDoc);
     delete (oasDoc.paths['/processes/{processID}'] as Record<string, unknown>).get;
     const violations = await spectral.run(oasDoc);
@@ -149,10 +150,10 @@ describe('/req/core/process-exception/no-such-process', () => {
   test('Fails when process description 404 response schema is invalid', async () => {
     const oasDoc = clone(exampleDoc);
 
-    (oasDoc.paths['/processes/{processID}'].get.responses as Record<string, unknown>)[404] = {
+    (oasDoc.paths['/processes/{processID}'].get.responses as Record<string, unknown>)['404'] = {
       description: 'Not Found',
       content: {
-        APPLICATION_JSON_TYPE: {
+        [APPLICATION_JSON_TYPE]: {
           schema: { type: 'string' },
         },
       },
@@ -161,5 +162,58 @@ describe('/req/core/process-exception/no-such-process', () => {
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toContainViolation('/req/core/process-exception/no-such-process', 1);
+  });
+});
+
+describe('/req/core/process-execute-op', () => {
+  test('Fails when process execution path is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths as Record<string, unknown>)['/processes/{processID}/execution'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-execute-op', 1);
+  });
+
+  test('Fails when process execution POST operation is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/processes/{processID}/execution'] as Record<string, unknown>).post;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-execute-op#post', 1);
+  });
+});
+
+describe('/req/core/process-execute-request', () => {
+  test('Fails when the execution request body is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/processes/{processID}/execution'].post as Record<string, unknown>).requestBody;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-execute-request', 1);
+  });
+
+  test('Fails when the execution request body schema is invalid', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    (oasDoc.paths['/processes/{processID}/execution'].post as Record<string, unknown>).requestBody = {
+      description: 'Not Found',
+      content: {
+        [APPLICATION_JSON_TYPE]: {
+          schema: { type: 'string' },
+        },
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-execute-request', 1);
+  });
+
+  test('Fails when the execution request body is optional', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.requestBodies.Execute as Record<string, unknown>).required = false;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-execute-request', 1);
   });
 });

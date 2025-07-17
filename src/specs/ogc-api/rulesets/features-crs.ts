@@ -1,7 +1,7 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { schema, truthy } from '@stoplight/spectral-functions';
-import responseMatchSchema from '../../../functions/responseMatchSchema';
+import hasSchemaMatch from '../../../functions/hasSchemaMatch';
 
 export const OGC_API_FEATURES_CRS_URI = 'http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs';
 
@@ -21,7 +21,7 @@ const featuresCrs: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-crs-list',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schema: {
             type: 'object',
@@ -46,7 +46,7 @@ const featuresCrs: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-crs-list',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schema: {
             type: 'object',
@@ -63,7 +63,7 @@ const featuresCrs: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-storageCrs-valid-value',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schema: {
             type: 'object',
@@ -96,7 +96,7 @@ const featuresCrs: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CRS_DOC_URI + 'fc-md-storageCrs-valid-value',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schema: {
             type: 'object',

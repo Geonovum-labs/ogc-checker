@@ -29,13 +29,17 @@ const resolver = new Resolver({
   },
 });
 
-const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> = async (response, options, context) => {
-  if (!response || (!options.schema && !options.schemaUri)) {
+const hasSchemaMatch: RulesetFunction<OpenAPIV3_0.ResponseObject | OpenAPIV3_0.RequestBodyObject, Options> = async (
+  input,
+  options,
+  context
+) => {
+  if (!input || (!options.schema && !options.schemaUri)) {
     return;
   }
 
   const mediaType = options.mediaType ?? APPLICATION_JSON_TYPE;
-  const content = response.content ? response.content[mediaType] : undefined;
+  const content = input.content ? input.content[mediaType] : undefined;
 
   if (!content) {
     return;
@@ -67,4 +71,4 @@ const responseMatchSchema: RulesetFunction<OpenAPIV3_0.ResponseObject, Options> 
   }
 };
 
-export default responseMatchSchema;
+export default hasSchemaMatch;

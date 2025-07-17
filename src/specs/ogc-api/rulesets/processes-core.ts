@@ -3,7 +3,7 @@ import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import hasParameter from '../../../functions/hasParameter';
 import hasPathMatch from '../../../functions/hasPathMatch';
-import responseMatchSchema from '../../../functions/responseMatchSchema';
+import hasSchemaMatch from '../../../functions/hasSchemaMatch';
 import { OpenAPIV3_0 } from '../../../openapi-types';
 import { errorMessage } from '../../../util';
 
@@ -38,7 +38,7 @@ const processesCore: RulesetDefinition = {
         },
         {
           field: '200',
-          function: responseMatchSchema,
+          function: hasSchemaMatch,
           functionOptions: {
             schemaUri:
               'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/common-core/landingPage.yaml',
@@ -68,7 +68,7 @@ const processesCore: RulesetDefinition = {
         },
         {
           field: '200',
-          function: responseMatchSchema,
+          function: hasSchemaMatch,
           functionOptions: {
             schemaUri:
               'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/common-core/confClasses.yaml',
@@ -131,7 +131,7 @@ const processesCore: RulesetDefinition = {
         },
         {
           field: '200',
-          function: responseMatchSchema,
+          function: hasSchemaMatch,
           functionOptions: {
             schemaUri:
               'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/processes-core/processList.yaml',
@@ -183,11 +183,57 @@ const processesCore: RulesetDefinition = {
         },
         {
           field: '404',
-          function: responseMatchSchema,
+          function: hasSchemaMatch,
           functionOptions: {
             schemaUri:
               'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/common-core/exception.yaml',
           },
+        },
+      ],
+    },
+    '/req/core/process-execute-op': {
+      given: '$.paths',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-execute-op',
+      message: 'The server SHALL support the HTTP POST operation at the path `/processes/{processID}/execution`.',
+      severity: 'error',
+      then: {
+        function: hasPathMatch,
+        functionOptions: {
+          pattern: '^\\/processes\\/[^/]+\\/execution$',
+        },
+      },
+    },
+    '/req/core/process-execute-op#post': {
+      given: '$.paths[?(@property.match(/^\\/processes\\/[^/]+\\/execution$/))]',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-execute-op',
+      message: 'The server SHALL support the HTTP POST operation at the path `/processes/{processID}/execution`.',
+      severity: 'error',
+      then: {
+        field: 'post',
+        function: truthy,
+      },
+    },
+    '/req/core/process-execute-request': {
+      given: '$.paths[?(@property.match(/^\\/processes\\/[^/]+\\/execution$/))].post',
+      message: 'The content of the request body SHALL be based upon the corresponding OpenAPI 3.0 schema document.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-execute-request',
+      severity: 'error',
+      then: [
+        {
+          field: 'requestBody',
+          function: truthy,
+        },
+        {
+          field: 'requestBody',
+          function: hasSchemaMatch,
+          functionOptions: {
+            schemaUri:
+              'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/processes-core/execute.yaml',
+          },
+        },
+        {
+          field: 'requestBody.required',
+          function: truthy,
         },
       ],
     },

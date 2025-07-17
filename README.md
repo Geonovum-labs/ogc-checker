@@ -112,6 +112,8 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/core/process-description`               |   Yes    |  Yes   |         |
 | `/req/core/process-description-success`       |   Yes    |  Yes   |         |
 | `/req/core/process-exception/no-such-process` |   Yes    |  Yes   |         |
+| `/req/core/process-execute-op`                |   Yes    |  Yes   |         |
+| `/req/core/process-execute-request`           |   Yes    |  Yes   |         |
 | `/req/json/definition`                        |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core

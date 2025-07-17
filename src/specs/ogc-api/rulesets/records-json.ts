@@ -1,7 +1,7 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { schema } from '@stoplight/spectral-functions';
-import responseMatchSchema from '../../../functions/responseMatchSchema';
+import hasSchemaMatch from '../../../functions/hasSchemaMatch';
 
 export const OGC_API_RECORDS_JSON_URI = 'http://www.opengis.net/spec/ogcapi-records-1/1.0/conf/json';
 
@@ -34,7 +34,7 @@ const recordsJson: RulesetDefinition = {
       documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'record-content',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri:
             'https://raw.githubusercontent.com/opengeospatial/ogcapi-records/refs/heads/master/core/openapi/schemas/recordCollectionGeoJSON.yaml',
@@ -49,7 +49,7 @@ const recordsJson: RulesetDefinition = {
       documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'record-content',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri:
             'https://raw.githubusercontent.com/opengeospatial/ogcapi-records/refs/heads/master/core/openapi/schemas/recordGeoJSON.yaml',
@@ -79,7 +79,7 @@ const recordsJson: RulesetDefinition = {
       documentationUrl: OGC_API_RECORDS_JSON_DOC_URI + 'catalog-content',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://raw.githubusercontent.com/opengeospatial/ogcapi-records/refs/heads/master/core/openapi/schemas/catalog.yaml',
           mediaType: 'application/ogc-catalog+json',
