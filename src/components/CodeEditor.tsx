@@ -3,10 +3,11 @@ import { forEachDiagnostic, linter, lintGutter, setDiagnosticsEffect } from '@co
 import ReactCodeMirror, { EditorSelection, Extension, ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import clsx from 'clsx';
 import { AlertCircle, SquareArrowOutUpRight } from 'lucide-react';
-import { isEmpty } from 'ramda';
+import { isEmpty, pick } from 'ramda';
 import { FC, useEffect, useRef, useState } from 'react';
-import { useContent } from '../store';
-import { Diagnostic, Spec, SpecLinter } from '../types';
+import { useShallow } from 'zustand/react/shallow';
+import { useChecker } from '../store';
+import { Diagnostic, Spec } from '../types';
 import { groupBySource } from '../util';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
@@ -16,17 +17,17 @@ interface Props {
 }
 
 const CodeEditor: FC<Props> = ({ spec }) => {
-  const [content, setContent] = useContent();
-  const [checking, setChecking] = useState(false);
-  const [error, setError] = useState<string>();
-  const [linters, setLinters] = useState<SpecLinter[]>([]);
+  const { content, setContent, linters, setLinters, checking, setChecking, error, setError } = useChecker(
+    useShallow(state => pick(['content', 'setContent', 'linters', 'setLinters', 'checking', 'setChecking', 'error', 'setError'], state))
+  );
+
   const [diagnostics, setDiagnostics] = useState<{ [key: string]: Diagnostic[] }>({});
   const codeMirrorRef = useRef<ReactCodeMirrorRef>(null);
 
   useEffect(() => {
     setContent(spec.example);
     setLinters(spec.linters);
-  }, [spec, setContent]);
+  }, [spec, setContent, setLinters]);
 
   return (
     <div className="flex h-full">

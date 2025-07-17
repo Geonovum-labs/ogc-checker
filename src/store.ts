@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
 import { SpecLinter } from './types';
 
 interface CheckerState {
@@ -20,8 +19,5 @@ export const useChecker = create<CheckerState>(set => ({
   setLinters: linters => set({ linters }),
   checking: false,
   setChecking: checking => set({ checking }),
-  error: '{}',
   setError: error => set({ error }),
 }));
-
-export const useContent = (): [string, (content: string) => void] => useChecker(useShallow(state => [state.content, state.setContent]));
