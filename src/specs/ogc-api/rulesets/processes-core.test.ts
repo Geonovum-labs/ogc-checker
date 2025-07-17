@@ -92,7 +92,7 @@ describe('/req/core/pl-limit-definition', () => {
 });
 
 describe('/req/core/process-list-success', () => {
-  test('Fails when processes success response is absent', async () => {
+  test('Fails when process list success response is absent', async () => {
     const oasDoc = clone(exampleDoc);
     delete (oasDoc.paths['/processes'].get.responses as Record<string, unknown>)['200'];
     const violations = await spectral.run(oasDoc);
@@ -100,11 +100,39 @@ describe('/req/core/process-list-success', () => {
     expect(violations).toContainViolation('/req/core/process-list-success', 1);
   });
 
-  test('Fails when processes response schema is invalid', async () => {
+  test('Fails when process list response schema is invalid', async () => {
     const oasDoc = clone(exampleDoc);
     (oasDoc.components.schemas.processList as Record<string, unknown>).required = [];
     const violations = await spectral.run(oasDoc);
 
     expect(violations).toContainViolation('/req/core/process-list-success', 1);
+  });
+});
+
+describe('/req/core/process-description', () => {
+  test('Fails when process description path', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths as Record<string, unknown>)['/processes/{processID}'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-description', 1);
+  });
+
+  test('Fails when process description success response is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/processes/{processID}'] as Record<string, unknown>).get;
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-description#get', 1);
+  });
+});
+
+describe('/req/core/process-description-success', () => {
+  test('Fails when process description success response is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/processes/{processID}'].get.responses as Record<string, unknown>)['200'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-description-success', 1);
   });
 });

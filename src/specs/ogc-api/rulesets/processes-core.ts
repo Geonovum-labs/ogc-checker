@@ -2,6 +2,7 @@ import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import hasParameter from '../../../functions/hasParameter';
+import hasPathMatch from '../../../functions/hasPathMatch';
 import responseMatchSchema from '../../../functions/responseMatchSchema';
 import { OpenAPIV3_0 } from '../../../openapi-types';
 import { errorMessage } from '../../../util';
@@ -137,6 +138,38 @@ const processesCore: RulesetDefinition = {
           },
         },
       ],
+    },
+    '/req/core/process-description': {
+      given: '$.paths',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-description',
+      message: 'The server SHALL support the HTTP GET operation at the path `/processes/{processID}`.',
+      severity: 'error',
+      then: {
+        function: hasPathMatch,
+        functionOptions: {
+          pattern: '^\\/processes\\/[^/]+$',
+        },
+      },
+    },
+    '/req/core/process-description#get': {
+      given: '$.paths[?(@property.match(/^\\/processes\\/[^/]+$/))]',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-description',
+      message: 'The server SHALL support the HTTP GET operation at the path `/processes/{processID}`.',
+      severity: 'error',
+      then: {
+        field: 'get',
+        function: truthy,
+      },
+    },
+    '/req/core/process-description-success': {
+      given: '$.paths[?(@property.match(/^\\/processes\\/[^/]+$/))].get.responses',
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-description-success',
+      severity: 'error',
+      then: {
+        field: '200',
+        function: truthy,
+      },
     },
   },
 };
