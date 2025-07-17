@@ -1,7 +1,10 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
+import hasParameter from '../../../functions/hasParameter';
 import responseMatchSchema from '../../../functions/responseMatchSchema';
+import { OpenAPIV3_0 } from '../../../openapi-types';
+import { errorMessage } from '../../../util';
 
 export const OGC_API_PROCESSES_CORE_URI = 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core';
 
@@ -68,6 +71,69 @@ const processesCore: RulesetDefinition = {
           functionOptions: {
             schemaUri:
               'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/common-core/confClasses.yaml',
+          },
+        },
+      ],
+    },
+    '/req/core/process-list': {
+      given: '$.paths',
+      message: 'The server SHALL support the HTTP GET operation at the path `/processes`.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-list',
+      severity: 'error',
+      then: {
+        field: '/processes.get',
+        function: truthy,
+      },
+    },
+    '/req/core/pl-limit-definition': {
+      given: "$.paths['/processes'].get",
+      message: 'The operation SHALL support a parameter `limit`. {{error}}',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'pl-limit-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'limit',
+            in: 'query',
+          },
+          validateSchema: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]) => {
+            if (!schema.type) {
+              return errorMessage('Schema is missing.', paramPath);
+            }
+
+            if (schema.type !== 'integer') {
+              return errorMessage('Schema type must be integer.', [...paramPath, 'schema']);
+            }
+
+            if (schema.minimum == undefined || schema.maximum === undefined || schema.default === undefined) {
+              return errorMessage('Integer schema must contain explicit values for "minimum", "maximum" and "default".', [
+                ...paramPath,
+                'schema',
+              ]);
+            }
+
+            return [];
+          },
+        },
+      },
+    },
+    '/req/core/process-list-success': {
+      given: "$.paths['/processes'].get.responses",
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-list-success',
+      severity: 'error',
+      then: [
+        {
+          field: '200',
+          function: truthy,
+        },
+        {
+          field: '200',
+          function: responseMatchSchema,
+          functionOptions: {
+            schemaUri:
+              'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/processes-core/processList.yaml',
           },
         },
       ],

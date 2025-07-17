@@ -62,3 +62,49 @@ describe('/req/core/conformance-success', () => {
     expect(violations).toContainViolation('/req/core/conformance-success', 1);
   });
 });
+
+describe('/req/core/process-list', () => {
+  test('Fails when processes path is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths as Record<string, unknown>)['/processes'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-list', 1);
+  });
+});
+
+describe('/req/core/pl-limit-definition', () => {
+  test('Fails when limit parameter schema is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    oasDoc.paths['/processes'].get.parameters.splice(0, 1);
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/pl-limit-definition', 1);
+  });
+
+  test('Fails when limit parameter schema is invalid', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.paths['/processes'].get.parameters[0] as Record<string, unknown>) = { type: 'string' };
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/pl-limit-definition', 1);
+  });
+});
+
+describe('/req/core/process-list-success', () => {
+  test('Fails when processes success response is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/processes'].get.responses as Record<string, unknown>)['200'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-list-success', 1);
+  });
+
+  test('Fails when processes response schema is invalid', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.schemas.processList as Record<string, unknown>).required = [];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-list-success', 1);
+  });
+});

@@ -4,7 +4,7 @@ import { schema } from '@stoplight/spectral-functions';
 
 export const OGC_API_PROCESSES_JSON_URI = 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json';
 
-export const OGC_API_PROCESSES_JSON_DOC_URI = 'https://docs.ogc.org/DRAFTS/18-062r3.html#';
+export const OGC_API_PROCESSES_JSON_DOC_URI = 'https://docs.ogc.org/DRAFTS/18-062r3.html#req_json_';
 
 const processesJson: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/req/json',
@@ -19,7 +19,7 @@ const processesJson: RulesetDefinition = {
         '$.paths[?(@property.match(/^\\/jobs\\/[^/]+$/))].get.responses.200.content',
       ],
       message: '200-responses of the server SHALL support the "application/json" media type. {{error}}',
-      documentationUrl: OGC_API_PROCESSES_JSON_DOC_URI + 'req_json_definition',
+      documentationUrl: OGC_API_PROCESSES_JSON_DOC_URI + 'definition',
       severity: 'error',
       then: {
         function: schema,

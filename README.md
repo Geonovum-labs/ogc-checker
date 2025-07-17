@@ -102,6 +102,11 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/core/api-definition-success` |    No    |   No   |         |
 | `/req/core/conformance-op`         |   Yes    |  Yes   |         |
 | `/req/core/conformance-success`    |   Yes    |  Yes   |         |
+| `/req/core/http`                   |    No    |   No   |         |
+| `/req/core/process-list`           |   Yes    |  Yes   |         |
+| `/req/core/pl-limit-definition`    |   Yes    |  Yes   |         |
+| `/req/core/pl-limit-response`      |    No    |   No   |         |
+| `/req/core/process-list-success`   |   Yes    |  Yes   |         |
 | `/req/json/definition`             |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core
