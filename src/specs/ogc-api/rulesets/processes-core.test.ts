@@ -136,3 +136,30 @@ describe('/req/core/process-description-success', () => {
     expect(violations).toContainViolation('/req/core/process-description-success', 1);
   });
 });
+
+describe('/req/core/process-exception/no-such-process', () => {
+  test('Fails when process description 404 response is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/processes/{processID}'].get.responses as Record<string, unknown>)['404'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-exception/no-such-process', 1);
+  });
+
+  test('Fails when process description 404 response schema is invalid', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    (oasDoc.paths['/processes/{processID}'].get.responses as Record<string, unknown>)[404] = {
+      description: 'Not Found',
+      content: {
+        APPLICATION_JSON_TYPE: {
+          schema: { type: 'string' },
+        },
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/process-exception/no-such-process', 1);
+  });
+});

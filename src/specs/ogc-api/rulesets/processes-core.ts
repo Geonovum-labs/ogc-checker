@@ -171,6 +171,26 @@ const processesCore: RulesetDefinition = {
         function: truthy,
       },
     },
+    '/req/core/process-exception/no-such-process': {
+      given: '$.paths[?(@property.match(/^\\/processes\\/[^/]+$/))].get.responses',
+      message: 'If the operation is executed using an invalid process identifier, the response SHALL be HTTP status code `404`.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'process-exception-no-such-process',
+      severity: 'error',
+      then: [
+        {
+          field: '404',
+          function: truthy,
+        },
+        {
+          field: '404',
+          function: responseMatchSchema,
+          functionOptions: {
+            schemaUri:
+              'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/common-core/exception.yaml',
+          },
+        },
+      ],
+    },
   },
 };
 
