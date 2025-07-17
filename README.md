@@ -89,6 +89,33 @@ Specification: https://docs.ogc.org/is/18-058r1/18-058r1.html
 | `/req/crs/ogc-crs-header`                 |   Yes    |  Yes   |                                               |
 | `/req/crs/ogc-crs-header-value`           |    No    |   No   |                                               |
 
+## OGC API - Processes - Part 1: Core
+
+Version: 2.0 (Draft)\
+Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
+
+| Requirement                                   | Testable | Tested | Remarks |
+| --------------------------------------------- | :------: | :----: | ------- |
+| `/req/core/landingpage-op`                    |   Yes    |  Yes   |         |
+| `/req/core/landingpage-success`               |   Yes    |  Yes   |         |
+| `/req/core/api-definition-op`                 |    No    |   No   |         |
+| `/req/core/api-definition-success`            |    No    |   No   |         |
+| `/req/core/conformance-op`                    |   Yes    |  Yes   |         |
+| `/req/core/conformance-success`               |   Yes    |  Yes   |         |
+| `/req/core/http`                              |    No    |   No   |         |
+| `/req/core/process-list`                      |   Yes    |  Yes   |         |
+| `/req/core/pl-limit-definition`               |   Yes    |  Yes   |         |
+| `/req/core/pl-limit-response`                 |    No    |   No   |         |
+| `/req/core/process-list-success`              |   Yes    |  Yes   |         |
+| `/req/core/pl-links`                          |    No    |   No   |         |
+| `/req/core/process-summary-links`             |    No    |   No   |         |
+| `/req/core/process-description`               |   Yes    |  Yes   |         |
+| `/req/core/process-description-success`       |   Yes    |  Yes   |         |
+| `/req/core/process-exception/no-such-process` |   Yes    |  Yes   |         |
+| `/req/core/process-execute-op`                |   Yes    |  Yes   |         |
+| `/req/core/process-execute-request`           |   Yes    |  Yes   |         |
+| `/req/json/definition`                        |   Yes    |  Yes   |         |
+
 ## OGC API - Records - Part 1: Core
 
 Version: 1.0 (Draft)\

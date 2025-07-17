@@ -1,7 +1,7 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { APPLICATION_GEO_JSON_TYPE } from '../../../constants';
-import responseMatchSchema from '../../../functions/responseMatchSchema';
+import hasSchemaMatch from '../../../functions/hasSchemaMatch';
 import { OGC_API_FEATURES_CORE_DOC_URI } from './features-core';
 
 export const OGC_API_FEATURES_GEOJSON_URI = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson';
@@ -17,7 +17,7 @@ const featuresGeoJson: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'root-success',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/landingPage.yaml',
         },
@@ -29,7 +29,7 @@ const featuresGeoJson: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'conformance-success',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/confClasses.yaml',
         },
@@ -41,7 +41,7 @@ const featuresGeoJson: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-md-success',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collections.yaml',
         },
@@ -53,7 +53,7 @@ const featuresGeoJson: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'sfc-md-success',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/collection.yaml',
         },
@@ -65,7 +65,7 @@ const featuresGeoJson: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'fc-response',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureCollectionGeoJSON.yaml',
           mediaType: APPLICATION_GEO_JSON_TYPE,
@@ -78,7 +78,7 @@ const featuresGeoJson: RulesetDefinition = {
       documentationUrl: OGC_API_FEATURES_CORE_DOC_URI + 'f-response',
       severity: 'error',
       then: {
-        function: responseMatchSchema,
+        function: hasSchemaMatch,
         functionOptions: {
           schemaUri: 'https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureGeoJSON.yaml',
           mediaType: APPLICATION_GEO_JSON_TYPE,
