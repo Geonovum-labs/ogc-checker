@@ -34,3 +34,31 @@ describe('/req/core/landingpage-success', () => {
     expect(violations).toContainViolation('/req/core/landingpage-success', 1);
   });
 });
+
+describe('/req/core/conformance-op', () => {
+  test('Fails when conformance path is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths as Record<string, unknown>)['/conformance'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/conformance-op', 1);
+  });
+});
+
+describe('/req/core/conformance-success', () => {
+  test('Fails when conformance success response is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/conformance'].get.responses as Record<string, unknown>)['200'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/conformance-success', 1);
+  });
+
+  test('Fails when conformance response schema is invalid', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.schemas.confClasses as Record<string, unknown>).required = [];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/core/conformance-success', 1);
+  });
+});

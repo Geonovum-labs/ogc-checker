@@ -42,6 +42,36 @@ const processesCore: RulesetDefinition = {
         },
       ],
     },
+    '/req/core/conformance-op': {
+      given: '$.paths',
+      message: 'The server SHALL support the HTTP GET operation at the path `/conformance`.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'conformance-op',
+      severity: 'error',
+      then: {
+        field: '/conformance.get',
+        function: truthy,
+      },
+    },
+    '/req/core/conformance-success': {
+      given: "$.paths['/conformance'].get.responses",
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_PROCESSES_CORE_DOC_URI + 'conformance-success',
+      severity: 'error',
+      then: [
+        {
+          field: '200',
+          function: truthy,
+        },
+        {
+          field: '200',
+          function: responseMatchSchema,
+          functionOptions: {
+            schemaUri:
+              'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/common-core/confClasses.yaml',
+          },
+        },
+      ],
+    },
   },
 };
 
