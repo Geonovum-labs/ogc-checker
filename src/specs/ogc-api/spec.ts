@@ -3,6 +3,7 @@ import { spectralLinter } from '../../spectral';
 import { Spec, SpecLinter, SpecResponseMapper } from '../../types';
 import { handleResponse, handleResponseJson } from '../../util';
 import featuresExample from './examples/features.json';
+import processesExample from './examples/processes.json';
 import recordsExample from './examples/records.json';
 import rulesets from './rulesets';
 
@@ -70,6 +71,19 @@ export const ogcApiFeaturesSpec: Spec = {
       linter: spectralLinter(linterName(entry[0]), entry[1]),
     })),
   responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-features-'),
+};
+
+export const ogcApiProcessesSpec: Spec = {
+  name: 'OGC API - Processes',
+  slug: 'ogc-api-processes',
+  example: JSON.stringify(processesExample, undefined, 2),
+  linters: Object.entries(rulesets)
+    .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-processes-'))
+    .map(entry => ({
+      name: linterName(entry[0]),
+      linter: spectralLinter(linterName(entry[0]), entry[1]),
+    })),
+  responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-processes-'),
 };
 
 export const ogcApiRecordsSpec: Spec = {

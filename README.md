@@ -89,6 +89,15 @@ Specification: https://docs.ogc.org/is/18-058r1/18-058r1.html
 | `/req/crs/ogc-crs-header`                 |   Yes    |  Yes   |                                               |
 | `/req/crs/ogc-crs-header-value`           |    No    |   No   |                                               |
 
+## OGC API - Processes - Part 1: Core
+
+Version: 2.0 (Draft)\
+Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
+
+| Requirement            | Testable | Tested | Remarks |
+| ---------------------- | :------: | :----: | ------- |
+| `/req/json/definition` |   Yes    |  Yes   |         |
+
 ## OGC API - Records - Part 1: Core
 
 Version: 1.0 (Draft)\
