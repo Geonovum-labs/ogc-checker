@@ -5,18 +5,18 @@ import clsx from 'clsx';
 import { AlertCircle, SquareArrowOutUpRight } from 'lucide-react';
 import { isEmpty } from 'ramda';
 import { FC, useEffect, useRef, useState } from 'react';
-import { Diagnostic, Spec, SpecInput, SpecLinter } from '../types';
-import { formatDocument, groupBySource, handleResponse } from '../util';
+import { useContent } from '../store';
+import { Diagnostic, Spec, SpecLinter } from '../types';
+import { groupBySource } from '../util';
 
 const EXTENSIONS: Extension[] = [json(), linter(jsonParseLinter()), lintGutter()];
 
 interface Props {
   spec: Spec;
-  uri?: string;
 }
 
-const CodeEditor: FC<Props> = ({ spec, uri }) => {
-  const [content, setContent] = useState('{}');
+const CodeEditor: FC<Props> = ({ spec }) => {
+  const [content, setContent] = useContent();
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string>();
   const [linters, setLinters] = useState<SpecLinter[]>([]);
@@ -26,37 +26,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
   useEffect(() => {
     setContent(spec.example);
     setLinters(spec.linters);
-  }, [spec]);
-
-  useEffect(() => {
-    if (uri) {
-      setError(undefined);
-      setChecking(true);
-      setDiagnostics({});
-
-      fetch(uri)
-        .then(response => handleResponse(response, uri))
-        .then(responseText =>
-          spec.responseMapper //
-            ? spec.responseMapper(responseText)
-            : Promise.resolve({ content: responseText })
-        )
-        .then((input: SpecInput) => {
-          setChecking(false);
-          setContent(formatDocument(input.content));
-          setLinters(input.linters ?? spec.linters);
-        })
-        .catch(error => {
-          setChecking(false);
-
-          if (error instanceof TypeError) {
-            setError(`Possible network or CORS failure: "${error.message}". Check your browser console for more details.`);
-          } else {
-            setError(`Error: "${error.message}"`);
-          }
-        });
-    }
-  }, [uri, spec]);
+  }, [spec, setContent]);
 
   return (
     <div className="flex h-full">
@@ -66,10 +36,6 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
           value={content}
           extensions={[...EXTENSIONS, ...linters.map(l => l.linter)]}
           onUpdate={viewUpdate => {
-            if (error) {
-              return;
-            }
-
             viewUpdate.transactions.forEach(transaction => {
               transaction.effects.forEach(effect => {
                 if (effect.is(setDiagnosticsEffect)) {
@@ -84,6 +50,7 @@ const CodeEditor: FC<Props> = ({ spec, uri }) => {
             if (viewUpdate.docChanged) {
               setContent(viewUpdate.state.doc.toString());
               setChecking(true);
+              setError(undefined);
             }
           }}
         />
