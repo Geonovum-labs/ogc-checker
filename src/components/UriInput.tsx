@@ -11,13 +11,15 @@ interface Props {
 
 const UriInput: FC<Props> = ({ spec }) => {
   const [uri, setUri] = useState('');
+  const [fetching, setFetching] = useState(false);
 
-  const { setContent, setLinters, checking, setChecking, setError } = useChecker(
-    useShallow(state => pick(['setContent', 'setLinters', 'checking', 'setChecking', 'setError'], state))
+  const { setContent, setLinters, setError, checking } = useChecker(
+    useShallow(state => pick(['setContent', 'setLinters', 'setError', 'checking'], state))
   );
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
     event.preventDefault();
+    setFetching(true);
 
     fetch(uri)
       .then(response => handleResponse(response, uri))
@@ -27,12 +29,12 @@ const UriInput: FC<Props> = ({ spec }) => {
           : Promise.resolve({ content: responseText })
       )
       .then((input: SpecInput) => {
-        setChecking(false);
+        setFetching(false);
         setContent(formatDocument(input.content));
         setLinters(input.linters ?? spec.linters);
       })
       .catch(error => {
-        setChecking(false);
+        setFetching(false);
 
         if (error instanceof TypeError) {
           setError(`Possible network or CORS failure: "${error.message}". Check your browser console for more details.`);
@@ -52,7 +54,7 @@ const UriInput: FC<Props> = ({ spec }) => {
           value={uri}
           onChange={event => setUri(event.target.value)}
         />
-        <button type="submit" className="ml-2 px-2.5 py-1.5 text-sm font-semibold cursor-pointer" disabled={checking}>
+        <button type="submit" className="ml-2 px-2.5 py-1.5 text-sm font-semibold cursor-pointer" disabled={fetching || checking}>
           Load
         </button>
       </form>

@@ -31,7 +31,7 @@
   }
 
   button {
-    @apply px-2 py-1 rounded-md bg-blue-500;
+    @apply px-2 py-1 rounded-md bg-blue-500 disabled:opacity-50;
   }
 }
 
