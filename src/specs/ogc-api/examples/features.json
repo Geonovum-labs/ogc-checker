@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "title": "A sample API conforming to the draft standard OGC API - Features - Part 1: Core",
+    "title": "A sample API conforming to the standard OGC API - Features - Part 1 & Part 2",
     "version": "1.0.0",
     "contact": {
       "name": "Acme Corporation",
