@@ -29,7 +29,7 @@
     "luxon": "^3.7.1",
     "nimma": "^0.7.2",
     "react": "^19.0.0",
-    "react-dom": "^19.1.0",
+    "react-dom": "^19.1.1",
     "react-router-dom": "^7.7.1",
     "zustand": "^5.0.5"
   },
