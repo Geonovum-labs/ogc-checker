@@ -28,7 +28,7 @@
     "lucide-react": "^0.525.0",
     "luxon": "^3.7.1",
     "nimma": "^0.7.2",
-    "react": "^19.0.0",
+    "react": "^19.1.1",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.7.1",
     "zustand": "^5.0.5"
@@ -39,7 +39,7 @@
     "@types/json-schema-merge-allof": "^0.6.5",
     "@types/luxon": "^3.6.2",
     "@types/ramda": "^0.30.2",
-    "@types/react": "^19.1.8",
+    "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.7.0",
     "eslint": "^9.17.0",
