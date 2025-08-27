@@ -40,7 +40,7 @@
     "@types/luxon": "^3.7.1",
     "@types/ramda": "^0.31.0",
     "@types/react": "^19.1.11",
-    "@types/react-dom": "^19.1.7",
+    "@types/react-dom": "^19.1.8",
     "@vitejs/plugin-react": "^5.0.1",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.2.0",
