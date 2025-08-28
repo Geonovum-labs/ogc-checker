@@ -63,3 +63,50 @@ describe('/req/job-list/type-definition', () => {
     expect(violations).toContainViolation('/req/job-list/type-definition', 1);
   });
 });
+
+describe('/req/job-list/processID-definition', () => {
+  test('Fails when parameter is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    oasDoc.paths['/jobs'].get.parameters = oasDoc.paths['/jobs'].get.parameters.filter(
+      param => param.$ref !== '#/components/parameters/processID-query'
+    );
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/processID-definition', 1);
+  });
+
+  test('Fails when parameter has wrong type', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/processID-query', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters['processID-query'],
+      schema: {
+        type: 'array',
+        items: {
+          type: 'number',
+        },
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/processID-definition', 1);
+  });
+
+  test('Fails when parameter is required', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/processID-query', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters['processID-query'],
+      required: true,
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/processID-definition', 1);
+  });
+});

@@ -44,6 +44,28 @@ const processesJobList: RulesetDefinition = {
         },
       },
     },
+    '/req/job-list/processID-definition': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `processID`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'processID-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'processID',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
 

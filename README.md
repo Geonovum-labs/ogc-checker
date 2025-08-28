@@ -118,6 +118,8 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/rec/job-list/job-list-landing-page`         |    No    |   No   |         |
 | `/req/job-list/type-definition`               |   Yes    |  Yes   |         |
 | `/req/job-list/type-response`                 |    No    |   No   |         |
+| `/req/job-list/processID-mandatory`           |   Yes    |   No   |         |
+| `/req/job-list/processID-definition`          |   Yes    |  Yes   |         |
 | `/req/json/definition`                        |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core
