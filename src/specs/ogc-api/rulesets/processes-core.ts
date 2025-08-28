@@ -1,4 +1,4 @@
-import type { RulesetDefinition } from '@stoplight/spectral-core';
+import type { IFunctionResult, RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import hasParameter from '../../../functions/hasParameter';
@@ -98,7 +98,7 @@ const processesCore: RulesetDefinition = {
             name: 'limit',
             in: 'query',
           },
-          validateSchema: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]) => {
+          validateSchema: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]): IFunctionResult[] => {
             if (!schema.type) {
               return errorMessage('Schema is missing.', paramPath);
             }

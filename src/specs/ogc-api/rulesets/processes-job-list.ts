@@ -1,7 +1,9 @@
-import type { RulesetDefinition } from '@stoplight/spectral-core';
+import type { IFunctionResult, RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import hasParameter from '../../../functions/hasParameter';
+import { OpenAPIV3_0 } from '../../../openapi-types';
+import { errorMessage } from '../../../util';
 
 export const OGC_API_PROCESSES_JOB_LIST_URI = 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/job-list';
 
@@ -141,6 +143,55 @@ const processesJobList: RulesetDefinition = {
             schema: {
               type: 'integer',
             },
+          },
+        },
+      },
+    },
+    '/req/job-list/limit-definition': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `limit`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'limit-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'limit',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'integer',
+            },
+          },
+        },
+      },
+    },
+    '/req/job-list/limit-default-minimum-maximum': {
+      given: '$.paths[/jobs].get',
+      message: 'The values for `minimum`, `maximum` and `default` are only examples and MAY be changed.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'limit-default-minimum-maximum',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'limit',
+            in: 'query',
+          },
+          validateSchema: (schema: OpenAPIV3_0.SchemaObject, paramPath: (string | number)[]): IFunctionResult[] => {
+            if (schema.minimum !== undefined && schema.minimum < 0) {
+              return errorMessage('Value for "minimum" must be at least 0.', paramPath);
+            }
+
+            if (schema.maximum !== undefined && schema.maximum < 1) {
+              return errorMessage('Value for "maximum" must be at least 1.', paramPath);
+            }
+
+            if (schema.default !== undefined && typeof schema.default === 'number' && schema.default < 1) {
+              return errorMessage('Value for "default" must be at least 1.', paramPath);
+            }
+
+            return [];
           },
         },
       },

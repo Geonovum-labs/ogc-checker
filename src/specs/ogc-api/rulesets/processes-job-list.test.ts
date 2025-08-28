@@ -287,3 +287,100 @@ describe('/req/job-list/duration-definition', () => {
     expect(violations).toContainViolation('/req/job-list/duration-definition#maxDuration', 1);
   });
 });
+
+describe('/req/job-list/limit-definition', () => {
+  test('Fails when parameter is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    oasDoc.paths['/jobs'].get.parameters = oasDoc.paths['/jobs'].get.parameters.filter(
+      param => param.$ref !== '#/components/parameters/limit'
+    );
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/limit-definition', 1);
+  });
+
+  test('Fails when parameter has wrong type', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/limit', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.limit,
+      schema: {
+        type: 'string',
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/limit-definition', 1);
+  });
+
+  test('Fails when parameter is required', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/limit', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.limit,
+      required: true,
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/limit-definition', 1);
+  });
+});
+
+describe('/req/job-list/limit-definition', () => {
+  test('Fails when parameter has invalid minimum', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/limit', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.limit,
+      schema: {
+        ...oasDoc.components.parameters.limit.schema,
+        minimum: -1,
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/limit-default-minimum-maximum', 1);
+  });
+
+  test('Fails when parameter has invalid maximum', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/limit', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.limit,
+      schema: {
+        ...oasDoc.components.parameters.limit.schema,
+        maximum: 0,
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/limit-default-minimum-maximum', 1);
+  });
+
+  test('Fails when parameter has invalid default', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/limit', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.limit,
+      schema: {
+        ...oasDoc.components.parameters.limit.schema,
+        default: 0,
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/limit-default-minimum-maximum', 1);
+  });
+});

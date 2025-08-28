@@ -127,6 +127,9 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/job-list/datetime-response`             |    No    |   No   |         |
 | `/req/job-list/duration-definition`           |   Yes    |  Yes   |         |
 | `/req/job-list/duration-response`             |    No    |   No   |         |
+| `/req/job-list/limit-definition`              |   Yes    |  Yes   |         |
+| `/req/job-list/limit-default-minimum-maximum` |   Yes    |  Yes   |         |
+| `/req/job-list/limit-response`                |    No    |   No   |         |
 | `/req/json/definition`                        |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core

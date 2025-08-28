@@ -1,5 +1,5 @@
 import { IFunctionResult, RulesetFunction } from '@stoplight/spectral-core';
-import { equals, omit } from 'ramda';
+import { equals, isEmpty, omit } from 'ramda';
 import { OpenAPIV3_0 } from '../openapi-types';
 import { errorMessage, matchSchema } from '../util';
 
@@ -47,11 +47,15 @@ const hasParameter: RulesetFunction<OpenAPIV3_0.OperationObject, Options> = (ope
   const paramPath = [...context.path, 'parameters', paramIndex];
 
   if (options.validateSchema) {
-    return options.validateSchema(parameter.schema ?? {}, paramPath);
+    const errors = options.validateSchema(parameter.schema ?? {}, paramPath);
+
+    if (!isEmpty(errors)) {
+      return errors;
+    }
   } else if (spec.schema) {
     const errors = matchSchema(parameter.schema ?? {}, spec.schema);
 
-    if (errors.length > 0) {
+    if (!isEmpty(errors)) {
       return errorMessage(`Parameter schema is not compatible. ` + errors.join(' '), [...paramPath, 'schema']);
     }
   }
