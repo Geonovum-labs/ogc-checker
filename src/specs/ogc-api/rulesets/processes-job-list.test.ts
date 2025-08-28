@@ -201,3 +201,89 @@ describe('/req/job-list/datetime-definition', () => {
     expect(violations).toContainViolation('/req/job-list/datetime-definition', 1);
   });
 });
+
+describe('/req/job-list/duration-definition', () => {
+  test('Fails when parameter is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    oasDoc.paths['/jobs'].get.parameters = oasDoc.paths['/jobs'].get.parameters.filter(
+      param => param.$ref !== '#/components/parameters/minDuration'
+    );
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/duration-definition#minDuration', 1);
+  });
+
+  test('Fails when parameter has wrong type', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/minDuration', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.minDuration,
+      schema: {
+        type: 'string',
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/duration-definition#minDuration', 1);
+  });
+
+  test('Fails when parameter is required', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/minDuration', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.minDuration,
+      required: true,
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/duration-definition#minDuration', 1);
+  });
+
+  test('Fails when parameter is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    oasDoc.paths['/jobs'].get.parameters = oasDoc.paths['/jobs'].get.parameters.filter(
+      param => param.$ref !== '#/components/parameters/maxDuration'
+    );
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/duration-definition#maxDuration', 1);
+  });
+
+  test('Fails when parameter has wrong type', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/maxDuration', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.maxDuration,
+      schema: {
+        type: 'string',
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/duration-definition#maxDuration', 1);
+  });
+
+  test('Fails when parameter is required', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/maxDuration', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.maxDuration,
+      required: true,
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/duration-definition#maxDuration', 1);
+  });
+});

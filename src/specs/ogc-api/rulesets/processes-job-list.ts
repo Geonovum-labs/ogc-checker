@@ -107,6 +107,44 @@ const processesJobList: RulesetDefinition = {
         },
       },
     },
+    '/req/job-list/duration-definition#minDuration': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `minDuration`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'duration-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'minDuration',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'integer',
+            },
+          },
+        },
+      },
+    },
+    '/req/job-list/duration-definition#maxDuration': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `maxDuration`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'duration-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'maxDuration',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'integer',
+            },
+          },
+        },
+      },
+    },
   },
 };
 
