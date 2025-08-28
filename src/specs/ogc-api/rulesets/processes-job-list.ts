@@ -198,8 +198,8 @@ const processesJobList: RulesetDefinition = {
       },
     },
     '/req/job-list/job-list-success': {
-      given: '$.paths[/jobs].get',
-      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      given: '$.paths[/jobs].get.responses',
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`. {{error}}',
       documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'job-list-success',
       severity: 'error',
       then: [
