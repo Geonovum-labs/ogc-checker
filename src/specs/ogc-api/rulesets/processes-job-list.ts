@@ -1,6 +1,7 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
+import hasParameter from '../../../functions/hasParameter';
 
 export const OGC_API_PROCESSES_JOB_LIST_URI = 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/job-list';
 
@@ -19,6 +20,28 @@ const processesJobList: RulesetDefinition = {
       then: {
         field: '/jobs.get',
         function: truthy,
+      },
+    },
+    '/req/job-list/type-definition': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `type`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'type-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'type',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
       },
     },
   },

@@ -114,6 +114,10 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/core/process-exception/no-such-process` |   Yes    |  Yes   |         |
 | `/req/core/process-execute-op`                |   Yes    |  Yes   |         |
 | `/req/core/process-execute-request`           |   Yes    |  Yes   |         |
+| `/req/job-list/job-list-op`                   |   Yes    |  Yes   |         |
+| `/rec/job-list/job-list-landing-page`         |    No    |   No   |         |
+| `/req/job-list/type-definition`               |   Yes    |  Yes   |         |
+| `/req/job-list/type-response`                 |    No    |   No   |         |
 | `/req/json/definition`                        |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core
