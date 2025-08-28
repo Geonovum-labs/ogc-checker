@@ -66,6 +66,28 @@ const processesJobList: RulesetDefinition = {
         },
       },
     },
+    '/req/job-list/status-definition': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `status`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'status-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'status',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
 
