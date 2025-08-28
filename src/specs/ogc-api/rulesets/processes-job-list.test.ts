@@ -384,3 +384,21 @@ describe('/req/job-list/limit-definition', () => {
     expect(violations).toContainViolation('/req/job-list/limit-default-minimum-maximum', 1);
   });
 });
+
+describe('/req/job-list/job-list-success', () => {
+  test('Fails when job list success response is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+    delete (oasDoc.paths['/jobs'].get.responses as Record<string, unknown>)['200'];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/job-list-success', 1);
+  });
+
+  test('Fails when job list response schema is invalid', async () => {
+    const oasDoc = clone(exampleDoc);
+    (oasDoc.components.schemas.jobList as Record<string, unknown>).required = [];
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/job-list-success', 1);
+  });
+});

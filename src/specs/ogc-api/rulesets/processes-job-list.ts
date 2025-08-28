@@ -2,6 +2,7 @@ import type { IFunctionResult, RulesetDefinition } from '@stoplight/spectral-cor
 import { oas3_0 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 import hasParameter from '../../../functions/hasParameter';
+import hasSchemaMatch from '../../../functions/hasSchemaMatch';
 import { OpenAPIV3_0 } from '../../../openapi-types';
 import { errorMessage } from '../../../util';
 
@@ -195,6 +196,26 @@ const processesJobList: RulesetDefinition = {
           },
         },
       },
+    },
+    '/req/job-list/job-list-success': {
+      given: '$.paths[/jobs].get',
+      message: 'A successful execution of the operation SHALL be reported as a response with a HTTP status code `200`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'job-list-success',
+      severity: 'error',
+      then: [
+        {
+          field: '200',
+          function: truthy,
+        },
+        {
+          field: '200',
+          function: hasSchemaMatch,
+          functionOptions: {
+            schemaUri:
+              'https://raw.githubusercontent.com/opengeospatial/ogcapi-processes/master/openapi/schemas/processes-core/jobList.yaml',
+          },
+        },
+      ],
     },
   },
 };

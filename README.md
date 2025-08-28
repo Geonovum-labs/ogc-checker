@@ -130,6 +130,7 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/job-list/limit-definition`              |   Yes    |  Yes   |         |
 | `/req/job-list/limit-default-minimum-maximum` |   Yes    |  Yes   |         |
 | `/req/job-list/limit-response`                |    No    |   No   |         |
+| `/req/job-list/job-list-success`              |   Yes    |  Yes   |         |
 | `/req/json/definition`                        |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core
