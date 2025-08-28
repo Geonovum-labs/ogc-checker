@@ -88,6 +88,25 @@ const processesJobList: RulesetDefinition = {
         },
       },
     },
+    '/req/job-list/datetime-definition': {
+      given: '$.paths[/jobs].get',
+      message: 'The operation SHALL support a parameter `datetime`.',
+      documentationUrl: OGC_API_PROCESSES_JOB_LIST_DOC_URI + 'datetime-definition',
+      severity: 'error',
+      then: {
+        function: hasParameter,
+        functionOptions: {
+          spec: {
+            name: 'datetime',
+            in: 'query',
+            required: false,
+            schema: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
   },
 };
 

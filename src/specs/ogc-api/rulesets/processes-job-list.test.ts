@@ -157,3 +157,47 @@ describe('/req/job-list/status-definition', () => {
     expect(violations).toContainViolation('/req/job-list/status-definition', 1);
   });
 });
+
+describe('/req/job-list/datetime-definition', () => {
+  test('Fails when parameter is absent', async () => {
+    const oasDoc = clone(exampleDoc);
+
+    oasDoc.paths['/jobs'].get.parameters = oasDoc.paths['/jobs'].get.parameters.filter(
+      param => param.$ref !== '#/components/parameters/datetime'
+    );
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/datetime-definition', 1);
+  });
+
+  test('Fails when parameter has wrong type', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/datetime', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.datetime,
+      schema: {
+        type: 'number',
+      },
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/datetime-definition', 1);
+  });
+
+  test('Fails when parameter is required', async () => {
+    const oasDoc = clone(exampleDoc);
+    const paramIndex = findIndex(param => param.$ref === '#/components/parameters/datetime', oasDoc.paths['/jobs'].get.parameters);
+
+    (oasDoc.paths['/jobs'].get.parameters[paramIndex] as Record<string, unknown>) = {
+      ...oasDoc.components.parameters.datetime,
+      required: true,
+    };
+
+    const violations = await spectral.run(oasDoc);
+
+    expect(violations).toContainViolation('/req/job-list/datetime-definition', 1);
+  });
+});

@@ -123,6 +123,8 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/job-list/processid-response`            |    No    |   No   |         |
 | `/req/job-list/status-definition`             |   Yes    |  Yes   |         |
 | `/req/job-list/status-response`               |    No    |   No   |         |
+| `/req/job-list/datetime-definition`           |   Yes    |  Yes   |         |
+| `/req/job-list/datetime-response`             |    No    |   No   |         |
 | `/req/json/definition`                        |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core
