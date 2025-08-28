@@ -714,7 +714,7 @@
           "jobs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/job"
+              "$ref": "#/components/schemas/statusInfo"
             }
           },
           "links": {
@@ -1218,58 +1218,6 @@
           }
         ]
       },
-      "job": {
-        "type": "object",
-        "required": ["jobID", "status", "type"],
-        "properties": {
-          "processID": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["process"]
-          },
-          "jobID": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/statusCode"
-          },
-          "message": {
-            "type": "string"
-          },
-          "exception": {
-            "$ref": "#/components/schemas/exception"
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "started": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "finished": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "progress": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 100
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/link"
-            }
-          }
-        }
-      },
       "ogcapppkg": {
         "type": "object",
         "required": ["executionUnit"],
@@ -1374,6 +1322,79 @@
               "mutable": {
                 "type": "boolean",
                 "default": true
+              }
+            }
+          }
+        ]
+      },
+      "statusInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/descriptionType"
+          },
+          {
+            "type": "object",
+            "required": ["id", "status", "type"],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "processID": {
+                "type": "string",
+                "format": "uri"
+              },
+              "type": {
+                "type": "string",
+                "example": ["process", "wps", "openeo"]
+              },
+              "request": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/components/schemas/link"
+                  }
+                ]
+              },
+              "status": {
+                "$ref": "#/components/schemas/statusCode"
+              },
+              "message": {
+                "type": "string"
+              },
+              "exception": {
+                "$ref": "#/components/schemas/exception"
+              },
+              "created": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "started": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "finished": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "progress": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/link"
+                }
               }
             }
           }
@@ -1733,7 +1754,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/job"
+              "$ref": "#/components/schemas/statusInfo"
             }
           }
         }

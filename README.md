@@ -94,27 +94,72 @@ Specification: https://docs.ogc.org/is/18-058r1/18-058r1.html
 Version: 2.0 (Draft)\
 Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 
-| Requirement                                   | Testable | Tested | Remarks |
-| --------------------------------------------- | :------: | :----: | ------- |
-| `/req/core/landingpage-op`                    |   Yes    |  Yes   |         |
-| `/req/core/landingpage-success`               |   Yes    |  Yes   |         |
-| `/req/core/api-definition-op`                 |    No    |   No   |         |
-| `/req/core/api-definition-success`            |    No    |   No   |         |
-| `/req/core/conformance-op`                    |   Yes    |  Yes   |         |
-| `/req/core/conformance-success`               |   Yes    |  Yes   |         |
-| `/req/core/http`                              |    No    |   No   |         |
-| `/req/core/process-list`                      |   Yes    |  Yes   |         |
-| `/req/core/pl-limit-definition`               |   Yes    |  Yes   |         |
-| `/req/core/pl-limit-response`                 |    No    |   No   |         |
-| `/req/core/process-list-success`              |   Yes    |  Yes   |         |
-| `/req/core/pl-links`                          |    No    |   No   |         |
-| `/req/core/process-summary-links`             |    No    |   No   |         |
-| `/req/core/process-description`               |   Yes    |  Yes   |         |
-| `/req/core/process-description-success`       |   Yes    |  Yes   |         |
-| `/req/core/process-exception/no-such-process` |   Yes    |  Yes   |         |
-| `/req/core/process-execute-op`                |   Yes    |  Yes   |         |
-| `/req/core/process-execute-request`           |   Yes    |  Yes   |         |
-| `/req/json/definition`                        |   Yes    |  Yes   |         |
+| Requirement                                                     | Testable | Tested | Remarks |
+| --------------------------------------------------------------- | :------: | :----: | ------- |
+| `/req/core/landingpage-op`                                      |   Yes    |  Yes   |         |
+| `/req/core/landingpage-success`                                 |   Yes    |  Yes   |         |
+| `/req/core/api-definition-op`                                   |    No    |   No   |         |
+| `/req/core/api-definition-success`                              |    No    |   No   |         |
+| `/req/core/conformance-op`                                      |   Yes    |  Yes   |         |
+| `/req/core/conformance-success`                                 |   Yes    |  Yes   |         |
+| `/req/core/http`                                                |    No    |   No   |         |
+| `/req/core/process-list`                                        |   Yes    |  Yes   |         |
+| `/req/core/pl-limit-definition`                                 |   Yes    |  Yes   |         |
+| `/req/core/pl-limit-response`                                   |    No    |   No   |         |
+| `/req/core/process-list-success`                                |   Yes    |  Yes   |         |
+| `/req/core/pl-links`                                            |    No    |   No   |         |
+| `/req/core/process-summary-links`                               |    No    |   No   |         |
+| `/req/core/process-description`                                 |   Yes    |  Yes   |         |
+| `/req/core/process-description-success`                         |   Yes    |  Yes   |         |
+| `/req/core/process-exception/no-such-process`                   |   Yes    |  Yes   |         |
+| `/req/core/process-execute-op`                                  |   Yes    |  Yes   |         |
+| `/req/core/process-execute-request`                             |   Yes    |  Yes   |         |
+| `/req/core/process-execute-input-inline-object`                 |    ?     |   No   |         |
+| `/req/core/process-execute-input-multiple-types`                |    ?     |   No   |         |
+| `/req/core/process-execute-input-inline-binary`                 |    ?     |   No   |         |
+| `/req/core/process-execute-input-inline-bbox`                   |    ?     |   No   |         |
+| `/req/core/process-execute-input-validation`                    |    ?     |   No   |         |
+| `/req/core/process-execute-default-execution-mode`              |    ?     |   No   |         |
+| `/req/core/process-execute-auto-execution-mode`                 |    ?     |   No   |         |
+| `/req/core/process-execute-default-outputs`                     |    ?     |   No   |         |
+| `/req/core/process-execute-sync-one`                            |    ?     |   No   |         |
+| `/req/core/process-execute-sync-one-default-content`            |    ?     |   No   |         |
+| `/req/core/process-execute-sync-many-json`                      |    ?     |   No   |         |
+| `/req/core/job-results-success-sync`                            |    No    |   No   |         |
+| `/req/core/process-execute-success-async`                       |   Yes    |   No   |         |
+| `/req/core/job`                                                 |   Yes    |   No   |         |
+| `/req/core/job-success`                                         |   Yes    |   No   |         |
+| `/req/core/job-exception-no-such-job`                           |   Yes    |   No   |         |
+| `/req/core/job-result`                                          |   Yes    |   No   |         |
+| `/req/core/job-results`                                         |   Yes    |   No   |         |
+| `/req/core/job-results-param-outputs`                           |   Yes    |   No   |         |
+| `/req/core/job-results-param-outputs-response`                  |    No    |   No   |         |
+| `/req/core/job-results-param-outputs-omit`                      |    No    |   No   |         |
+| `/req/core/job-results-param-outputs-empty`                     |   Yes    |   No   |         |
+| `/req/core/job-results-async-one`                               |   Yes    |   No   |         |
+| `/req/core/job-results-async-many`                              |   Yes    |   No   |         |
+| `/req/core/job-results-exception/invalid-query-parameter-value` |   Yes    |   No   |         |
+| `/req/core/job-results-exception/no-such-job`                   |   Yes    |   No   |         |
+| `/req/core/job-results-exception/results-not-ready`             |   Yes    |   No   |         |
+| `/req/core/job-results-failed`                                  |   Yes    |   No   |         |
+| `/req/job-list/job-list-op`                                     |   Yes    |  Yes   |         |
+| `/rec/job-list/job-list-landing-page`                           |    No    |   No   |         |
+| `/req/job-list/type-definition`                                 |   Yes    |  Yes   |         |
+| `/req/job-list/type-response`                                   |    No    |   No   |         |
+| `/req/job-list/processID-mandatory`                             |   Yes    |   No   |         |
+| `/req/job-list/processID-definition`                            |   Yes    |  Yes   |         |
+| `/req/job-list/processid-response`                              |    No    |   No   |         |
+| `/req/job-list/status-definition`                               |   Yes    |  Yes   |         |
+| `/req/job-list/status-response`                                 |    No    |   No   |         |
+| `/req/job-list/datetime-definition`                             |   Yes    |  Yes   |         |
+| `/req/job-list/datetime-response`                               |    No    |   No   |         |
+| `/req/job-list/duration-definition`                             |   Yes    |  Yes   |         |
+| `/req/job-list/duration-response`                               |    No    |   No   |         |
+| `/req/job-list/limit-definition`                                |   Yes    |  Yes   |         |
+| `/req/job-list/limit-default-minimum-maximum`                   |   Yes    |  Yes   |         |
+| `/req/job-list/limit-response`                                  |    No    |   No   |         |
+| `/req/job-list/job-list-success`                                |   Yes    |  Yes   |         |
+| `/req/json/definition`                                          |   Yes    |  Yes   |         |
 
 ## OGC API - Records - Part 1: Core
 
