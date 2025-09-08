@@ -26,7 +26,7 @@
     "clsx": "^2.1.1",
     "json-schema-merge-allof": "^0.8.1",
     "lucide-react": "^0.542.0",
-    "luxon": "^3.7.1",
+    "luxon": "^3.7.2",
     "nimma": "^0.7.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
