@@ -21,6 +21,16 @@ const featureCollection = {
 };
 
 describe('/req/core/schema-valid', () => {
+  test('Fails when required properties are absent on feature', async () => {
+    const violations = await spectral.run({
+      ...feature,
+      conformsTo: [JSON_FG_CORE_URI],
+      geometry: undefined,
+    });
+
+    expect(violations).toContainViolation('/req/core/schema-valid', 1, /Object must have required property "geometry"\.$/);
+  });
+
   test('Fails when required properties are absent on feature collection', async () => {
     const violations = await spectral.run({
       ...featureCollection,
