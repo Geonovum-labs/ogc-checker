@@ -25,10 +25,10 @@ describe('/req/core/schema-valid', () => {
     const violations = await spectral.run({
       ...feature,
       conformsTo: [JSON_FG_CORE_URI],
-      place: undefined,
+      geometry: undefined,
     });
 
-    expect(violations).toContainViolation('/req/core/schema-valid', 1, /Object must have required property "place"\.$/);
+    expect(violations).toContainViolation('/req/core/schema-valid', 1, /Object must have required property "geometry"\.$/);
   });
 
   test('Fails when required properties are absent on feature collection', async () => {
@@ -605,9 +605,7 @@ describe('/req/core/geometry-collection', () => {
       },
     });
 
-    // TODO: Change back once schema issue is fixed: https://github.com/opengeospatial/ogc-feat-geo-json/issues/134
-    // expect(violations).toContainViolation('/req/core/place');
-    expect(violations.length).toBe(7);
+    expect(violations).toContainViolation('/req/core/geometry-collection');
   });
 
   test('Fails when a Prism base contains a "coordRefSys" member.', async () => {
@@ -683,14 +681,13 @@ describe('/req/core/fallback', () => {
     const violations = await spectral.run({
       ...feature,
       conformsTo: [JSON_FG_CORE_URI],
+      coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
       place: {
         type: GeometryTypes.POINT,
-        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
         coordinates: [10, 20],
       },
       geometry: {
         type: GeometryTypes.POINT,
-        coordRefSys: 'http://www.opengis.net/def/crs/EPSG/0/27700',
         coordinates: [10, 20],
       },
     });
