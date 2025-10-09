@@ -16,7 +16,9 @@ const processesJson: RulesetDefinition = {
       given: [
         '$.paths["/"].get.responses.200.content',
         '$.paths["/conformance"].get.responses.200.content',
-        '$.paths[?(@property.match(/^\\/processes(\\/[^/]+)?$/))].get.responses.200.content',
+        '$.paths[?(@property.match(/^\\/processes$/))].get.responses.200.content',
+        '$.paths[?(@property.match(/^\\/processes\\/[^/]+$/))].get.responses.200.content',
+        '$.paths[?(@property.match(/^\\/processes\\/[^/]+\\/execution$/))].post.responses.200.content',
         '$.paths[?(@property.match(/^\\/jobs\\/[^/]+$/))].get.responses.200.content',
       ],
       message: '200-responses of the server SHALL support the "application/json" media type. {{error}}',
