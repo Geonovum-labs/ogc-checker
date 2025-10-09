@@ -20,6 +20,7 @@ const processOgcProcessDescription: RulesetDefinition = {
       then: {
         function: hasSchemaMatch,
         functionOptions: {
+          // TODO: Upgrade to v2.0 schema
           schemaUri: 'https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/process.yaml',
         },
       },

@@ -149,6 +149,7 @@ Specification: https://docs.ogc.org/DRAFTS/18-062r3.html
 | `/req/core/job-results-exception/results-not-ready`             |   Yes    |   No   |         |
 | `/req/core/job-results-failed`                                  |   Yes    |   No   |         |
 | `/req/ogc-process-description/json-encoding`                    |   Yes    |  Yes   |         |
+| `/req/ogc-process-description/links`                            |    No    |   No   |         |
 | `/req/ogc-process-description/inputs-def`                       |    ?     |   No   |         |
 | `/req/ogc-process-description/input-def`                        |    ?     |   No   |         |
 | `/req/ogc-process-description/input-binary`                     |    ?     |   No   |         |
