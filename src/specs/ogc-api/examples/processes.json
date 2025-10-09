@@ -233,7 +233,7 @@
       },
       "link": {
         "type": "object",
-        "required": ["href"],
+        "required": ["href", "rel"],
         "properties": {
           "href": {
             "type": "string"
@@ -1334,7 +1334,7 @@
           },
           {
             "type": "object",
-            "required": ["id", "status", "type"],
+            "required": ["id", "status", "processingEntityType"],
             "properties": {
               "id": {
                 "type": "string"
@@ -1343,9 +1343,9 @@
                 "type": "string",
                 "format": "uri"
               },
-              "type": {
+              "processingEntityType": {
                 "type": "string",
-                "example": ["process", "wps", "openeo"]
+                "example": ["ogc-api-processes", "openeo"]
               },
               "request": {
                 "oneOf": [
