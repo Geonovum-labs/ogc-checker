@@ -8,4 +8,16 @@ export default defineConfig({
   build: {
     outDir: 'docs',
   },
+  test: {
+    environment: 'node',
+    setupFiles: ['src/vitest-matchers.ts'],
+    deps: {
+      inline: ['@geonovum/standards-checker'],
+      optimizer: {
+        ssr: {
+          include: ['@geonovum/standards-checker'],
+        },
+      },
+    },
+  },
 });
