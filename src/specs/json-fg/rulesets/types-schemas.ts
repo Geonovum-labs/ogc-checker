@@ -3,14 +3,14 @@ import { isFeatureTypePresent } from '../functions/isFeatureTypePresent';
 import { isValidConformanceTypesSchemas } from '../functions/isValidConformanceTypesSchemas';
 import { isValidGeometryDimension } from '../functions/isValidGeometryDimension';
 
-export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/types-schemas';
+export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/types-schemas';
 
-export const JSON_FG_TYPES_SCHEMAS_CURIE = '[ogc-json-fg-1-0.2:types-schemas]';
+export const JSON_FG_TYPES_SCHEMAS_CURIE = '[ogc-json-fg-1-0.3:types-schemas]';
 
 export const JSON_FG_TYPES_SCHEMAS_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#types-schemas_';
 
 const jsonFgTypesSchemas: RulesetDefinition = {
-  documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/types-schemas',
+  documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/types-schemas',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Feature Types and Schemas"',
   rules: {
     '/req/types-schemas/metadata': {

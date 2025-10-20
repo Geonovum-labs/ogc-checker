@@ -11,16 +11,16 @@ import { isPlaceAndGeometryNotEqual } from '../functions/isPlaceAndGeometryNotEq
 import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
 import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
 
-export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
+export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/core';
 
-export const JSON_FG_CORE_CURIE = '[ogc-json-fg-1-0.2:core]';
+export const JSON_FG_CORE_CURIE = '[ogc-json-fg-1-0.3:core]';
 
 export const JSON_FG_CORE_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#core_';
 
 const isUnbounded = (input: unknown) => typeof input === 'string' && input === '..';
 
 const jsonFgCore: RulesetDefinition = {
-  documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/core',
+  documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/core',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Core"',
   rules: {
     '/req/core/schema-valid': {
