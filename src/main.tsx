@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { createRouter } from '@geonovum/standards-checker';
 import specs from './specs';
-import './index.css';
+import '@geonovum/standards-checker/ui/index.css';
 
 const router = createRouter(specs);
 
