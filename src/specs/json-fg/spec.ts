@@ -1,6 +1,6 @@
 import { spectralLinter } from '../../spectral';
 import { Spec } from '../../types';
-import example from './example.json';
+import example from './examples/feature.json';
 import rulesets from './rulesets';
 
 const linterName = (confClass: string) => confClass.replace('http://www.opengis.net/spec/', '');

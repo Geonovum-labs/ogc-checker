@@ -1,19 +1,15 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import { falsy, truthy } from '@stoplight/spectral-functions';
+import { falsy } from '@stoplight/spectral-functions';
 import { DateTime } from 'luxon';
 import { isValidDate } from '../../../functions/date';
 import { isValidDateTime } from '../../../functions/datetime';
-import { includes } from '../../../functions/includes';
-import remoteSchema, { SchemaFunctionResult } from '../../../functions/remoteSchema';
+import remoteSchema from '../../../functions/remoteSchema';
 import { hasPositionRange } from '../functions/hasPositionRange';
 import { hasSameDimensions } from '../functions/hasSameDimensions';
 import { isPlaceAndGeometryNotEqual } from '../functions/isPlaceAndGeometryNotEqual';
-import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
 import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
 
 export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/core';
-
-export const JSON_FG_CORE_CURIE = '[ogc-json-fg-1-0.3:core]';
 
 export const JSON_FG_CORE_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#core_';
 
@@ -25,69 +21,44 @@ const jsonFgCore: RulesetDefinition = {
   rules: {
     '/req/core/schema-valid': {
       given: '$',
-      message:
-        'The JSON document SHALL validate against the JSON Schema of a JSON-FG feature (a JSON-FG feature) or the JSON Schema of a JSON-FG feature collection (a JSON-FG feature collection). {{error}}.',
+      message: 'The JSON object SHALL validate against the JSON Schema of a JSON-FG root object. {{error}}.',
       documentationUrl: JSON_FG_CORE_DOC_URI + 'schema-valid',
       severity: 'error',
       then: [
         {
           function: remoteSchema,
           functionOptions: {
-            schema: (input: unknown): SchemaFunctionResult => {
-              if (input && typeof input === 'object' && 'type' in input) {
-                switch (input.type) {
-                  case 'Feature':
-                    return { schema: { $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json' } };
-                  case 'FeatureCollection':
-                    return { schema: { $ref: 'https://beta.schemas.opengis.net/json-fg/featurecollection.json' } };
-                  default:
-                    return {
-                      error: {
-                        message: 'Property `type` must contain "Feature" or "FeatureCollection".',
-                        path: ['type'],
-                      },
-                    };
-                }
-              } else if (typeof input === 'object') {
-                return {
-                  error: {
-                    message: 'Object must have required property "type".',
-                  },
-                };
-              } else {
-                return {
-                  error: {
-                    message: 'Document is not an object.',
-                  },
-                };
-              }
+            schema: {
+              type: 'object',
+              discriminator: { propertyName: 'type' },
+              required: ['conformsTo'],
+              properties: {
+                conformsTo: { $ref: 'https://beta.schemas.opengis.net/json-fg/conformsto.json' },
+              },
+              oneOf: [
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/feature.json' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/featurecollection.json' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/Point' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiPoint' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/LineString' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiLineString' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/Polygon' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiPolygon' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/GeometryCollection' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/Polyhedron' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiPolyhedron' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/Prism' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiPrism' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/CircularString' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/CompoundCurve' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/CurvePolygon' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiCurve' },
+                { $ref: 'https://beta.schemas.opengis.net/json-fg/geometry-object.json#/$defs/MultiSurface' },
+              ],
             },
           },
         },
       ],
-    },
-    '/req/core/metadata#A': {
-      given: '$',
-      message: 'The JSON document SHALL include a "conformsTo" member.',
-      documentationUrl: JSON_FG_CORE_DOC_URI + 'metadata',
-      severity: 'error',
-      then: {
-        field: 'conformsTo',
-        function: truthy,
-      },
-    },
-    '/req/core/metadata#B': {
-      given: '$',
-      message: `The "conformsTo" member of the JSON document SHALL include at least one of the two following values: "${JSON_FG_CORE_URI}", "${JSON_FG_CORE_CURIE}".`,
-      documentationUrl: JSON_FG_CORE_DOC_URI + 'metadata',
-      severity: 'error',
-      then: {
-        field: 'conformsTo',
-        function: includes,
-        functionOptions: {
-          anyOf: [JSON_FG_CORE_URI, JSON_FG_CORE_CURIE],
-        },
-      },
     },
     '/req/core/metadata#C': {
       given: '$.features.*',
@@ -99,6 +70,7 @@ const jsonFgCore: RulesetDefinition = {
         function: falsy,
       },
     },
+    // TODO Remove once https://github.com/opengeospatial/ogc-feat-geo-json/issues/151 is fixed
     '/req/core/interval#B': {
       given: '$..time.interval',
       documentationUrl: JSON_FG_CORE_DOC_URI + 'interval',
@@ -119,6 +91,7 @@ const jsonFgCore: RulesetDefinition = {
         },
       },
     },
+    // TODO Remove once https://github.com/opengeospatial/ogc-feat-geo-json/issues/151 is fixed
     '/req/core/interval#C': {
       given: '$..time.interval',
       documentationUrl: JSON_FG_CORE_DOC_URI + 'interval',
@@ -133,6 +106,33 @@ const jsonFgCore: RulesetDefinition = {
             return [
               {
                 message: 'If the start is a timestamp, the end SHALL be a timestamp, too, or "..".',
+              },
+            ];
+          }
+        },
+      },
+    },
+    '/req/core/interval#D': {
+      given: '$..time.interval',
+      documentationUrl: JSON_FG_CORE_DOC_URI + 'interval',
+      severity: 'error',
+      then: {
+        function: input => {
+          if (
+            !Array.isArray(input) ||
+            (!isValidDate(input[0]) && !isValidDateTime(input[0])) ||
+            (!isValidDate(input[1]) && !isValidDateTime(input[1]))
+          ) {
+            return;
+          }
+
+          const intervalStart = DateTime.fromISO(input[0]);
+          const intervalEnd = DateTime.fromISO(input[1]);
+
+          if (intervalStart > intervalEnd) {
+            return [
+              {
+                message: 'If neither the start and the end are "..", the start SHALL be earlier than or equal to the end.',
               },
             ];
           }
@@ -159,7 +159,7 @@ const jsonFgCore: RulesetDefinition = {
             return [
               {
                 message:
-                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "date" and a "timestamp" member, the full-date parts SHALL be identical.',
+                  'If the "time" value in any JSON-FG feature includes both a "date" and a "timestamp" member, the full-date parts SHALL be identical.',
               },
             ];
           }
@@ -193,7 +193,7 @@ const jsonFgCore: RulesetDefinition = {
             return [
               {
                 message:
-                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "timestamp" and an "interval" member with start/end dates, the interval SHALL contain the date of the timestamp.',
+                  'If the "time" value in any JSON-FG feature includes both a "timestamp" and an "interval" member with start/end dates, the interval SHALL contain the date of the timestamp, or in case start and end of the interval are identical, the date of the timestamp SHALL be identical to the date of both interval ends.',
               },
             ];
           }
@@ -227,7 +227,7 @@ const jsonFgCore: RulesetDefinition = {
             return [
               {
                 message:
-                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "timestamp" and an "interval" member with start/end timestamps, the interval SHALL contain the timestamp.',
+                  'If the "time" value in any JSON-FG feature includes both a "timestamp" and an "interval" member with start/end timestamps, the interval SHALL contain the timestamp, or in case start and end of the interval are identical, the timestamp SHALL be identical to both interval ends.',
               },
             ];
           }
@@ -261,7 +261,7 @@ const jsonFgCore: RulesetDefinition = {
             return [
               {
                 message:
-                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "date" and an "interval" member with start/end dates, the interval SHALL contain the date.',
+                  'If the "time" value in any JSON-FG feature includes both a "date" and an "interval" member with start/end dates, the interval SHALL contain the date, or in case start and end of the interval are identical, the date SHALL be identical to both interval ends.',
               },
             ];
           }
@@ -295,7 +295,7 @@ const jsonFgCore: RulesetDefinition = {
             return [
               {
                 message:
-                  'If the "time" object in any JSON-FG feature in the JSON document includes both a "date" and an "interval" member with start/end timestamps, the interval SHALL include timestamps on the date.',
+                  'If the "time" value in any JSON-FG feature includes both a "date" and an "interval" member with start/end timestamps, the interval SHALL include timestamps on the date, or in case start and end of the interval are identical, the date SHALL be identical to the date of both interval ends.',
               },
             ];
           }
@@ -325,14 +325,6 @@ const jsonFgCore: RulesetDefinition = {
       severity: 'error',
       then: {
         function: isValidPlaceCrs,
-      },
-    },
-    '/req/core/geometry-collection': {
-      given: '$..place',
-      documentationUrl: JSON_FG_CORE_DOC_URI + 'geometry-collection',
-      severity: 'error',
-      then: {
-        function: isValidCollectionCrs,
       },
     },
     '/req/core/fallback': {

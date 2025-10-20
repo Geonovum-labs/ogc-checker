@@ -15,6 +15,7 @@ export interface SchemaFunctionResult {
 export type SchemaFunction = (input: unknown) => SchemaFunctionResult;
 
 const ajv = new Ajv({
+  discriminator: true,
   loadSchema: async uri => {
     const response = await fetch(uri);
     return response.json();

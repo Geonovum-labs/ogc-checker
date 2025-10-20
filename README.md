@@ -9,41 +9,42 @@ URL: https://geonovum.github.io/ogc-checker/
 Version: 0.3.0\
 Specification: https://docs.ogc.org/DRAFTS/21-045.html
 
-| Requirement                                | Testable | Tested | Remarks |
-| ------------------------------------------ | :------: | :----: | ------- |
-| `/req/core/schema-valid`                   |    ?     |   ?    |         |
-| `/req/core/metadata`                       |    ?     |   ?    |         |
-| `/req/core/interval`                       |    ?     |   ?    |         |
-| `/req/core/instant-and-interval`           |    ?     |   ?    |         |
-| `/req/core/utc`                            |    ?     |   ?    |         |
-| `/req/core/coordinate-dimension`           |    ?     |   ?    |         |
-| `/req/core/geometry-wgs84`                 |    ?     |   ?    |         |
-| `/req/core/geometry-no-jsonfg-extension`   |    ?     |   ?    |         |
-| `/req/core/geom-valid`                     |    ?     |   ?    |         |
-| `/req/core/place`                          |    ?     |   ?    |         |
-| `/req/core/same-crs`                       |    ?     |   ?    |         |
-| `/req/core/fallback`                       |    ?     |   ?    |         |
-| `/req/core/axis-order`                     |    ?     |   ?    |         |
-| `/req/polyhedra/metadata`                  |    ?     |   ?    |         |
-| `/req/polyhedra/coordinates`               |    ?     |   ?    |         |
-| `/req/polyhedra/geom-valid`                |    ?     |   ?    |         |
-| `/req/prisms/metadata`                     |    ?     |   ?    |         |
-| `/req/prisms/coordinates`                  |    ?     |   ?    |         |
-| `/req/prisms/geom-valid`                   |    ?     |   ?    |         |
-| `/req/circular-arcs/metadata`              |    ?     |   ?    |         |
-| `/req/circular-arcs/geom-valid`            |    ?     |   ?    |         |
-| `/req/measures/metadata`                   |    ?     |   ?    |         |
-| `/req/measures/coordinates`                |    ?     |   ?    |         |
-| `/req/measures/sub-geometries`             |    ?     |   ?    |         |
-| `/req/types-schemas/metadata`              |    ?     |   ?    |         |
-| `/req/types-schemas/feature-type`          |    ?     |   ?    |         |
-| `/req/types-schemas/geometry-dimension`    |    ?     |   ?    |         |
-| `/req/types-schemas/feature-schemas`       |    ?     |   ?    |         |
-| `/req/types-schemas/single-feature-schema` |    ?     |   ?    |         |
-| `/req/profiles/rfc7946`                    |    ?     |   ?    |         |
-| `/req/profiles/jsonfg`                     |    ?     |   ?    |         |
-| `/req/profiles/jsonfg-plus`                |    ?     |   ?    |         |
-| `/req/api/profile-parameter`               |    ?     |   ?    |         |
+| Requirement                                | Testable | Tested | Remarks                             |
+| ------------------------------------------ | :------: | :----: | ----------------------------------- |
+| `/req/core/schema-valid`                   |   Yes    |  Yes   |                                     |
+| `/req/core/metadata`                       |   Yes    |  Yes   |                                     |
+| `/req/core/instant`                        |   Yes    |  Yes   |                                     |
+| `/req/core/interval`                       |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/instant-and-interval`           |   Yes    |  Yes   |                                     |
+| `/req/core/utc`                            |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/coordinate-dimension`           |   Yes    |  Yes   |                                     |
+| `/req/core/geometry-wgs84`                 |   Yes    |  Yes   |                                     |
+| `/req/core/geometry-no-jsonfg-extension`   |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/geom-valid`                     |   Yes    |   No   |                                     |
+| `/req/core/place`                          |   Yes    |  Yes   |                                     |
+| `/req/core/same-crs`                       |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/fallback`                       |   Yes    |  Yes   |                                     |
+| `/req/core/axis-order`                     |    ?     |   ?    |                                     |
+| `/req/polyhedra/metadata`                  |    ?     |   ?    |                                     |
+| `/req/polyhedra/coordinates`               |    ?     |   ?    |                                     |
+| `/req/polyhedra/geom-valid`                |    ?     |   ?    |                                     |
+| `/req/prisms/metadata`                     |    ?     |   ?    |                                     |
+| `/req/prisms/coordinates`                  |    ?     |   ?    |                                     |
+| `/req/prisms/geom-valid`                   |    ?     |   ?    |                                     |
+| `/req/circular-arcs/metadata`              |    ?     |   ?    |                                     |
+| `/req/circular-arcs/geom-valid`            |    ?     |   ?    |                                     |
+| `/req/measures/metadata`                   |    ?     |   ?    |                                     |
+| `/req/measures/coordinates`                |    ?     |   ?    |                                     |
+| `/req/measures/sub-geometries`             |    ?     |   ?    |                                     |
+| `/req/types-schemas/metadata`              |   Yes    |  Yes   |                                     |
+| `/req/types-schemas/feature-type`          |   Yes    |  Yes   |                                     |
+| `/req/types-schemas/geometry-dimension`    |   Yes    |  Yes   |                                     |
+| `/req/types-schemas/feature-schemas`       |    ?     |   ?    |                                     |
+| `/req/types-schemas/single-feature-schema` |    ?     |   ?    |                                     |
+| `/req/profiles/rfc7946`                    |    ?     |   ?    |                                     |
+| `/req/profiles/jsonfg`                     |    ?     |   ?    |                                     |
+| `/req/profiles/jsonfg-plus`                |    ?     |   ?    |                                     |
+| `/req/api/profile-parameter`               |    ?     |   ?    |                                     |
 
 ## OGC API - Features - Part 1: Core
 

@@ -1,5 +1,5 @@
-import { Extension } from '@uiw/react-codemirror';
 import { Diagnostic as CodemirrorDiagnostic } from '@codemirror/lint';
+import { Extension } from '@uiw/react-codemirror';
 
 export interface Spec {
   name: string;
@@ -35,11 +35,16 @@ export enum GeometryTypes {
   MULTILINESTRING = 'MultiLineString',
   POLYGON = 'Polygon',
   MULTIPOLYGON = 'MultiPolygon',
+  GEOMETRYCOLLECTION = 'GeometryCollection',
   POLYHEDRON = 'Polyhedron',
   MULTIPOLYHEDRON = 'MultiPolyhedron',
   PRISM = 'Prism',
   MULTIPRISM = 'MultiPrism',
-  GEOMETRYCOLLECTION = 'GeometryCollection',
+  CIRCULARSTRING = 'CircularString',
+  COMPOUNDCURVE = 'CompoundCurve',
+  CURVEPOLYGON = 'CurvePolygon',
+  MULTICURVE = 'MultiCurve',
+  MULTISURFACE = 'MultiSurface',
 }
 
 export type Position2D = [number, number];

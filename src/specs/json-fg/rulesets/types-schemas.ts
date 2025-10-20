@@ -1,11 +1,9 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
-import { isFeatureTypePresent } from '../functions/isFeatureTypePresent';
-import { isValidConformanceTypesSchemas } from '../functions/isValidConformanceTypesSchemas';
+import { schema } from '@stoplight/spectral-functions';
+import remoteSchema from '../../../functions/remoteSchema';
 import { isValidGeometryDimension } from '../functions/isValidGeometryDimension';
 
 export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/types-schemas';
-
-export const JSON_FG_TYPES_SCHEMAS_CURIE = '[ogc-json-fg-1-0.3:types-schemas]';
 
 export const JSON_FG_TYPES_SCHEMAS_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#types-schemas_';
 
@@ -18,7 +16,35 @@ const jsonFgTypesSchemas: RulesetDefinition = {
       documentationUrl: JSON_FG_TYPES_SCHEMAS_DOC_URI + 'metadata',
       severity: 'error',
       then: {
-        function: isValidConformanceTypesSchemas,
+        function: schema,
+        functionOptions: {
+          schema: {
+            if: {
+              anyOf: [
+                { required: ['featureType'] },
+                { required: ['featureSchema'] },
+                {
+                  properties: {
+                    features: {
+                      contains: {
+                        anyOf: [{ required: ['featureType'] }, { required: ['featureSchema'] }],
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+            then: {
+              properties: {
+                conformsTo: {
+                  contains: {
+                    const: JSON_FG_TYPES_SCHEMAS_URI,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     '/req/types-schemas/feature-type': {
@@ -26,7 +52,45 @@ const jsonFgTypesSchemas: RulesetDefinition = {
       documentationUrl: JSON_FG_TYPES_SCHEMAS_DOC_URI + 'feature-type',
       severity: 'error',
       then: {
-        function: isFeatureTypePresent,
+        function: remoteSchema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+            discriminator: { propertyName: 'type' },
+            oneOf: [
+              {
+                required: ['type', 'featureType'],
+                properties: {
+                  type: {
+                    const: 'Feature',
+                  },
+                },
+              },
+              {
+                required: ['type'],
+                properties: {
+                  type: {
+                    const: 'FeatureCollection',
+                  },
+                },
+                oneOf: [
+                  { required: ['featureType'] },
+                  {
+                    properties: {
+                      features: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          required: ['featureType'],
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        },
       },
     },
     '/req/types-schemas/geometry-dimension': {
