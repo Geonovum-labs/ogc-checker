@@ -21,7 +21,7 @@ const App: FC<Props> = ({ spec }) => (
       <UriInput spec={spec} />
       <div className="flex items-center">
         <SpecSelector className="mr-4" />
-        <a href="https://github.com/Geonovum-labs/json-fg-linter" target="_blank">
+        <a href="https://github.com/Geonovum/ogc-checker" target="_blank">
           <GitHubIcon />
         </a>
       </div>
