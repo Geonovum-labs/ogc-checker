@@ -1,4 +1,5 @@
-import { DocumentTypes } from '../../../types';
+import { DocumentTypes } from '@geonovum/standards-checker';
+
 
 export const isFeature = (input: unknown) =>
   input && typeof input === 'object' && 'type' in input && typeof input.type === 'string' && input.type === DocumentTypes.FEATURE;

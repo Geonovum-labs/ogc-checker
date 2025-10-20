@@ -1,6 +1,6 @@
+import { errorMessage } from '@geonovum/standards-checker/engine/util';
 import { RulesetFunction } from '@stoplight/spectral-core';
 import { equals } from 'ramda';
-import { errorMessage } from '../../../util';
 
 export const isPlaceAndGeometryNotEqual: RulesetFunction<unknown> = async input => {
   if (

@@ -1,7 +1,7 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
-import { errorMessage } from '../../../util';
 import { JSON_FG_TYPES_SCHEMAS_CURIE, JSON_FG_TYPES_SCHEMAS_URI } from '../rulesets/types-schemas';
 import { getConformsTo } from './util';
+import { errorMessage } from '@geonovum/standards-checker/engine/util';
 
 const featureContainsFeatureType = (input: unknown) =>
   input && typeof input === 'object' && 'featureType' in input && typeof input.featureType === 'string';

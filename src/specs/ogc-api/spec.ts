@@ -1,11 +1,10 @@
-import { APPLICATION_JSON_TYPE, APPLICATION_OPENAPI_JSON_3_0_TYPE } from '../../constants';
-import { spectralLinter } from '../../spectral';
-import { Spec, SpecLinter, SpecResponseMapper } from '../../types';
-import { handleResponse, handleResponseJson } from '../../util';
+import { APPLICATION_JSON_TYPE, APPLICATION_OPENAPI_JSON_3_0_TYPE, handleResponse, handleResponseJson, Spec, SpecLinter, SpecResponseMapper, spectralLinter } from '@geonovum/standards-checker';
+
 import featuresExample from './examples/features.json';
 import processesExample from './examples/processes.json';
 import recordsExample from './examples/records.json';
 import rulesets from './rulesets';
+import { RulesetDefinition } from '@stoplight/spectral-core';
 
 const responseMapper =
   (prefix: string): SpecResponseMapper =>
@@ -68,7 +67,7 @@ export const ogcApiFeaturesSpec: Spec = {
     .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-features-'))
     .map(entry => ({
       name: linterName(entry[0]),
-      linter: spectralLinter(linterName(entry[0]), entry[1]),
+      linter: spectralLinter(linterName(entry[0]), entry[1] as RulesetDefinition),
     })),
   responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-features-'),
 };
@@ -81,7 +80,7 @@ export const ogcApiProcessesSpec: Spec = {
     .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-processes-'))
     .map(entry => ({
       name: linterName(entry[0]),
-      linter: spectralLinter(linterName(entry[0]), entry[1]),
+      linter: spectralLinter(linterName(entry[0]), entry[1] as RulesetDefinition),
     })),
   responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-processes-'),
 };
@@ -94,7 +93,7 @@ export const ogcApiRecordsSpec: Spec = {
     .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-records-'))
     .map(entry => ({
       name: linterName(entry[0]),
-      linter: spectralLinter(linterName(entry[0]), entry[1]),
+      linter: spectralLinter(linterName(entry[0]), entry[1] as RulesetDefinition),
     })),
   responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-records-'),
 };

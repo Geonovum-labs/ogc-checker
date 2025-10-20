@@ -1,6 +1,6 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
-import { errorMessage } from '../../../util';
 import { getFeatures, getGeometryDimension, getPlaceType, isFeatureCollection } from './util';
+import { errorMessage } from '@geonovum/standards-checker/engine/util';
 
 export const isValidGeometryDimension: RulesetFunction<unknown> = async input => {
   const geometryDimension = getGeometryDimension(input);

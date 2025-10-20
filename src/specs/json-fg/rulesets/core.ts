@@ -1,15 +1,12 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { falsy, truthy } from '@stoplight/spectral-functions';
 import { DateTime } from 'luxon';
-import { isValidDate } from '../../../functions/date';
-import { isValidDateTime } from '../../../functions/datetime';
-import { includes } from '../../../functions/includes';
-import remoteSchema, { SchemaFunctionResult } from '../../../functions/remoteSchema';
 import { hasPositionRange } from '../functions/hasPositionRange';
 import { hasSameDimensions } from '../functions/hasSameDimensions';
 import { isPlaceAndGeometryNotEqual } from '../functions/isPlaceAndGeometryNotEqual';
 import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
 import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
+import { remoteSchema, SchemaFunctionResult, isValidDate, isValidDateTime, includes } from '@geonovum/standards-checker';
 
 export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 

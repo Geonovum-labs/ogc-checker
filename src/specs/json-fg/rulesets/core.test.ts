@@ -1,8 +1,8 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { describe, expect, test } from 'vitest';
-import { DocumentTypes, GeometryTypes } from '../../../types';
 import { JSON_FG_3D_URI } from './3d';
 import ruleset, { JSON_FG_CORE_CURIE, JSON_FG_CORE_URI } from './core';
+import { DocumentTypes, GeometryTypes } from '@geonovum/standards-checker';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
