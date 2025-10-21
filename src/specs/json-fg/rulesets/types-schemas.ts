@@ -1,16 +1,14 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
-import { isFeatureTypePresent } from '../functions/isFeatureTypePresent';
-import { isValidConformanceTypesSchemas } from '../functions/isValidConformanceTypesSchemas';
+import { schema } from '@stoplight/spectral-functions';
 import { isValidGeometryDimension } from '../functions/isValidGeometryDimension';
+import { remoteSchema } from '@geonovum/standards-checker';
 
-export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/types-schemas';
-
-export const JSON_FG_TYPES_SCHEMAS_CURIE = '[ogc-json-fg-1-0.2:types-schemas]';
+export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/types-schemas';
 
 export const JSON_FG_TYPES_SCHEMAS_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#types-schemas_';
 
-const jsonFgTypesSchemas: RulesetDefinition = {
-  documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.2/req/types-schemas',
+const typesSchemas: RulesetDefinition = {
+  documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/types-schemas',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Feature Types and Schemas"',
   rules: {
     '/req/types-schemas/metadata': {
@@ -18,7 +16,35 @@ const jsonFgTypesSchemas: RulesetDefinition = {
       documentationUrl: JSON_FG_TYPES_SCHEMAS_DOC_URI + 'metadata',
       severity: 'error',
       then: {
-        function: isValidConformanceTypesSchemas,
+        function: schema,
+        functionOptions: {
+          schema: {
+            if: {
+              anyOf: [
+                { required: ['featureType'] },
+                { required: ['featureSchema'] },
+                {
+                  properties: {
+                    features: {
+                      contains: {
+                        anyOf: [{ required: ['featureType'] }, { required: ['featureSchema'] }],
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+            then: {
+              properties: {
+                conformsTo: {
+                  contains: {
+                    const: JSON_FG_TYPES_SCHEMAS_URI,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
     '/req/types-schemas/feature-type': {
@@ -26,7 +52,45 @@ const jsonFgTypesSchemas: RulesetDefinition = {
       documentationUrl: JSON_FG_TYPES_SCHEMAS_DOC_URI + 'feature-type',
       severity: 'error',
       then: {
-        function: isFeatureTypePresent,
+        function: remoteSchema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+            discriminator: { propertyName: 'type' },
+            oneOf: [
+              {
+                required: ['type', 'featureType'],
+                properties: {
+                  type: {
+                    const: 'Feature',
+                  },
+                },
+              },
+              {
+                required: ['type'],
+                properties: {
+                  type: {
+                    const: 'FeatureCollection',
+                  },
+                },
+                oneOf: [
+                  { required: ['featureType'] },
+                  {
+                    properties: {
+                      features: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          required: ['featureType'],
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        },
       },
     },
     '/req/types-schemas/geometry-dimension': {
@@ -40,4 +104,4 @@ const jsonFgTypesSchemas: RulesetDefinition = {
   },
 };
 
-export default jsonFgTypesSchemas;
+export default typesSchemas;

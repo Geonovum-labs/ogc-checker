@@ -3,12 +3,7 @@ import { RulesetFunction } from '@stoplight/spectral-core';
 
 const GEOJSON_TYPES = ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon', 'GeometryCollection'];
 
-const CRS84_URIS = [
-  'http://www.opengis.net/def/crs/OGC/0/CRS84',
-  'http://www.opengis.net/def/crs/OGC/0/CRS84h',
-  '[OGC:CRS84]',
-  '[OGC:CRS84h]',
-];
+const CRS84_URIS = ['http://www.opengis.net/def/crs/OGC/0/CRS84', 'http://www.opengis.net/def/crs/OGC/0/CRS84h'];
 
 const isCrs84 = (coordRefSys: unknown) => {
   if (typeof coordRefSys === 'string') {

@@ -1,5 +1,5 @@
 import { Spec, spectralLinter } from '@geonovum/standards-checker';
-import example from './example.json';
+import example from './examples/feature.json';
 import rulesets from './rulesets';
 import { RulesetDefinition } from '@stoplight/spectral-core';
 

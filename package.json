@@ -12,6 +12,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@geonovum/standards-checker": "github:Geonovum/standards-checker",
     "@stoplight/spectral-core": "^1.20.0",
     "@stoplight/spectral-functions": "^1.10.1",
     "@stoplight/spectral-rulesets": "^1.22.0",
@@ -20,12 +21,12 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.4",
-    "zustand": "^5.0.8",
-    "@geonovum/standards-checker": "github:Geonovum/standards-checker"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
-    "@tailwindcss/postcss": "^4.1.14",
+    "@tailwindcss/postcss": "^4.1.15",
+    "@types/json-schema-merge-allof": "^0.6.5",
     "@types/luxon": "^3.7.1",
     "@types/ramda": "^0.31.1",
     "@types/react": "^19.2.2",
@@ -35,10 +36,13 @@
     "eslint-plugin-react-hooks": "^7.0.0",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.4.0",
-    "tsdown": "^0.15.9",
+    "postcss": "^8.5.6",
+    "ramda": "^0.32.0",
+    "tailwindcss": "^4.1.15",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.1",
+    "typescript-eslint": "^8.46.2",
     "vite": "^7.1.11",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "tsdown": "^0.15.9"
   }
 }
