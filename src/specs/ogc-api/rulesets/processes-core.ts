@@ -1,5 +1,5 @@
-import { hasSchemaMatch, hasParameter, OpenAPIV3_0, hasPathMatch } from 'standards-checker';
-import { errorMessage } from 'standards-checker/engine/util';
+import { hasSchemaMatch, hasParameter, OpenAPIV3_0, hasPathMatch } from '@geonovum/standards-checker';
+import { errorMessage } from '@geonovum/standards-checker/engine/util';
 import type { IFunctionResult, RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from './formats';
 import { truthy } from '@stoplight/spectral-functions';

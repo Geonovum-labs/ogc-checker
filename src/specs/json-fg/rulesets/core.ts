@@ -6,7 +6,7 @@ import { hasSameDimensions } from '../functions/hasSameDimensions';
 import { isPlaceAndGeometryNotEqual } from '../functions/isPlaceAndGeometryNotEqual';
 import { isValidCollectionCrs } from '../functions/isValidCollectionCrs';
 import { isValidPlaceCrs } from '../functions/isValidPlaceCrs';
-import { remoteSchema, SchemaFunctionResult, isValidDate, isValidDateTime, includes } from 'standards-checker';
+import { remoteSchema, SchemaFunctionResult, isValidDate, isValidDateTime, includes } from '@geonovum/standards-checker';
 
 export const JSON_FG_CORE_URI = 'http://www.opengis.net/spec/json-fg-1/0.2/conf/core';
 

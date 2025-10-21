@@ -1,4 +1,4 @@
-import { hasSchemaMatch } from 'standards-checker';
+import { hasSchemaMatch } from '@geonovum/standards-checker';
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from './formats';
 import { schema, truthy } from '@stoplight/spectral-functions';

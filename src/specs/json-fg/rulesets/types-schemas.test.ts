@@ -2,7 +2,7 @@ import { Spectral } from '@stoplight/spectral-core';
 import { describe, expect, test } from 'vitest';
 import { JSON_FG_CORE_URI } from './core';
 import ruleset, { JSON_FG_TYPES_SCHEMAS_URI } from './types-schemas';
-import { DocumentTypes, GeometryTypes } from 'standards-checker';
+import { DocumentTypes, GeometryTypes } from '@geonovum/standards-checker';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);

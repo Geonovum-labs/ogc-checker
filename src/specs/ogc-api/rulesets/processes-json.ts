@@ -1,4 +1,4 @@
-import { APPLICATION_JSON_TYPE } from 'standards-checker';
+import { APPLICATION_JSON_TYPE } from '@geonovum/standards-checker';
 import type { RulesetDefinition } from '@stoplight/spectral-core';
 import { oas3_0 } from './formats';
 import { schema } from '@stoplight/spectral-functions';

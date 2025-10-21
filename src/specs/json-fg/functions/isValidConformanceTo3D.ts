@@ -1,7 +1,7 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
 import { JSON_FG_3D_CURIE, JSON_FG_3D_URI } from '../rulesets/3d';
 import { getConformsTo } from './util';
-import { errorMessage } from 'standards-checker/engine/util';
+import { errorMessage } from '@geonovum/standards-checker/engine/util';
 
 const TYPES_3D = ['Polyhedron', 'MultiPolyhedron', 'Prism', 'MultiPrism'];
 

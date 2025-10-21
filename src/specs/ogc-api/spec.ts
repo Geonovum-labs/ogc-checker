@@ -7,7 +7,7 @@ import {
   SpecLinter,
   SpecResponseMapper,
   spectralLinter,
-} from 'standards-checker';
+} from '@geonovum/standards-checker';
 
 import featuresExample from './examples/features.json';
 import processesExample from './examples/processes.json';

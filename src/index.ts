@@ -2,7 +2,7 @@ import type { RulesetDefinition } from '@stoplight/spectral-core';
 import specs from './specs';
 import jsonFgRulesets from './specs/json-fg/rulesets';
 import ogcApiRulesets from './specs/ogc-api/rulesets';
-import { RulesetPlugin, RulesetPluginIndex } from 'standards-checker';
+import { RulesetPlugin, RulesetPluginIndex } from '@geonovum/standards-checker';
 
 /**
  * Minimal metadata needed to construct a CLI-ready ruleset plugin.

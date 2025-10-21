@@ -1,16 +1,30 @@
-import spectralFormats from '@stoplight/spectral-formats';
 type FormatFn = (document: unknown) => boolean;
-type FormatNamespace = Record<string, unknown>;
-let cachedOas30: FormatFn | undefined;
-const lookup = (): FormatFn => {
-  if (!cachedOas30) {
-    const namespace = (spectralFormats as unknown as FormatNamespace) ?? {};
-    const candidate = namespace.oas3_0;
-    if (typeof candidate !== 'function') {
-      throw new Error("Format 'oas3_0' is not available from @stoplight/spectral-formats.");
-    }
-    cachedOas30 = candidate as FormatFn;
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+  if (typeof value !== 'object' || value === null) {
+    return false;
   }
-  return cachedOas30;
+
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === null || prototype === Object.prototype;
 };
-export const oas3_0: FormatFn = document => lookup()(document);
+
+const isOas3Document = (document: unknown): document is { openapi: unknown } => {
+  if (!isPlainObject(document) || !('openapi' in document)) {
+    return false;
+  }
+
+  const major = Number.parseInt(String((document as { openapi: unknown }).openapi), 10);
+
+  return Number.isInteger(major) && major === 3;
+};
+
+export const oas3_0: FormatFn = document => {
+  if (!isOas3Document(document)) {
+    return false;
+  }
+
+  return /^3\.0(?:\.[0-9]*)?$/.test(String((document as { openapi: unknown }).openapi));
+};
+
+(oas3_0 as FormatFn & { displayName?: string }).displayName = 'OpenAPI 3.0.x';
