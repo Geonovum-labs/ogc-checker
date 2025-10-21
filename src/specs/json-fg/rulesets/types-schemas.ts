@@ -7,7 +7,7 @@ export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/
 
 export const JSON_FG_TYPES_SCHEMAS_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#types-schemas_';
 
-const jsonFgTypesSchemas: RulesetDefinition = {
+const typesSchemas: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/types-schemas',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Feature Types and Schemas"',
   rules: {
@@ -104,4 +104,4 @@ const jsonFgTypesSchemas: RulesetDefinition = {
   },
 };
 
-export default jsonFgTypesSchemas;
+export default typesSchemas;

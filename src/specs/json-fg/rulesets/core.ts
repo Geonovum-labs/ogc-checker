@@ -15,7 +15,7 @@ export const JSON_FG_CORE_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#cor
 
 const isUnbounded = (input: unknown) => typeof input === 'string' && input === '..';
 
-const jsonFgCore: RulesetDefinition = {
+const core: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/core',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Core"',
   rules: {
@@ -338,4 +338,4 @@ const jsonFgCore: RulesetDefinition = {
   },
 };
 
-export default jsonFgCore;
+export default core;
