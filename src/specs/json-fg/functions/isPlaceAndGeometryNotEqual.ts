@@ -1,4 +1,4 @@
-import { errorMessage } from '@geonovum/standards-checker/engine/util';
+import { errorMessage } from 'standards-checker/engine/util';
 import { RulesetFunction } from '@stoplight/spectral-core';
 import { equals } from 'ramda';
 

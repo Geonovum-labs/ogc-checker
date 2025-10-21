@@ -1,7 +1,7 @@
-import { hasParameter, OpenAPIV3_0, hasSchemaMatch } from '@geonovum/standards-checker';
-import { errorMessage } from '@geonovum/standards-checker/engine/util';
+import { hasParameter, OpenAPIV3_0, hasSchemaMatch } from 'standards-checker';
+import { errorMessage } from 'standards-checker/engine/util';
 import type { IFunctionResult, RulesetDefinition } from '@stoplight/spectral-core';
-import { oas3_0 } from '@stoplight/spectral-formats';
+import { oas3_0 } from './formats';
 import { truthy } from '@stoplight/spectral-functions';
 
 export const OGC_API_PROCESSES_JOB_LIST_URI = 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/job-list';

@@ -1,7 +1,7 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
-import { errorMessage } from '@geonovum/standards-checker/engine/util';
+import { errorMessage } from 'standards-checker/engine/util';
 import { isValidCoordinateArray } from './util';
-import { Coordinates, Position } from '@geonovum/standards-checker';
+import { Coordinates, Position } from 'standards-checker';
 
 interface Options {
   x?: [number, number];

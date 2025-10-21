@@ -1,6 +1,7 @@
-import { hasSchemaMatch } from '@geonovum/standards-checker';
+import { hasSchemaMatch } from 'standards-checker';
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import { oas3_0 } from '@stoplight/spectral-formats';
+import { oas3_0 } from './formats';
+
 
 export const OGC_API_PROCESSES_OGC_PROCESS_DESCRIPTION_URI =
   'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/ogc-process-description';

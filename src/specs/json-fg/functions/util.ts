@@ -1,4 +1,4 @@
-import { DocumentTypes } from '@geonovum/standards-checker';
+import { DocumentTypes } from 'standards-checker';
 
 
 export const isFeature = (input: unknown) =>

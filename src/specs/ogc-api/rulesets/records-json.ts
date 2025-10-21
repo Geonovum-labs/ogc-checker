@@ -1,6 +1,6 @@
-import { hasSchemaMatch } from '@geonovum/standards-checker';
+import { hasSchemaMatch } from 'standards-checker';
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import { oas3_0 } from '@stoplight/spectral-formats';
+import { oas3_0 } from './formats';
 import { schema } from '@stoplight/spectral-functions';
 
 export const OGC_API_RECORDS_JSON_URI = 'http://www.opengis.net/spec/ogcapi-records-1/1.0/conf/json';

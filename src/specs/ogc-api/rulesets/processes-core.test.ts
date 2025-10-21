@@ -3,7 +3,7 @@ import { clone } from 'ramda';
 import { describe, expect, test } from 'vitest';
 import exampleDoc from '../examples/processes.json';
 import ruleset from './processes-core';
-import { APPLICATION_JSON_TYPE } from '@geonovum/standards-checker';
+import { APPLICATION_JSON_TYPE } from 'standards-checker';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
