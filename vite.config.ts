@@ -12,10 +12,10 @@ export default defineConfig({
     environment: 'node',
     setupFiles: ['src/vitest-matchers.ts'],
     deps: {
-      inline: ['standards-checker'],
+      inline: ['@geonovum/standards-checker'],
       optimizer: {
         ssr: {
-          include: ['standards-checker'],
+          include: ['@geonovum/standards-checker'],
         },
       },
     },
