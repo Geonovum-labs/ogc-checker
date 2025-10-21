@@ -6,40 +6,45 @@ URL: https://geonovum.github.io/ogc-checker/
 
 ## JSON-FG
 
-The validation rules are based on JSON-FG requirements classes [Core](https://docs.ogc.org/DRAFTS/21-045.html#rc_core), [3D](https://docs.ogc.org/DRAFTS/21-045.html#rc_3d) and [Features types and Schemas](https://docs.ogc.org/DRAFTS/21-045.html#rc_types-schemas). In addition, the checker does some consistency checks that are useful but not based on explicit requirements.
+Version: 0.3.0\
+Specification: https://docs.ogc.org/DRAFTS/21-045.html
 
-The following table gives an overview of supported JSON-FG requirements. The codes in the Rules column are the
-requirement names as listed in the OGC standard document. The table mentions separate sub requirements (e.g. "A", "B") only when some are and some are not supported.
-
-| Requirement                               | Tested | Description                                                                                                   |
-| ----------------------------------------- | :----: | ------------------------------------------------------------------------------------------------------------- |
-| Correct JSON syntax                       |  Yes   | Basis syntax checking                                                                                         |
-| /req/core/schema-valid                    |  Yes   | JSON Schema validation                                                                                        |
-| /rec/core/properties                      |   No   | GeoJSON compatibility mode ([open discussion](https://github.com/opengeospatial/ogc-feat-geo-json/issues/82)) |
-| /req/core/metadata                        |  Yes   | Presence of conformance statement                                                                             |
-| /req/core/instant                         |  Yes   | Valid dates / times in instants                                                                               |
-| /req/core/interval                        |  Yes   | Valid dates / times in intervals                                                                              |
-| /req/core/instant-and-interval            |  Yes   | Consistancy between instant and interval                                                                      |
-| interval start is before interval end     |  Yes   | This is checked in addition to the official requirements                                                      |
-| /req/core/utc                             |  Yes   | Always UTC ("Z") timezone                                                                                     |
-| /req/core/coordinate-dimension            |  Yes   | All positions in a geometry have the same dimension                                                           |
-| /req/core/geometry-wgs84                  |  Yes   | WGS84 geometries within range                                                                                 |
-| /req/core/geom-valid                      |   No   | Validity of geometries                                                                                        |
-| /req/core/place                           |  Yes   | No valid GeoJSON geometries in `place`                                                                        |
-| /req/core/geometry-collection             |  Yes   | All coordinates in a collection have the same CRS                                                             |
-| /req/core/fallback - A                    |  Yes   | Geometries in `geometry` and `place` are not the same                                                         |
-| /req/core/fallback - B                    |   No   | GeoJSON compatibility is indicated in when the document is a GET response                                     |
-| /req/core/axis-order                      |   No   | Conformance to OGC axis order policy                                                                          |
-| /rec/core/place-crs                       |   No   | Coordinates in `place` within range of the used CRS                                                           |
-| /req/3d/metadata                          |  Yes   | Presence of conformance statement for 3D geometries                                                           |
-| /req/3d/coordinate-dimension              |  Yes   | All positions in a 3D geometry have 3 dimensions                                                              |
-| /req/3d/geom-valid                        |   No   | Valid 3D geometries                                                                                           |
-| /req/types-schemas/metadata               |  Yes   | Presence of metadata conformance statement                                                                    |
-| /req/types-schemas/feature-type           |  Yes   | Presence of `featureType`                                                                                     |
-| /req/types-schemas/geometry-dimension     |  Yes   | Consistency between `geometryDimension` and geometry type                                                     |
-| /rec/types-schemas/homogeneous-collection |   No   | `featureType` and `geometryDimension` stated on collection level when all are the same                        |
-| /req/types-schemas/feature-schemas        |   No   | Referenced schemas must conform to OGC API Features part 5: Schemas                                           |
-| /req/types-schemas/single-feature-schema  |   No   | Consistency between feature schema and feature type                                                           |
+| Requirement                                | Testable | Tested | Remarks                             |
+| ------------------------------------------ | :------: | :----: | ----------------------------------- |
+| `/req/core/schema-valid`                   |   Yes    |  Yes   |                                     |
+| `/req/core/metadata`                       |   Yes    |  Yes   |                                     |
+| `/req/core/instant`                        |   Yes    |  Yes   |                                     |
+| `/req/core/interval`                       |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/instant-and-interval`           |   Yes    |  Yes   |                                     |
+| `/req/core/utc`                            |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/coordinate-dimension`           |   Yes    |  Yes   |                                     |
+| `/req/core/geometry-wgs84`                 |   Yes    |  Yes   |                                     |
+| `/req/core/geometry-no-jsonfg-extension`   |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/geom-valid`                     |   Yes    |   No   |                                     |
+| `/req/core/place`                          |   Yes    |  Yes   |                                     |
+| `/req/core/same-crs`                       |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
+| `/req/core/fallback`                       |   Yes    |  Yes   |                                     |
+| `/req/core/axis-order`                     |    ?     |   ?    |                                     |
+| `/req/polyhedra/metadata`                  |    ?     |   ?    |                                     |
+| `/req/polyhedra/coordinates`               |    ?     |   ?    |                                     |
+| `/req/polyhedra/geom-valid`                |    ?     |   ?    |                                     |
+| `/req/prisms/metadata`                     |    ?     |   ?    |                                     |
+| `/req/prisms/coordinates`                  |    ?     |   ?    |                                     |
+| `/req/prisms/geom-valid`                   |    ?     |   ?    |                                     |
+| `/req/circular-arcs/metadata`              |    ?     |   ?    |                                     |
+| `/req/circular-arcs/geom-valid`            |    ?     |   ?    |                                     |
+| `/req/measures/metadata`                   |    ?     |   ?    |                                     |
+| `/req/measures/coordinates`                |    ?     |   ?    |                                     |
+| `/req/measures/sub-geometries`             |    ?     |   ?    |                                     |
+| `/req/types-schemas/metadata`              |   Yes    |  Yes   |                                     |
+| `/req/types-schemas/feature-type`          |   Yes    |  Yes   |                                     |
+| `/req/types-schemas/geometry-dimension`    |   Yes    |  Yes   |                                     |
+| `/req/types-schemas/feature-schemas`       |    ?     |   ?    |                                     |
+| `/req/types-schemas/single-feature-schema` |    ?     |   ?    |                                     |
+| `/req/profiles/rfc7946`                    |    ?     |   ?    |                                     |
+| `/req/profiles/jsonfg`                     |    ?     |   ?    |                                     |
+| `/req/profiles/jsonfg-plus`                |    ?     |   ?    |                                     |
+| `/req/api/profile-parameter`               |    ?     |   ?    |                                     |
 
 ## OGC API - Features - Part 1: Core
 
