@@ -1,4 +1,5 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
+import { schema } from '@stoplight/spectral-functions';
 
 export const JSON_FG_POLYHEDRA_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/polyhedra';
 
@@ -7,7 +8,61 @@ export const JSON_FG_POLYHEDRA_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.htm
 const polyhedra: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/polyhedra',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Polyhedra"',
-  rules: {},
+  rules: {
+    '/req/polyhedra/metadata': {
+      given: '$',
+      documentationUrl: JSON_FG_POLYHEDRA_DOC_URI + 'metadata',
+      severity: 'error',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            if: {
+              anyOf: [
+                {
+                  properties: {
+                    place: {
+                      properties: {
+                        type: {
+                          const: 'Polyhedron',
+                        },
+                      },
+                    },
+                  },
+                },
+                {
+                  properties: {
+                    features: {
+                      contains: {
+                        properties: {
+                          place: {
+                            properties: {
+                              type: {
+                                const: 'Polyhedron',
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+            then: {
+              properties: {
+                conformsTo: {
+                  contains: {
+                    const: JSON_FG_POLYHEDRA_URI,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export default polyhedra;

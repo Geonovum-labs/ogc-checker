@@ -24,8 +24,8 @@ Specification: https://docs.ogc.org/DRAFTS/21-045.html
 | `/req/core/place`                          |   Yes    |  Yes   |                                     |
 | `/req/core/same-crs`                       |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
 | `/req/core/fallback`                       |   Yes    |  Yes   |                                     |
-| `/req/core/axis-order`                     |    ?     |   ?    |                                     |
-| `/req/polyhedra/metadata`                  |    ?     |   ?    |                                     |
+| `/req/core/axis-order`                     |    No    |   No   |                                     |
+| `/req/polyhedra/metadata`                  |   Yes    |  Yes   |                                     |
 | `/req/polyhedra/coordinates`               |    ?     |   ?    |                                     |
 | `/req/polyhedra/geom-valid`                |    ?     |   ?    |                                     |
 | `/req/prisms/metadata`                     |    ?     |   ?    |                                     |
