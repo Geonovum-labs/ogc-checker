@@ -10,7 +10,19 @@ const spectral = new Spectral();
 spectral.setRuleset(ruleset);
 
 describe('/req/polyhedra/metadata', () => {
-  test('Fails when a feature has type "Polyhedron" and does not include the Polyhedra conformance class', async () => {
+  test('Succeeds when a feature place does not have type "Polyhedron" or "MultiPolygon" and does not include the Polyhedra conformance class', async () => {
+    const violations = await spectral.run({
+      ...featureDoc,
+      place: {
+        type: GeometryTypes.POINT,
+        coordinates: [],
+      },
+    });
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Fails when a feature place has type "Polyhedron" and does not include the Polyhedra conformance class', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       conformsTo: reject(c => c === JSON_FG_POLYHEDRA_URI, featureDoc.conformsTo),
@@ -19,7 +31,7 @@ describe('/req/polyhedra/metadata', () => {
     expect(violations).toContainViolation('/req/polyhedra/metadata');
   });
 
-  test('Fails when a feature has type "MultiPolyhedron" and does not include the Polyhedra conformance class', async () => {
+  test('Fails when a feature place has type "MultiPolyhedron" and does not include the Polyhedra conformance class', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       conformsTo: reject(c => c === JSON_FG_POLYHEDRA_URI, featureDoc.conformsTo),
@@ -70,7 +82,7 @@ describe('/req/polyhedra/metadata', () => {
 });
 
 describe('/req/polyhedra/coordinates', () => {
-  test('Succeeds when a feature has type "Polyhedron" and the coordinate dimension is 3', async () => {
+  test('Succeeds when a feature place has type "Polyhedron" and the coordinate dimension is 3', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -82,7 +94,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toHaveLength(0);
   });
 
-  test('Succeeds when a feature has type "MultiPolyhedron" and the coordinate dimension is 3', async () => {
+  test('Succeeds when a feature place has type "MultiPolyhedron" and the coordinate dimension is 3', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -94,7 +106,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toHaveLength(0);
   });
 
-  test('Fails when a feature has type "Polyhedron" and the coordinate dimension is not 3', async () => {
+  test('Fails when a feature place has type "Polyhedron" and the coordinate dimension is not 3', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -106,7 +118,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toContainViolation('/req/polyhedra/coordinates');
   });
 
-  test('Fails when a feature has type "MultiPolyhedron" and the coordinate dimension is not 3', async () => {
+  test('Fails when a feature place has type "MultiPolyhedron" and the coordinate dimension is not 3', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -118,7 +130,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toContainViolation('/req/polyhedra/coordinates');
   });
 
-  test('Succeeds when a feature has type "Polyhedron" with measures and the coordinate dimension is 4', async () => {
+  test('Succeeds when a feature place has type "Polyhedron" with measures and the coordinate dimension is 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -131,7 +143,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toHaveLength(0);
   });
 
-  test('Succeeds when a feature has type "MultiPolyhedron" with measures and the coordinate dimension is 4', async () => {
+  test('Succeeds when a feature place has type "MultiPolyhedron" with measures and the coordinate dimension is 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -144,7 +156,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toHaveLength(0);
   });
 
-  test('Fails when a feature has type "Polyhedron" with measures and the coordinate dimension is not 4', async () => {
+  test('Fails when a feature place has type "Polyhedron" with measures and the coordinate dimension is not 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
@@ -157,7 +169,7 @@ describe('/req/polyhedra/coordinates', () => {
     expect(violations).toContainViolation('/req/polyhedra/coordinates');
   });
 
-  test('Fails when a feature has type "MultiPolyhedron" with measures and the coordinate dimension is not 4', async () => {
+  test('Fails when a feature place has type "MultiPolyhedron" with measures and the coordinate dimension is not 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {

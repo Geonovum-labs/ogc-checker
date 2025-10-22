@@ -25,6 +25,7 @@ const prisms: RulesetDefinition = {
             if: {
               anyOf: [
                 {
+                  required: ['place'],
                   properties: {
                     place: {
                       properties: {
@@ -36,6 +37,7 @@ const prisms: RulesetDefinition = {
                   },
                 },
                 {
+                  required: ['features'],
                   properties: {
                     features: {
                       contains: {
