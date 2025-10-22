@@ -2,7 +2,7 @@ import { RulesetFunction } from '@stoplight/spectral-core';
 import { equals } from 'ramda';
 import { errorMessage } from '../../../util';
 
-export const isPlaceAndGeometryNotEqual: RulesetFunction<unknown> = async input => {
+export const isPlaceAndGeometryNotEqual: RulesetFunction<unknown> = input => {
   if (
     !(input && typeof input === 'object') ||
     !('place' in input && input.place !== null) ||

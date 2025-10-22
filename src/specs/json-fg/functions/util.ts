@@ -1,4 +1,4 @@
-import { DocumentTypes } from '../../../types';
+import { Coordinates, DocumentTypes } from '../../../types';
 
 export const isFeature = (input: unknown) =>
   input && typeof input === 'object' && 'type' in input && typeof input.type === 'string' && input.type === DocumentTypes.FEATURE;
@@ -32,3 +32,11 @@ export const getGeometryDimension = (input: unknown): number | undefined =>
   input && typeof input === 'object' && 'geometryDimension' in input && typeof input.geometryDimension === 'number'
     ? input.geometryDimension
     : undefined;
+
+export const getDimensions = (coordinates: Coordinates): number[] => {
+  if (typeof coordinates[0] === 'number') {
+    return [coordinates.length];
+  }
+
+  return coordinates.flatMap(c => getDimensions(c as Coordinates));
+};

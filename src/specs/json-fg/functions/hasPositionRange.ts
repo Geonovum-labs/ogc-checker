@@ -16,7 +16,7 @@ const getPositions = (coordinates: Coordinates): Position[] => {
   return coordinates.flatMap(c => getPositions(c));
 };
 
-export const hasPositionRange: RulesetFunction<unknown, Options> = async (input, options) => {
+export const hasPositionRange: RulesetFunction<unknown, Options> = (input, options) => {
   if (!(input && typeof input === 'object') || !('coordinates' in input && isValidCoordinateArray(input.coordinates))) {
     return;
   }

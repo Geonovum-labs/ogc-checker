@@ -34,7 +34,7 @@ const multiPrismMemberBaseContainsCrs = (input: unknown) =>
   Array.isArray(input.prisms) &&
   input.prisms.some(prism => prismBaseContainsCrs(prism));
 
-export const isValidCollectionCrs: RulesetFunction<unknown> = async input => {
+export const isValidCollectionCrs: RulesetFunction<unknown> = input => {
   if (
     collectionContainsCrs(input) ||
     prismBaseContainsCrs(input) ||

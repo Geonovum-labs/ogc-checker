@@ -3,7 +3,7 @@ import { GeometryTypes } from '../../../types';
 import { errorMessage } from '../../../util';
 import { getFeatures, getGeometryDimension, getPlaceType, isFeatureCollection } from './util';
 
-export const isValidGeometryDimension: RulesetFunction<unknown> = async input => {
+export const isValidGeometryDimension: RulesetFunction<unknown> = input => {
   const geometryDimension = getGeometryDimension(input);
 
   if (!isFeatureCollection(input) || geometryDimension === undefined) {

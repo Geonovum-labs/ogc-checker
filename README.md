@@ -24,18 +24,17 @@ Specification: https://docs.ogc.org/DRAFTS/21-045.html
 | `/req/core/place`                          |   Yes    |  Yes   |                                     |
 | `/req/core/same-crs`                       |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
 | `/req/core/fallback`                       |   Yes    |  Yes   |                                     |
-| `/req/core/axis-order`                     |    ?     |   ?    |                                     |
-| `/req/polyhedra/metadata`                  |    ?     |   ?    |                                     |
-| `/req/polyhedra/coordinates`               |    ?     |   ?    |                                     |
-| `/req/polyhedra/geom-valid`                |    ?     |   ?    |                                     |
-| `/req/prisms/metadata`                     |    ?     |   ?    |                                     |
-| `/req/prisms/coordinates`                  |    ?     |   ?    |                                     |
-| `/req/prisms/geom-valid`                   |    ?     |   ?    |                                     |
-| `/req/circular-arcs/metadata`              |    ?     |   ?    |                                     |
-| `/req/circular-arcs/geom-valid`            |    ?     |   ?    |                                     |
-| `/req/measures/metadata`                   |    ?     |   ?    |                                     |
-| `/req/measures/coordinates`                |    ?     |   ?    |                                     |
-| `/req/measures/sub-geometries`             |    ?     |   ?    |                                     |
+| `/req/core/axis-order`                     |    No    |   No   |                                     |
+| `/req/polyhedra/metadata`                  |   Yes    |  Yes   |                                     |
+| `/req/polyhedra/coordinates`               |   Yes    |  Yes   |                                     |
+| `/req/polyhedra/geom-valid`                |   Yes    |   No   |                                     |
+| `/req/prisms/metadata`                     |   Yes    |  Yes   |                                     |
+| `/req/prisms/coordinates`                  |   Yes    |  Yes   |                                     |
+| `/req/circular-arcs/metadata`              |   Yes    |  Yes   |                                     |
+| `/req/circular-arcs/geom-valid`            |   Yes    |   No   |                                     |
+| `/req/measures/metadata`                   |   Yes    |  Yes   |                                     |
+| `/req/measures/coordinates`                |   Yes    |  Yes   |                                     |
+| `/req/measures/sub-geometries`             |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
 | `/req/types-schemas/metadata`              |   Yes    |  Yes   |                                     |
 | `/req/types-schemas/feature-type`          |   Yes    |  Yes   |                                     |
 | `/req/types-schemas/geometry-dimension`    |   Yes    |  Yes   |                                     |
