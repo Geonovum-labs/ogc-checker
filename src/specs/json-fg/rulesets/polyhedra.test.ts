@@ -15,7 +15,6 @@ describe('/req/polyhedra/metadata', () => {
       ...featureDoc,
       place: {
         type: GeometryTypes.POINT,
-        coordinates: [],
       },
     });
 
@@ -37,7 +36,6 @@ describe('/req/polyhedra/metadata', () => {
       conformsTo: reject(c => c === JSON_FG_POLYHEDRA_URI, featureDoc.conformsTo),
       place: {
         type: GeometryTypes.MULTIPOLYHEDRON,
-        coordinates: [[[[[[479816.67, 5705861.672, 100]]]]]],
       },
     });
 
@@ -53,7 +51,6 @@ describe('/req/polyhedra/metadata', () => {
           ...featureCollectionDoc.features[0],
           place: {
             type: GeometryTypes.POLYHEDRON,
-            coordinates: [],
           },
         },
       ],
@@ -71,7 +68,6 @@ describe('/req/polyhedra/metadata', () => {
           ...featureCollectionDoc.features[0],
           place: {
             type: GeometryTypes.MULTIPOLYHEDRON,
-            coordinates: [],
           },
         },
       ],

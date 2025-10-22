@@ -24,8 +24,11 @@ const polyhedra: RulesetDefinition = {
             if: {
               anyOf: [
                 {
-                  required: ['place'],
+                  required: ['type'],
                   properties: {
+                    type: {
+                      const: 'Feature',
+                    },
                     place: {
                       properties: {
                         type: {
@@ -36,8 +39,11 @@ const polyhedra: RulesetDefinition = {
                   },
                 },
                 {
-                  required: ['features'],
+                  required: ['type'],
                   properties: {
+                    type: {
+                      const: 'FeatureCollection',
+                    },
                     features: {
                       contains: {
                         properties: {
