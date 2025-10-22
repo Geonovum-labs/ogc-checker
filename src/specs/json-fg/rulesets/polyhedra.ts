@@ -1,5 +1,6 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
 import { schema } from '@stoplight/spectral-functions';
+import { hasDimensions } from '../functions/hasDimensions';
 
 export const JSON_FG_POLYHEDRA_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/polyhedra';
 
@@ -59,6 +60,17 @@ const polyhedra: RulesetDefinition = {
               },
             },
           },
+        },
+      },
+    },
+    '/req/polyhedra/coordinates': {
+      given: ['$..place'],
+      documentationUrl: JSON_FG_POLYHEDRA_DOC_URI + 'coordinates',
+      severity: 'error',
+      then: {
+        function: (input, _options, context) => {
+          const numDimensions = input.measures?.enabled ? 4 : 3;
+          return hasDimensions(input, { numDimensions }, context);
         },
       },
     },
