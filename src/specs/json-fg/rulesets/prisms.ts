@@ -70,21 +70,40 @@ const prisms: RulesetDefinition = {
       },
     },
     '/req/prisms/coordinates#A': {
-      given: ['$..place'],
+      given: '$',
       documentationUrl: JSON_FG_PRISMS_DOC_URI + 'coordinates',
       severity: 'error',
       then: {
         function: (input, _options, context) => {
-          if (GeometryTypes.PRISM === input.type && input.base) {
-            const numDimensions = input.base.measures?.enabled ? 3 : 2;
-            return hasDimensions(input.base, { numDimensions }, context);
+          const numDimensions = input.measures?.enabled ? 3 : 2;
+          const place = input.place ?? {};
+
+          if (GeometryTypes.PRISM === place.type && place.base) {
+            return hasDimensions(
+              place.base,
+              {
+                numDimensions,
+                errorMessage:
+                  'All positions in the "base" member of a JSON-FG geometry of type "Prism" SHALL have a coordinate dimension of two (2) - or three (3), if measure values are included.',
+                path: ['place', 'base'],
+              },
+              context
+            );
           }
 
-          if (GeometryTypes.MULTIPRISM === input.type && Array.isArray(input.prisms)) {
-            for (const prism of input.prisms) {
+          if (GeometryTypes.MULTIPRISM === place.type && Array.isArray(place.prisms)) {
+            for (const [index, prism] of place.prisms.entries()) {
               if (GeometryTypes.PRISM === prism.type && prism.base) {
-                const numDimensions = prism.base.measures?.enabled ? 3 : 2;
-                return hasDimensions(prism.base, { numDimensions }, context);
+                return hasDimensions(
+                  prism.base,
+                  {
+                    numDimensions,
+                    errorMessage:
+                      'All positions in the "base" member of a JSON-FG geometry of type "Prism" SHALL have a coordinate dimension of two (2) - or three (3), if measure values are included.',
+                    path: ['place', 'prisms', index, 'base'],
+                  },
+                  context
+                );
               }
             }
           }

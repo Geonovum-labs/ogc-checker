@@ -69,14 +69,24 @@ const polyhedra: RulesetDefinition = {
       },
     },
     '/req/polyhedra/coordinates': {
-      given: ['$..place'],
+      given: '$',
       documentationUrl: JSON_FG_POLYHEDRA_DOC_URI + 'coordinates',
       severity: 'error',
       then: {
         function: (input, _options, context) => {
-          if (POLYHEDRON_TYPES.includes(input.type)) {
+          if (POLYHEDRON_TYPES.includes(input.place?.type)) {
             const numDimensions = input.measures?.enabled ? 4 : 3;
-            return hasDimensions(input, { numDimensions }, context);
+
+            return hasDimensions(
+              input.place,
+              {
+                numDimensions,
+                errorMessage:
+                  'All positions in a "Polyhedron" or "MultiPolyhedron" geometry (JSON-FG geometry with "type" set to "Polyhedron" or "MultiPolyhedron") SHALL have a coordinate dimension of three (3) - or four (4), if measure values are included.',
+                path: ['place', 'coordinates'],
+              },
+              context
+            );
           }
         },
       },

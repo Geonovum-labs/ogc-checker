@@ -3,7 +3,7 @@ import { Coordinates } from '../../../types';
 import { errorMessage } from '../../../util';
 import { getDimensions, isValidCoordinateArray } from './util';
 
-export const hasSameDimensions: RulesetFunction<unknown> = async input => {
+export const hasSameDimensions: RulesetFunction<unknown> = input => {
   if (!(input && typeof input === 'object') || !('coordinates' in input && isValidCoordinateArray(input.coordinates))) {
     return;
   }

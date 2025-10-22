@@ -133,10 +133,10 @@ describe('/req/polyhedra/coordinates', () => {
   test('Succeeds when a feature place has type "Polyhedron" with measures and the coordinate dimension is 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
+      measures: { enabled: true },
       place: {
         type: GeometryTypes.POLYHEDRON,
         coordinates: [[[[[479816.67, 5705861.672, 100, 100]]]]],
-        measures: { enabled: true },
       },
     });
 
@@ -146,10 +146,10 @@ describe('/req/polyhedra/coordinates', () => {
   test('Succeeds when a feature place has type "MultiPolyhedron" with measures and the coordinate dimension is 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
+      measures: { enabled: true },
       place: {
         type: GeometryTypes.MULTIPOLYHEDRON,
         coordinates: [[[[[[479816.67, 5705861.672, 100, 100]]]]]],
-        measures: { enabled: true },
       },
     });
 
@@ -159,10 +159,10 @@ describe('/req/polyhedra/coordinates', () => {
   test('Fails when a feature place has type "Polyhedron" with measures and the coordinate dimension is not 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
+      measures: { enabled: true },
       place: {
         type: GeometryTypes.POLYHEDRON,
         coordinates: [[[[[479816.67, 5705861.672, 100]]]]],
-        measures: { enabled: true },
       },
     });
 
@@ -172,10 +172,10 @@ describe('/req/polyhedra/coordinates', () => {
   test('Fails when a feature place has type "MultiPolyhedron" with measures and the coordinate dimension is not 4', async () => {
     const violations = await spectral.run({
       ...featureDoc,
+      measures: { enabled: true },
       place: {
         type: GeometryTypes.MULTIPOLYHEDRON,
         coordinates: [[[[[[479816.67, 5705861.672, 100]]]]]],
-        measures: { enabled: true },
       },
     });
 

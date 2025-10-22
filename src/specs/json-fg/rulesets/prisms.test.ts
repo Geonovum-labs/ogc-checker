@@ -150,12 +150,12 @@ describe('/req/prisms/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       conformsTo: [...featureDoc.conformsTo, JSON_FG_PRISMS_URI],
+      measures: { enabled: true },
       place: {
         ...PRISM_GEOMETRY,
         base: {
           ...PRISM_GEOMETRY.base,
           coordinates: [81220.15, 455113.71, 100, 100],
-          measures: { enabled: true },
         },
       },
     });
@@ -167,6 +167,7 @@ describe('/req/prisms/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       conformsTo: [...featureDoc.conformsTo, JSON_FG_PRISMS_URI],
+      measures: { enabled: true },
       place: {
         type: GeometryTypes.MULTIPRISM,
         prisms: [
@@ -175,7 +176,6 @@ describe('/req/prisms/coordinates', () => {
             base: {
               ...PRISM_GEOMETRY.base,
               coordinates: [81220.15, 455113.71, 100, 100],
-              measures: { enabled: true },
             },
           },
         ],
@@ -189,12 +189,12 @@ describe('/req/prisms/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       conformsTo: [...featureDoc.conformsTo, JSON_FG_PRISMS_URI],
+      measures: { enabled: true },
       place: {
         ...PRISM_GEOMETRY,
         base: {
           ...PRISM_GEOMETRY.base,
           coordinates: [81220.15, 455113.71],
-          measures: { enabled: true },
         },
       },
     });
@@ -206,6 +206,7 @@ describe('/req/prisms/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       conformsTo: [...featureDoc.conformsTo, JSON_FG_PRISMS_URI],
+      measures: { enabled: true },
       place: {
         type: GeometryTypes.MULTIPRISM,
         prisms: [
@@ -214,7 +215,6 @@ describe('/req/prisms/coordinates', () => {
             base: {
               ...PRISM_GEOMETRY.base,
               coordinates: [81220.15, 455113.71],
-              measures: { enabled: true },
             },
           },
         ],
