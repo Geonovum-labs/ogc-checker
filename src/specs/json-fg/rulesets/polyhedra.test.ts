@@ -1,6 +1,7 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { reject } from 'ramda';
 import { describe, expect, test } from 'vitest';
+import { GeometryTypes } from '../../../types';
 import featureCollectionDoc from '../examples/feature-collection.json';
 import featureDoc from '../examples/feature.json';
 import ruleset, { JSON_FG_POLYHEDRA_URI } from './polyhedra';
@@ -26,7 +27,7 @@ describe('/req/polyhedra/metadata', () => {
         {
           ...featureCollectionDoc.features[0],
           place: {
-            type: 'Polyhedron',
+            type: GeometryTypes.POLYHEDRON,
             coordinates: [],
           },
         },
@@ -42,8 +43,20 @@ describe('/req/polyhedra/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
-        type: 'Polyhedron',
+        type: GeometryTypes.POLYHEDRON,
         coordinates: [[[[[479816.67, 5705861.672, 100]]]]],
+      },
+    });
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Succeeds when a feature has type "MultiPolyhedron" and the coordinate dimension is 3', async () => {
+    const violations = await spectral.run({
+      ...featureDoc,
+      place: {
+        type: GeometryTypes.MULTIPOLYHEDRON,
+        coordinates: [[[[[[479816.67, 5705861.672, 100]]]]]],
       },
     });
 
@@ -54,8 +67,20 @@ describe('/req/polyhedra/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
-        type: 'Polyhedron',
+        type: GeometryTypes.POLYHEDRON,
         coordinates: [[[[[479816.67, 5705861.672]]]]],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/polyhedra/coordinates');
+  });
+
+  test('Fails when a feature has type "MultiPolyhedron" and the coordinate dimension is not 3', async () => {
+    const violations = await spectral.run({
+      ...featureDoc,
+      place: {
+        type: GeometryTypes.MULTIPOLYHEDRON,
+        coordinates: [[[[[[479816.67, 5705861.672]]]]]],
       },
     });
 
@@ -66,8 +91,21 @@ describe('/req/polyhedra/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
-        type: 'Polyhedron',
+        type: GeometryTypes.POLYHEDRON,
         coordinates: [[[[[479816.67, 5705861.672, 100, 100]]]]],
+        measures: { enabled: true },
+      },
+    });
+
+    expect(violations).toHaveLength(0);
+  });
+
+  test('Succeeds when a feature has type "MultiPolyhedron" with measures and the coordinate dimension is 4', async () => {
+    const violations = await spectral.run({
+      ...featureDoc,
+      place: {
+        type: GeometryTypes.MULTIPOLYHEDRON,
+        coordinates: [[[[[[479816.67, 5705861.672, 100, 100]]]]]],
         measures: { enabled: true },
       },
     });
@@ -79,8 +117,21 @@ describe('/req/polyhedra/coordinates', () => {
     const violations = await spectral.run({
       ...featureDoc,
       place: {
-        type: 'Polyhedron',
+        type: GeometryTypes.POLYHEDRON,
         coordinates: [[[[[479816.67, 5705861.672, 100]]]]],
+        measures: { enabled: true },
+      },
+    });
+
+    expect(violations).toContainViolation('/req/polyhedra/coordinates');
+  });
+
+  test('Fails when a feature has type "MultiPolyhedron" with measures and the coordinate dimension is not 4', async () => {
+    const violations = await spectral.run({
+      ...featureDoc,
+      place: {
+        type: GeometryTypes.MULTIPOLYHEDRON,
+        coordinates: [[[[[[479816.67, 5705861.672, 100]]]]]],
         measures: { enabled: true },
       },
     });

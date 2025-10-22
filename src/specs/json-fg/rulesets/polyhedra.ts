@@ -1,5 +1,6 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
 import { schema } from '@stoplight/spectral-functions';
+import { GeometryTypes } from '../../../types';
 import { hasDimensions } from '../functions/hasDimensions';
 
 export const JSON_FG_POLYHEDRA_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/polyhedra';
@@ -69,8 +70,10 @@ const polyhedra: RulesetDefinition = {
       severity: 'error',
       then: {
         function: (input, _options, context) => {
-          const numDimensions = input.measures?.enabled ? 4 : 3;
-          return hasDimensions(input, { numDimensions }, context);
+          if ([GeometryTypes.POLYHEDRON, GeometryTypes.MULTIPOLYHEDRON].includes(input.type)) {
+            const numDimensions = input.measures?.enabled ? 4 : 3;
+            return hasDimensions(input, { numDimensions }, context);
+          }
         },
       },
     },
