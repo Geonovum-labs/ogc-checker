@@ -33,8 +33,8 @@ Specification: https://docs.ogc.org/DRAFTS/21-045.html
 | `/req/circular-arcs/metadata`              |   Yes    |  Yes   |                                     |
 | `/req/circular-arcs/geom-valid`            |   Yes    |   No   |                                     |
 | `/req/measures/metadata`                   |   Yes    |  Yes   |                                     |
-| `/req/measures/coordinates`                |    ?     |   ?    |                                     |
-| `/req/measures/sub-geometries`             |    ?     |   ?    |                                     |
+| `/req/measures/coordinates`                |   Yes    |  Yes   |                                     |
+| `/req/measures/sub-geometries`             |   Yes    |  Yes   | Covered by `/req/core/schema-valid` |
 | `/req/types-schemas/metadata`              |   Yes    |  Yes   |                                     |
 | `/req/types-schemas/feature-type`          |   Yes    |  Yes   |                                     |
 | `/req/types-schemas/geometry-dimension`    |   Yes    |  Yes   |                                     |

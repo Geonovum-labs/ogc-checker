@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RulesetDefinition } from '@stoplight/spectral-core';
 import { schema } from '@stoplight/spectral-functions';
+import { GEOJSON_TYPES } from '../../../types';
+import { hasDimensions } from '../functions/hasDimensions';
+import { isFeature, isFeatureCollection } from '../functions/util';
 
 export const JSON_FG_MEASURES_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/measures';
 
@@ -33,6 +37,44 @@ const measures: RulesetDefinition = {
               },
             },
           },
+        },
+      },
+    },
+    '/req/measures/coordinates': {
+      given: '$',
+      documentationUrl: JSON_FG_MEASURES_DOC_URI + 'coordinates',
+      severity: 'error',
+      then: {
+        function: (input, _options, context) => {
+          const validateFeature = (feature: any, path: (string | number)[]) => {
+            if (!GEOJSON_TYPES.includes(input.place?.type)) {
+              return;
+            }
+
+            const place = feature.place;
+            const numDimensions = place.measures?.enabled || feature.measures?.enabled || input.measures?.enabled ? 3 : 2;
+
+            return hasDimensions(
+              input.place,
+              {
+                numDimensions,
+                errorMessage:
+                  'If a JSON-FG geometry has m coordinates, each position SHALL have three coordinates (in case of a 2D CRS) or four coordinates (in case of a 3D CRS).',
+                path,
+              },
+              context
+            );
+          };
+
+          if (isFeature(input)) {
+            return validateFeature(input, ['place', 'coordinates']);
+          }
+
+          if (isFeatureCollection(input) && Array.isArray(input.features)) {
+            return input.features.flatMap(
+              (feature: any, index: number) => validateFeature(feature, ['features', index, 'place', 'coordinates']) || []
+            );
+          }
         },
       },
     },
