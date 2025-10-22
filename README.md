@@ -32,7 +32,7 @@ Specification: https://docs.ogc.org/DRAFTS/21-045.html
 | `/req/prisms/coordinates`                  |   Yes    |  Yes   |                                     |
 | `/req/circular-arcs/metadata`              |   Yes    |  Yes   |                                     |
 | `/req/circular-arcs/geom-valid`            |   Yes    |   No   |                                     |
-| `/req/measures/metadata`                   |    ?     |   ?    |                                     |
+| `/req/measures/metadata`                   |   Yes    |  Yes   |                                     |
 | `/req/measures/coordinates`                |    ?     |   ?    |                                     |
 | `/req/measures/sub-geometries`             |    ?     |   ?    |                                     |
 | `/req/types-schemas/metadata`              |   Yes    |  Yes   |                                     |
