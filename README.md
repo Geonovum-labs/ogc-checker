@@ -28,9 +28,8 @@ Specification: https://docs.ogc.org/DRAFTS/21-045.html
 | `/req/polyhedra/metadata`                  |   Yes    |  Yes   |                                     |
 | `/req/polyhedra/coordinates`               |   Yes    |  Yes   |                                     |
 | `/req/polyhedra/geom-valid`                |   Yes    |   No   |                                     |
-| `/req/prisms/metadata`                     |    ?     |   ?    |                                     |
-| `/req/prisms/coordinates`                  |    ?     |   ?    |                                     |
-| `/req/prisms/geom-valid`                   |    ?     |   ?    |                                     |
+| `/req/prisms/metadata`                     |   Yes    |  Yes   |                                     |
+| `/req/prisms/coordinates`                  |   Yes    |  Yes   |                                     |
 | `/req/circular-arcs/metadata`              |    ?     |   ?    |                                     |
 | `/req/circular-arcs/geom-valid`            |    ?     |   ?    |                                     |
 | `/req/measures/metadata`                   |    ?     |   ?    |                                     |

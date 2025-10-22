@@ -19,6 +19,19 @@ describe('/req/polyhedra/metadata', () => {
     expect(violations).toContainViolation('/req/polyhedra/metadata');
   });
 
+  test('Fails when a feature has type "MultiPolyhedron" and does not include the Polyhedra conformance class', async () => {
+    const violations = await spectral.run({
+      ...featureDoc,
+      conformsTo: reject(c => c === JSON_FG_POLYHEDRA_URI, featureDoc.conformsTo),
+      place: {
+        type: GeometryTypes.MULTIPOLYHEDRON,
+        coordinates: [[[[[[479816.67, 5705861.672, 100]]]]]],
+      },
+    });
+
+    expect(violations).toContainViolation('/req/polyhedra/metadata');
+  });
+
   test('Fails when a feature collection contains a feature of type "Polyhedron" and does not include the Polyhedra conformance class', async () => {
     const violations = await spectral.run({
       ...featureCollectionDoc,
@@ -28,6 +41,24 @@ describe('/req/polyhedra/metadata', () => {
           ...featureCollectionDoc.features[0],
           place: {
             type: GeometryTypes.POLYHEDRON,
+            coordinates: [],
+          },
+        },
+      ],
+    });
+
+    expect(violations).toContainViolation('/req/polyhedra/metadata');
+  });
+
+  test('Fails when a feature collection contains a feature of type "MultiPolyhedron" and does not include the Polyhedra conformance class', async () => {
+    const violations = await spectral.run({
+      ...featureCollectionDoc,
+      conformsTo: reject(c => c === JSON_FG_POLYHEDRA_URI, featureDoc.conformsTo),
+      features: [
+        {
+          ...featureCollectionDoc.features[0],
+          place: {
+            type: GeometryTypes.MULTIPOLYHEDRON,
             coordinates: [],
           },
         },

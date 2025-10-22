@@ -7,6 +7,8 @@ export const JSON_FG_POLYHEDRA_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/
 
 export const JSON_FG_POLYHEDRA_DOC_URI = 'https://docs.ogc.org/DRAFTS/21-045.html#polyhedra_';
 
+const POLYHEDRON_TYPES = [GeometryTypes.POLYHEDRON, GeometryTypes.MULTIPOLYHEDRON];
+
 const polyhedra: RulesetDefinition = {
   documentationUrl: 'http://www.opengis.net/spec/json-fg-1/0.3/req/polyhedra',
   description: 'OGC Features and Geometries JSON - Part 1: Core - Requirements Class "Polyhedra"',
@@ -26,7 +28,7 @@ const polyhedra: RulesetDefinition = {
                     place: {
                       properties: {
                         type: {
-                          const: 'Polyhedron',
+                          enum: POLYHEDRON_TYPES,
                         },
                       },
                     },
@@ -40,7 +42,7 @@ const polyhedra: RulesetDefinition = {
                           place: {
                             properties: {
                               type: {
-                                const: 'Polyhedron',
+                                enum: POLYHEDRON_TYPES,
                               },
                             },
                           },
@@ -70,7 +72,7 @@ const polyhedra: RulesetDefinition = {
       severity: 'error',
       then: {
         function: (input, _options, context) => {
-          if ([GeometryTypes.POLYHEDRON, GeometryTypes.MULTIPOLYHEDRON].includes(input.type)) {
+          if (POLYHEDRON_TYPES.includes(input.type)) {
             const numDimensions = input.measures?.enabled ? 4 : 3;
             return hasDimensions(input, { numDimensions }, context);
           }
