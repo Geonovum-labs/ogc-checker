@@ -1,7 +1,7 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
 import { errorMessage } from '@geonovum/standards-checker/engine/util';
 import { isValidCoordinateArray } from './util';
-import { Coordinates } from '@geonovum/standards-checker';
+import { Coordinates } from '../../types';
 
 const getDimensions = (coordinates: Coordinates): number[] => {
   if (typeof coordinates[0] === 'number') {

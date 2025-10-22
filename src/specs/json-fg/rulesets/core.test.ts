@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import featureCollectionDoc from '../examples/feature-collection.json';
 import featureDoc from '../examples/feature.json';
 import ruleset, { JSON_FG_CORE_URI } from './core';
-import { GeometryTypes } from '@geonovum/standards-checker';
+import { GeometryTypes } from '../../types';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
