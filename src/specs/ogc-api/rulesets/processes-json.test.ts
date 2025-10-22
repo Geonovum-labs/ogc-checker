@@ -1,9 +1,9 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { clone } from 'ramda';
 import { describe, expect, test } from 'vitest';
-import { APPLICATION_JSON_TYPE } from '../../../constants';
 import exampleDoc from '../examples/processes.json';
 import ruleset from './processes-json';
+import { APPLICATION_JSON_TYPE } from '@geonovum/standards-checker';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);

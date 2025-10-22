@@ -1,11 +1,19 @@
-import { APPLICATION_JSON_TYPE, APPLICATION_OPENAPI_JSON_3_0_TYPE } from '../../constants';
-import { spectralLinter } from '../../spectral';
-import { Spec, SpecLinter, SpecResponseMapper } from '../../types';
-import { handleResponse, handleResponseJson } from '../../util';
+import {
+  APPLICATION_JSON_TYPE,
+  APPLICATION_OPENAPI_JSON_3_0_TYPE,
+  handleResponse,
+  handleResponseJson,
+  Spec,
+  SpecLinter,
+  SpecResponseMapper,
+  spectralLinter,
+} from '@geonovum/standards-checker';
+
 import featuresExample from './examples/features.json';
 import processesExample from './examples/processes.json';
 import recordsExample from './examples/records.json';
 import rulesets from './rulesets';
+import { RulesetDefinition } from '@stoplight/spectral-core';
 
 const responseMapper =
   (prefix: string): SpecResponseMapper =>
@@ -59,18 +67,21 @@ const responseMapper =
   };
 
 const linterName = (confClass: string) => confClass.replace('http://www.opengis.net/spec/', '');
+export const ogcapiFeatures = 'http://www.opengis.net/spec/ogcapi-features-';
+export const ogcApiProcesses = 'http://www.opengis.net/spec/ogcapi-processes-';
+export const ogcApiRecords = 'http://www.opengis.net/spec/ogcapi-records-';
 
 export const ogcApiFeaturesSpec: Spec = {
   name: 'OGC API - Features',
   slug: 'ogc-api-features',
   example: JSON.stringify(featuresExample, undefined, 2),
   linters: Object.entries(rulesets)
-    .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-features-'))
+    .filter(entry => entry[0].startsWith(ogcapiFeatures))
     .map(entry => ({
       name: linterName(entry[0]),
-      linter: spectralLinter(linterName(entry[0]), entry[1]),
+      linter: spectralLinter(linterName(entry[0]), entry[1] as RulesetDefinition),
     })),
-  responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-features-'),
+  responseMapper: responseMapper(ogcapiFeatures),
 };
 
 export const ogcApiProcessesSpec: Spec = {
@@ -78,12 +89,12 @@ export const ogcApiProcessesSpec: Spec = {
   slug: 'ogc-api-processes',
   example: JSON.stringify(processesExample, undefined, 2),
   linters: Object.entries(rulesets)
-    .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-processes-'))
+    .filter(entry => entry[0].startsWith(ogcApiProcesses))
     .map(entry => ({
       name: linterName(entry[0]),
-      linter: spectralLinter(linterName(entry[0]), entry[1]),
+      linter: spectralLinter(linterName(entry[0]), entry[1] as RulesetDefinition),
     })),
-  responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-processes-'),
+  responseMapper: responseMapper(ogcApiProcesses),
 };
 
 export const ogcApiRecordsSpec: Spec = {
@@ -91,10 +102,10 @@ export const ogcApiRecordsSpec: Spec = {
   slug: 'ogc-api-records',
   example: JSON.stringify(recordsExample, undefined, 2),
   linters: Object.entries(rulesets)
-    .filter(entry => entry[0].startsWith('http://www.opengis.net/spec/ogcapi-records-'))
+    .filter(entry => entry[0].startsWith(ogcApiRecords))
     .map(entry => ({
       name: linterName(entry[0]),
-      linter: spectralLinter(linterName(entry[0]), entry[1]),
+      linter: spectralLinter(linterName(entry[0]), entry[1] as RulesetDefinition),
     })),
-  responseMapper: responseMapper('http://www.opengis.net/spec/ogcapi-records-'),
+  responseMapper: responseMapper(ogcApiRecords),
 };

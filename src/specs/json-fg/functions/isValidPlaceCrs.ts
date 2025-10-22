@@ -1,5 +1,5 @@
+import { getParent, queryPath, errorMessage } from '@geonovum/standards-checker/engine/util';
 import { RulesetFunction } from '@stoplight/spectral-core';
-import { errorMessage, getParent, queryPath } from '../../../util';
 
 const GEOJSON_TYPES = ['Point', 'MultiPoint', 'LineString', 'MultiLineString', 'Polygon', 'MultiPolygon', 'GeometryCollection'];
 

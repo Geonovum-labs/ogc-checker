@@ -1,9 +1,9 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { describe, expect, test } from 'vitest';
-import { GeometryTypes } from '../../../types';
 import featureCollectionDoc from '../examples/feature-collection.json';
 import featureDoc from '../examples/feature.json';
 import ruleset, { JSON_FG_CORE_URI } from './core';
+import { GeometryTypes } from '../../types';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);

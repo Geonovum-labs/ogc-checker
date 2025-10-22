@@ -1,11 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-import './index.css';
-import router from './router.tsx';
+import { createRouter } from '@geonovum/standards-checker';
+import specs from './specs';
+import '@geonovum/standards-checker/ui/index.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+const router = createRouter(specs);
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </StrictMode>
 );

@@ -1,7 +1,7 @@
 import { RulesetDefinition } from '@stoplight/spectral-core';
 import { schema } from '@stoplight/spectral-functions';
-import remoteSchema from '../../../functions/remoteSchema';
 import { isValidGeometryDimension } from '../functions/isValidGeometryDimension';
+import { remoteSchema } from '@geonovum/standards-checker';
 
 export const JSON_FG_TYPES_SCHEMAS_URI = 'http://www.opengis.net/spec/json-fg-1/0.3/conf/types-schemas';
 

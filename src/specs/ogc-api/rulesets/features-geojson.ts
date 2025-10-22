@@ -1,8 +1,7 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import { oas3_0 } from '@stoplight/spectral-formats';
-import { APPLICATION_GEO_JSON_TYPE } from '../../../constants';
-import hasSchemaMatch from '../../../functions/hasSchemaMatch';
+import { oas3_0 } from './formats';
 import { OGC_API_FEATURES_CORE_DOC_URI } from './features-core';
+import { APPLICATION_GEO_JSON_TYPE, hasSchemaMatch } from '@geonovum/standards-checker';
 
 export const OGC_API_FEATURES_GEOJSON_URI = 'http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson';
 

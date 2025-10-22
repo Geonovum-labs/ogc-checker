@@ -1,10 +1,10 @@
 import { Spectral } from '@stoplight/spectral-core';
 import { omit, reject } from 'ramda';
 import { describe, expect, test } from 'vitest';
-import { GeometryTypes } from '../../../types';
 import featureCollectionDoc from '../examples/feature-collection.json';
 import featureDoc from '../examples/feature.json';
 import ruleset, { JSON_FG_TYPES_SCHEMAS_URI } from './types-schemas';
+import { GeometryTypes } from '../../types';
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);

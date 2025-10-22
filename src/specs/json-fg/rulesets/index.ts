@@ -1,4 +1,4 @@
-import { Rulesets } from '../../../spectral';
+import { Rulesets } from '@geonovum/standards-checker';
 import api, { JSON_FG_API_URI } from './api';
 import circularArcs, { JSON_FG_CIRCULAR_ARCS_URI } from './circular-arcs';
 import core, { JSON_FG_CORE_URI } from './core';

@@ -1,7 +1,7 @@
+import { hasSchemaMatch } from '@geonovum/standards-checker';
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import { oas3_0 } from '@stoplight/spectral-formats';
+import { oas3_0 } from './formats';
 import { schema, truthy } from '@stoplight/spectral-functions';
-import hasSchemaMatch from '../../../functions/hasSchemaMatch';
 
 export const OGC_API_FEATURES_CRS_URI = 'http://www.opengis.net/spec/ogcapi-features-2/1.0/conf/crs';
 

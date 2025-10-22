@@ -1,6 +1,6 @@
 import { RulesetFunction } from '@stoplight/spectral-core';
-import { GeometryTypes } from '../../../types';
-import { errorMessage } from '../../../util';
+import { errorMessage } from '@geonovum/standards-checker/engine/util';
+import { GeometryTypes } from '../../types';
 
 const containsCrs = (item: unknown) => item && typeof item === 'object' && 'coordRefSys' in item;
 

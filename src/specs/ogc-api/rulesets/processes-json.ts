@@ -1,7 +1,7 @@
+import { APPLICATION_JSON_TYPE } from '@geonovum/standards-checker';
 import type { RulesetDefinition } from '@stoplight/spectral-core';
-import { oas3_0 } from '@stoplight/spectral-formats';
+import { oas3_0 } from './formats';
 import { schema } from '@stoplight/spectral-functions';
-import { APPLICATION_JSON_TYPE } from '../../../constants';
 
 export const OGC_API_PROCESSES_JSON_URI = 'http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json';
 
