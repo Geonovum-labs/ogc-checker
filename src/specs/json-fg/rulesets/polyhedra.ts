@@ -17,6 +17,7 @@ const polyhedra: RulesetDefinition = {
       given: '$',
       documentationUrl: JSON_FG_POLYHEDRA_DOC_URI + 'metadata',
       severity: 'error',
+      message: `The "conformsTo" member of a JSON-FG root object that contains any of the polyhedron geometry types SHALL include the value "${JSON_FG_POLYHEDRA_URI}".`,
       then: {
         function: schema,
         functionOptions: {

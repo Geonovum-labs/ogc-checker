@@ -17,6 +17,7 @@ const measures: RulesetDefinition = {
       given: '$',
       documentationUrl: JSON_FG_MEASURES_DOC_URI + 'metadata',
       severity: 'error',
+      message: `The "conformsTo" member of a JSON-FG root object that contains a "measures" member in any JSON-FG object SHALL include the value "${JSON_FG_MEASURES_URI}".`,
       then: {
         function: schema,
         functionOptions: {

@@ -22,6 +22,7 @@ const circularArcs: RulesetDefinition = {
       given: '$',
       documentationUrl: JSON_FG_CIRCULAR_ARCS_DOC_URI + 'metadata',
       severity: 'error',
+      message: `The "conformsTo" member of a JSON-FG root object that contains any of the geometry types "CircularString", "CompoundCurve", "CurvePolygon", "MultiCurve", or "MultiSurface" SHALL include the value "${JSON_FG_CIRCULAR_ARCS_URI}".`,
       then: {
         function: schema,
         functionOptions: {
