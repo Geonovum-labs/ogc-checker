@@ -1,8 +1,9 @@
 import type { RulesetDefinition } from '@stoplight/spectral-core';
+import { RulesetPlugin, RulesetPluginIndex } from '@geonovum/standards-checker';
 import specs from './specs';
 import jsonFgRulesets from './specs/json-fg/rulesets';
 import ogcApiRulesets from './specs/ogc-api/rulesets';
-import { RulesetPlugin, RulesetPluginIndex } from '@geonovum/standards-checker';
+import { ogcapiFeatures as ogcApiFeaturesPrefix, ogcApiProcesses as ogcApiProcessesPrefix, ogcApiRecords as ogcApiRecordsPrefix } from './specs/ogc-api/spec';
 
 /**
  * Minimal metadata needed to construct a CLI-ready ruleset plugin.
@@ -18,35 +19,38 @@ interface PluginConfig {
 
 const specsBySlug = new Map(specs.map(spec => [spec.slug, spec]));
 
-const slugFromRulesetUri = (uri: string): string | undefined => {
-  const match = uri.match(/spec\/([^/]+)/);
+interface RulesetTarget {
+  slug: string;
+  filter?: (uri: string, definition: RulesetDefinition) => boolean;
+}
 
-  if (!match) {
-    return undefined;
-  }
+interface RulesetSource {
+  slug: string;
+  rulesets: Record<string, RulesetDefinition>;
+  targets?: RulesetTarget[];
+}
 
-  const base = match[1].replace(/-\d+(?:\.\d+)?$/, '');
-
-  if (base.startsWith('ogcapi')) {
-    return base.replace(/^ogcapi/, 'ogc-api');
-  }
-
-  return base;
-};
-
-const collectRulesetGroups = (...sources: Record<string, RulesetDefinition>[]) => {
+const collectRulesetGroups = (...sources: RulesetSource[]) => {
   const groups = new Map<string, Record<string, RulesetDefinition>>();
 
-  sources.forEach(map => {
-    Object.entries(map).forEach(([uri, definition]) => {
-      const slug = slugFromRulesetUri(uri);
+  sources.forEach(({ slug, rulesets, targets }) => {
+    const resolvedTargets = targets ?? [{ slug }];
 
-      if (!slug || !specsBySlug.has(slug)) {
+    resolvedTargets.forEach(({ slug: targetSlug, filter }) => {
+      if (!specsBySlug.has(targetSlug)) {
         return;
       }
 
-      const existing = groups.get(slug) ?? {};
-      groups.set(slug, { ...existing, [uri]: definition });
+      const subset = filter
+        ? Object.fromEntries(Object.entries(rulesets).filter(([uri, definition]) => filter(uri, definition)))
+        : rulesets;
+
+      if (!Object.keys(subset).length) {
+        return;
+      }
+
+      const existing = groups.get(targetSlug) ?? {};
+      groups.set(targetSlug, { ...existing, ...subset });
     });
   });
 
@@ -60,7 +64,18 @@ const buildPlugin = ({ slug, rulesets }: PluginConfig): RulesetPlugin => {
   };
 };
 
-const rulesetGroups = collectRulesetGroups(jsonFgRulesets, ogcApiRulesets);
+const rulesetGroups = collectRulesetGroups(
+  { slug: 'json-fg', rulesets: jsonFgRulesets },
+  {
+    slug: 'ogc-api',
+    rulesets: ogcApiRulesets,
+    targets: [
+      { slug: 'ogc-api-features', filter: uri => uri.startsWith(ogcApiFeaturesPrefix) },
+      { slug: 'ogc-api-processes', filter: uri => uri.startsWith(ogcApiProcessesPrefix) },
+      { slug: 'ogc-api-records', filter: uri => uri.startsWith(ogcApiRecordsPrefix) },
+    ],
+  },
+);
 
 const plugins = Array.from(rulesetGroups.entries()).reduce<RulesetPluginIndex>((acc, [slug, rulesets]) => {
   acc[slug] = buildPlugin({ slug, rulesets });
